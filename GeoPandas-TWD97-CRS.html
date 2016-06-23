@@ -78,55 +78,46 @@
 <p>更多的資訊可以參考<a href="http://www.sunriver.com.tw/grid_tm2.htm">大地座標系統與二度分帶座標</a></p>
 <h3>環境設定與套件安裝</h3>
 <p>我的電腦是用 OS X + Python3，要建立一個新的資料 kbike 夾與虛擬環境 venv：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>$ Jason mkdir -p kbike
+<div class="codehilite"><pre><span></span>$ Jason mkdir -p kbike
 $ Jason python3 -m venv env
 $ Jason <span class="nb">source</span> <span class="nb">source</span> env/bin/activate
 $ <span class="o">(</span>env<span class="o">)</span>Jason
 </pre></div>
-</td></tr></table>
+
 
 <p>建立之後就可以用 pip 開始安裝 GeoPandas 和 Jupyter 兩個套件然後進入 kbike 資料夾下載檔案：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>$ Jason pip install GeoPandas
+<div class="codehilite"><pre><span></span>$ Jason pip install GeoPandas
 $ Jason pip install Jupyter
 </pre></div>
-</td></tr></table>
+
 
 <p>因為這次 sample 是高雄自行車道地理資訊，所以建立完之後就可以下載<a href="http://data.kaohsiung.gov.tw/Opendata/DetailList.aspx?CaseNo1=AD&amp;CaseNo2=2&amp;Lang=C&amp;FolderType=O">高雄自行車路線</a>解壓縮到 kbike 資料夾內。
 這次下載資料有三個，因為都是中文我改了檔案名稱：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="go">kbike0324.dbf</span>
+<div class="codehilite"><pre><span></span><span class="go">kbike0324.dbf</span>
 <span class="go">kbike0324.shp</span>
 <span class="go">kbike0324.shx</span>
 </pre></div>
-</td></tr></table>
+
 
 <p>這三個檔案會使用到 .shp 裡頭儲存著二維座標系的位置。</p>
 <h3>處理資料</h3>
 <p>萬事俱備只欠東風，現在就可以將前面我們安裝好的 Jupyter Notebook 打開然後 import GeoPandas。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>$ Jason jupyter notebook
+<div class="codehilite"><pre><span></span>$ Jason jupyter notebook
 </pre></div>
-</td></tr></table>
+
 
 <p>打開預設瀏覽器後會看到右上角一個 new 的按鈕，點開然後選擇 python3，這時會跑出一個 console mode，就先 import 套件然後設定產生圖的 size:</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="kn">as</span> <span class="nn">gpd</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="kn">as</span> <span class="nn">gpd</span>
 <span class="o">%</span><span class="n">pylab</span> <span class="n">inline</span>
 <span class="n">pylab</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>
 </pre></div>
-</td></tr></table>
+
 
 <p>接著就是把 .shp 檔案讀進來然後印出來看看檔案的樣子：</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">villages_shap</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;kbike0324.shp&#39;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="n">villages_shap</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;kbike0324.shp&#39;</span><span class="p">)</span>
 <span class="n">villages_shap</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-</td></tr></table>
+
 
 <p>這份資料主要由 1029 rows × 2 columns 組合而成，因為 GeoPandas 是依附在 Pandas 所以資料只會印出一部分：</p>
 <table>
@@ -161,11 +152,10 @@ $ Jason pip install Jupyter
 </tbody>
 </table>
 <p>接著我們要將這份資料的地理座標系印出，因為只是範例就簡單找了兩個腳踏車道 阿公店自行車道和博愛世運大道 來處理囉。</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">broad</span> <span class="o">=</span> <span class="n">villages_shap</span><span class="p">[</span><span class="n">villages_shap</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;阿公店自行車道&#39;</span><span class="p">]</span>
+<div class="codehilite"><pre><span></span><span class="n">broad</span> <span class="o">=</span> <span class="n">villages_shap</span><span class="p">[</span><span class="n">villages_shap</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;阿公店自行車道&#39;</span><span class="p">]</span>
 <span class="n">loveroad</span> <span class="o">=</span> <span class="n">villages_shap</span><span class="p">[</span><span class="n">villages_shap</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;博愛世運大道&#39;</span><span class="p">]</span>
 </pre></div>
-</td></tr></table>
+
 
 <p>然後就會把圖檔順利產生囉。
 範例就在 <a href="https://github.com/chairco/Kaohsiung-bike-GeoPandas/blob/master/.ipynb_checkpoints/Untitled-checkpoint.ipynb">gihub</a> 歡迎下載參考。</p>
