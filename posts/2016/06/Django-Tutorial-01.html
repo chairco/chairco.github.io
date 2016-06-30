@@ -20,11 +20,11 @@
 
 
 <meta name="author" content="chairco" />
-<meta name="description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境變數 ..." />
+<meta name="description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..." />
 <meta name="keywords" content="Coding, Django">
 <meta property="og:site_name" content="chairco's blog"/>
 <meta property="og:title" content="Django 教學第一篇-專案與環境設定"/>
-<meta property="og:description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境變數 ..."/>
+<meta property="og:description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..."/>
 <meta property="og:locale" content="zh_TW"/>
 <meta property="og:url" content="../../../posts/2016/06/Django-Tutorial-01.html"/>
 <meta property="og:type" content="article"/>
@@ -78,7 +78,7 @@
 <h3>環境說明</h3>
 <p>Django&nbsp;要開啟一個新的專案主要有幾個步驟：</p>
 <ul>
-<li>建立虛擬環境變數</li>
+<li>建立虛擬環境</li>
 <li>建立 Django&nbsp;專案</li>
 <li>建立 settings&nbsp;資料夾與設定環境變數</li>
 <li>建立一個新的 <span class="caps">APP</span></li>
@@ -204,8 +204,9 @@ print(os.path.dirname(os.path.abspath(__file__)))
 <ul>
 <li>第一個範例可以看到因為變數代入是 <code>__file__</code> 所以印出了 <code>test.py</code> 所在位置</li>
 <li>第二個範例只是要告訴你 os.path.split() 就是把檔案位置和檔案名稱回傳一個 <code>iterator</code>,&nbsp;第一個元素傳位置，第二個元素傳名稱</li>
-<li>第三個範例就是告訴你多加一個 os.path.dirname() 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 os.path.dirname()&nbsp;來往上移動囉。夠直覺了吧。</li>
+<li>第三個範例就是告訴你多加一個 os.path.dirname() 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 os.path.dirname()&nbsp;來往上移動囉。</li>
 </ul>
+<p>夠直覺了吧。</p>
 <p>最後來到比較重要部分，因為設定三個 <code>.py</code> 目的就是為了要區分本機開發環境與部署的環境，最前面我們有提到 Django 是透過一個 <code>wsgi.py</code> 來設定環境變數，內容如下:</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
@@ -308,7 +309,7 @@ print(os.path.dirname(os.path.abspath(__file__)))
   },
   "image": "/pics/7709136.png",
   "url": "../../../posts/2016/06/Django-Tutorial-01.html",
-  "description": "開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境變數 ..."
+  "description": "開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..."
 }
 </script></body>
 </html>
