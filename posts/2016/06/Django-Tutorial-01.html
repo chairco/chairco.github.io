@@ -87,7 +87,7 @@
 <p>通常許多教學內容比較少談論到怎麼處理 Django 的環境變數與設定專案資料夾內的 setting.py，因為 Django 是透過專案內的 <code>wsgi.py</code> 這隻檔案把專案變成 <span class="caps">WSGI</span> 應用程式<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/02-how-does-django-work.md">註1</a>，打開 <code>wsgi.py</code> 的內容會發現它可以設定 <code>setting.py</code> 位置，並透過 <code>setting.py</code> 來處理專案的環境變數，因為這個方式，可以據此來切換不同模式例如 共同設定、開發模式與部署正式機設定<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/04-run-your-project.md">註3</a>[^3]。</p>
 <h3>專案說明</h3>
 <p>這次想做一個專案是類似借東西系統，因為有參與產品研發，在研發初期會有很多不同 Function Team&nbsp;要借用產品進行驗證與測試，希望可以透過一個平台根據序號與目的填寫借用表單。</p>
-<p>因為一個借用單可能一次包含很多產品需求，因此要能夠一張表單對應多個機器。</p>
+<p>因為一個借用單可能一次包含很多產品需求，因此要能夠一張表單對應多個產品序號。</p>
 <h3>建立虛擬環境與設定 Django&nbsp;環境變數</h3>
 <p>因為 Python 3.x 已經很成熟了，而且改正了很多 Python 2.x 煩人 <a href="http://uranusjr.logdown.com/posts/2013/12/20/write-python-3-codes-that-run-on-the-python-2-interpreter">Unicode 問題</a>，過去第三方套件也逐漸支援，實在沒有不用的理由。最重要的是 Python 3.x&nbsp;已經內建虛擬環境套件，可以更方便與本機端的套件庫做區隔。</p>
 <p>在開發這個專案我們總會需要安裝不同套件，再來 Django 版本也不斷演進，為了不干擾其他專案建立一個虛擬環境 env&nbsp;然後啟動它:</p>
@@ -97,7 +97,7 @@ source env/bin/activate
 </pre></div>
 
 
-<p>這個指令會幫你建立一個 env 的虛擬環境變數（你可以取名為其它名稱），這等於是建立一個全新的 python 3 環境，可以試試 <code>pip list</code> 原先本機端套件都消失了。不過我習慣在這之前先 update 一下 pip 這個套件然後再進行 Django 的安裝。這個教學撰寫時 Django 已經演進到 1.9.7 版本，如果你還是習慣 1.8.x 版本記得安裝時指定一下 <code>pip install "django&lt;1.9"</code>，但我喜歡 1.9.x 之後 admin&nbsp;畫面所以就安裝最新版:</p>
+<p>這個指令會幫你建立一個 env 的虛擬環境變數（你可以命名為其它的名稱），這等於是建立一個全新的 python 3 環境，可以試試 <code>pip list</code> 原先本機端套件都消失了。不過我習慣在這之前先 update 一下 pip 這個套件然後再進行 Django 的安裝。這個教學撰寫時 Django 已經演進到 1.9.7 版本，如果你還是習慣 1.8.x 版本記得安裝時指定一下 <code>pip install "django&lt;1.9"</code>，但我喜歡 1.9.x 之後 admin&nbsp;畫面所以就安裝最新版:</p>
 <div class="codehilite"><pre><span></span>(env)pip install --upgrade pip
 (env)pip install django
 </pre></div>
@@ -189,12 +189,7 @@ source env/bin/activate
 </pre></div>
 
 
-<p>前面那個 os.path.dirname() 講得太含糊，順便解釋一下好了 os.path.dirname() 其實就是回傳 os.path.split() 的第一個元素。我乾脆在 <code>settings</code> 底下建立一個 <code>test.py</code> 來印出。</p>
-<ul>
-<li>第一個範例可以看到因為變數代入是 <code>__file__</code> 所以印出了 <code>test.py</code> 所在位置</li>
-<li>第二個範例只是要告訴你 os.path.split() 就是把檔案位置和檔案名稱回傳一個 <code>iterator</code>,&nbsp;第一個元素傳位置，第二個元素傳名稱</li>
-<li>第三個範例就是告訴你多加一個 os.path.dirname() 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 os.path.dirname()&nbsp;來往上移動囉。夠直覺了吧。</li>
-</ul>
+<p>前面那個 os.path.dirname() 講得太含糊，順便解釋一下好了 os.path.dirname() 其實就是回傳 os.path.split() 的第一個元素。我乾脆在 <code>settings</code> 底下建立一個 <code>test.py</code> 來印出:</p>
 <div class="codehilite"><pre><span></span>print(os.path.abspath(__file__))
 /Users/chairco/OneDrive/SourceCode/django/allo/borrow/borrow/settings/test.py
 
@@ -206,6 +201,11 @@ print(os.path.dirname(os.path.abspath(__file__)))
 </pre></div>
 
 
+<ul>
+<li>第一個範例可以看到因為變數代入是 <code>__file__</code> 所以印出了 <code>test.py</code> 所在位置</li>
+<li>第二個範例只是要告訴你 os.path.split() 就是把檔案位置和檔案名稱回傳一個 <code>iterator</code>,&nbsp;第一個元素傳位置，第二個元素傳名稱</li>
+<li>第三個範例就是告訴你多加一個 os.path.dirname() 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 os.path.dirname()&nbsp;來往上移動囉。夠直覺了吧。</li>
+</ul>
 <p>最後來到比較重要部分，因為設定三個 <code>.py</code> 目的就是為了要區分本機開發環境與部署的環境，最前面我們有提到 Django 是透過一個 <code>wsgi.py</code> 來設定環境變數，內容如下:</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
@@ -227,7 +227,7 @@ print(os.path.dirname(os.path.abspath(__file__)))
 </pre></div>
 
 
-<p>走到這邊大概 Django&nbsp;的環境也設定差不多了，接下來我們在處理一下資料庫的環境變數，就可以進入到第二篇的開發囉。</p>
+<p>走到這邊大概 Django 的環境也設定差不多了，接下來我們處理一下資料庫的環境變數，就可以進入到第二篇的 <span class="caps">APP</span>&nbsp;開發囉。</p>
 <hr />
 <p>註 1: WSGI的全寫是 Web Server Gateway Interface，它的發音有點像是&nbsp;whiskey，它是Python定義網頁程式和伺服器溝通的介面。</p>
 <p>註 2: 連結文章很清楚說明 Django 的 wsgi.py&nbsp;的目的。</p>
