@@ -79,9 +79,9 @@
 <p>Django&nbsp;要開啟一個新的專案主要有幾個步驟：</p>
 <ul>
 <li>建立虛擬環境變數</li>
-<li>開啟專案</li>
+<li>建立 Django&nbsp;專案</li>
+<li>建立 settings&nbsp;資料夾與設定環境變數</li>
 <li>建立一個新的 <span class="caps">APP</span></li>
-<li>設定專案環境變數與資料夾的&nbsp;setting.py</li>
 <li>開始開發程式</li>
 </ul>
 <p>通常許多教學內容比較少談論到怎麼處理 Django 的環境變數與設定專案資料夾內的 setting.py，因為 Django 是透過專案內的 <code>wsgi.py</code> 這隻檔案把專案變成 <span class="caps">WSGI</span> 應用程式<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/02-how-does-django-work.md">註1</a>，打開 <code>wsgi.py</code> 的內容會發現它可以設定 <code>setting.py</code> 位置，並透過 <code>setting.py</code> 來處理專案的環境變數，因為這個方式，可以據此來切換不同模式例如 共同設定、開發模式與部署正式機設定<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/04-run-your-project.md">註3</a>[^3]。</p>
@@ -174,7 +174,7 @@ source env/bin/activate
 </pre></div>
 
 
-<p>修改 <code>base.py</code> 內容 mark <code>SECRET_KEY</code> 和 <code>DEBUG = True</code>, 並起修改 <code>BASE_DIR</code> 如下:</p>
+<p>修改 <code>base.py</code> 內容 mark <code>#SECRET_KEY</code> 和 <code>#DEBUG = True</code>, 並修改 <code>BASE_DIR</code> 如下:</p>
 <p><code>BASE_DIR</code> 這個內容是要傳回當前執行檔的所在路徑，因為多了一個 settings 資料夾，因此要再多一層 <code>os.path.dirname()</code> 這個很直覺。</p>
 <div class="codehilite"><pre><span></span><span class="c1">#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))</span>
 <span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
