@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../theme/stylesheet/style.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+
+<meta name="author" content="chairco" />
+<meta name="description" content="GITHUB: [https://github.com/chairco/django-tutorial-borrow] 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。一開始希望不要就計劃太複雜功能，會將主要框架給規劃出來等這些細小功能就能伴隨元件慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性，原因是 Django ..." />
+<meta name="keywords" content="Coding, Django">
+<meta property="og:site_name" content="chairco's blog"/>
+<meta property="og:title" content="Django 教學第二篇-建立第一個 APP"/>
+<meta property="og:description" content="GITHUB: [https://github.com/chairco/django-tutorial-borrow] 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。一開始希望不要就計劃太複雜功能，會將主要框架給規劃出來等這些細小功能就能伴隨元件慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性，原因是 Django ..."/>
+<meta property="og:locale" content="zh_TW"/>
+<meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-02.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2016-07-01 13:51:07+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="../../../author/chairco.html">
+<meta property="article:section" content="Coding"/>
+<meta property="article:tag" content="Coding"/>
+<meta property="article:tag" content="Django"/>
+<meta property="og:image" content="/pics/7709136.png">
+  <title>chairco's blog &ndash; Django 教學第二篇-建立第一個 APP</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../..">
+        <img src="/pics/7709136.png" alt="Jason's Blog" title="Jason's Blog">
+      </a>
+      <h1><a href="../../..">Jason's Blog</a></h1>
+<p>Code / Travel / Other</p>      <nav>
+        <ul class="list">
+          <li><a href="../../../pages/about-me/#about-me">About&nbsp;Me</a></li>
+          <li><a href="http://ptt05643972.pixnet.net/blog" target="_blank">日本旅遊記錄(2014)</a></li>
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-google" href="#" target="_blank"><i class="fa fa-google"></i></a></li>
+        <li><a class="sc-twitter" href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/profile.php?id=1699706506" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/chairco" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-envelope-o" href="mailto:chairco@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+        <li><a class="sc-linkedin" href="https://www.linkedin.com/in/yichieh-chen-43899688" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+      </ul>
+    </div>
+  </aside>
+  <main>
+    <nav>
+      <a href="../../..">Home</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+    </nav>
+
+<article>
+  <header>
+    <h1 id="Django-Tutorial-02">Django 教學第二篇-建立第一個 <span class="caps">APP</span></h1>
+    <p>Posted on  7 01, 2016 in <a href="../../../category/coding.html">Coding</a></p>
+  </header>
+  <div>
+    <p><span class="caps">GITHUB</span>:&nbsp;[https://github.com/chairco/django-tutorial-borrow]</p>
+<p>延續前一篇 <a href="">Django 教學第一篇-專案與環境設定</a>一鼓作氣接著來開始建立第一個 <span class="caps">APP</span>&nbsp;吧。</p>
+<p>首先我們要先想像一下這個 <span class="caps">APP</span>&nbsp;會包含哪些功能然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。一開始希望不要就計劃太複雜功能，會將主要框架給規劃出來等這些細小功能就能伴隨元件慢慢開發。</p>
+<p>一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 <span class="caps">APP</span>，然後只有單一依賴性，原因是 Django 重視每個 <span class="caps">APP</span> 的獨立性，儘管你可以讓 a 這個 <span class="caps">APP</span> 去依賴 B (A depend on B) 但不要做出相互依賴關係。所以我們會規劃三個 <span class="caps">APP</span>:</p>
+<ol>
+<li>使用者認證</li>
+<li>申請借用單</li>
+<li>自動傳送通知信件</li>
+</ol>
+<p>開始動手的 <span class="caps">APP</span> 會先針對第二個申請借用單做開發，所以進入到 borrow 專案內用 <code>manage.py</code> 來建立一個新的 <span class="caps">APP</span> loans(名稱會用複數名, 原因是這個 <span class="caps">APP</span>&nbsp;會管理很多借用需求單):</p>
+<div class="codehilite"><pre><span></span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">startapp</span> <span class="n">loans</span>
+</pre></div>
+
+
+<p>增加一個新的 <span class="caps">APP</span>&nbsp;後這個專案的結構就會長成這樣:</p>
+<div class="codehilite"><pre><span></span>borrow
+├── borrow
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-35.pyc
+│   │   ├── urls.cpython-35.pyc
+│   │   └── wsgi.cpython-35.pyc
+│   ├── settings
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-35.pyc
+│   │   │   ├── base.cpython-35.pyc
+│   │   │   └── local.cpython-35.pyc
+│   │   ├── base.py
+│   │   ├── local.py
+│   │   └── production.py
+│   ├── urls.py
+│   └── wsgi.py
+├── loans
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+└── manage.py
+</pre></div>
+
+
+<p>接著我們到 <code>settings/base.py</code> 下將這個 <span class="caps">APP</span> 加入到 <code>INSTALLED_APPS</code> 內告訴 Django 已經被加入。 <span class="caps">APP</span> 順序沒有一定，但因為 Django 的相依性是由上到下，所以習慣由上加下來<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>。</p>
+<div class="codehilite"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;loans&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+
+<p>現在我們已經可以開始來規劃 loan&#8217;s model 了。概念是希望使用者登入到系統並通過認證後可以填寫借用需求單，因此借用需求單應該會有兩個 table 一個 table 會儲存需求單(loan), 另一張表格會儲存機器(device)。因為一張 <code>loan</code> 可能會對應一到多台 <code>device</code>，因此這個表格會是一個 1 對&nbsp;多的概念:</p>
+<div class="codehilite"><pre><span></span>|  loan    |              |  device  |
+|----------|              |----------|
+|  owner   |              |  ISN     |
+|  purpose | 1 &lt;------- n |  unit    |
+|  menu    |              |  config  |
+</pre></div>
+
+
+<p>loan 的 table:
++ 兩個欄位和一個 Inlineform : <code>owner</code>, <code>purpose</code>, <code>menu</code> 有一個欄位指向 <code>device</code> 的 foreign key <code>ISN</code>，接著我們就可以開始撰寫 <code>models.py</code>。</p>
+<div class="codehilite"><pre><span></span><span class="c1"># loans/models.py</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="k">class</span> <span class="nc">Loan</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">purpose</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span>
+        <span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-created_at&#39;</span><span class="p">]</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Loan&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Loans&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">purpose</span>
+
+    <span class="nd">@models.permalink</span>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;loan_detail&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pk&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
+
+
+<span class="k">class</span> <span class="nc">Device</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="n">loan</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="s1">&#39;Loan&#39;</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;menu_items&#39;</span><span class="p">,</span> 
+        <span class="n">verbose_name</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;loan&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">unit_no</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">isn</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">blank</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">verbose_name</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;ISN&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span>
+        <span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;-created_at&#39;</span><span class="p">]</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Device&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Devices&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isn</span>
+
+    <span class="nd">@models.permalink</span>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;device_detail&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">])</span>
+</pre></div>
+
+
+<p>這段 code 有點長。&nbsp;照順序來說明:</p>
+<ul>
+<li>Loan table 的兩個 fields: <code>owner</code> 和 <code>purpose</code>，都是 <code>CharField</code> 資料庫會以 <code>VARCHAR</code> 型別表示。</li>
+<li><code>created_at</code> 這個 fields&nbsp;是自動產生，是希望這個表單能記錄建立的時間。</li>
+<li><code>def __str__(self):</code> 這是 python 轉換成字串的 hook。注意的點是 python 3.x 因為處理掉 Unicode 問題，在 python 2.x 要改成 <code>def __unicode__(self):</code>，不過我建議用 python 3.x&nbsp;吧</li>
+<li><code>def get_absolute_url(self):</code> 和 @models.permalink&nbsp;之後用到再說。</li>
+<li>Device table&nbsp;大同小異就不重複說了。</li>
+</ul>
+<p>接著我們用 <code>makemigrations</code> 這個指令更新 <code>loans</code> 的 <code>models</code></p>
+<div class="codehilite"><pre><span></span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">makemigrations</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>Migrations for &#39;loans&#39;:
+  0001_initial.py:
+    - Create model Device
+    - Create model Loan
+    - Add field loan to device
+</pre></div>
+
+
+<p>看到上面畫面就代表已經將新增 Loan 與 Device 間的關聯訊息存並且放到 <code>migrations\0001_initial.py</code>。然後我們再執行寫入到 loans project&nbsp;指令讓正式寫入資料庫內。</p>
+<div class="codehilite"><pre><span></span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span> <span class="n">loans</span>
+</pre></div>
+
+
+<p>當你看到這個畫面代表已經成功在資料庫建立 <code>Loan</code> 和 <code>Device</code> 兩個&nbsp;table。</p>
+<div class="codehilite"><pre><span></span>Operations to perform:
+  Apply all migrations: loans
+Running migrations:
+  Rendering model states... DONE
+  Applying loans.0001_initial... OK
+</pre></div>
+
+
+<p>不過到現在為止我們還是很抽象的建立資料庫欄位，不過好在 Django 幫我們建立 Admin module，因此我們可以快速用 Admin 介面確認剛剛建立的資料庫欄位。首先要先建立一個 superuser 來做登入動作(帳號密碼都可以自訂，Email 可以按 return&nbsp;鍵跳過):</p>
+<div class="codehilite"><pre><span></span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+<span class="n">Username</span> <span class="p">(</span><span class="n">leave</span> <span class="n">blank</span> <span class="n">to</span> <span class="n">use</span> <span class="s1">&#39;chairco&#39;</span><span class="p">):</span> <span class="n">admin</span>
+<span class="n">Email</span> <span class="n">address</span><span class="p">:</span>
+<span class="n">Password</span><span class="p">:</span>
+<span class="n">Password</span> <span class="p">(</span><span class="n">again</span><span class="p">):</span>
+<span class="n">Superuser</span> <span class="n">created</span> <span class="n">successfully</span><span class="o">.</span>
+</pre></div>
+
+
+<p>接著在瀏覽器網址列鍵入 <code>http://127.0.0.1:8000/admin/</code> 輸入帳號與密碼就可以看到漂亮的 Admin&nbsp;畫面，但似乎還缺少了什麼呢？？</p>
+<p>原來剛剛建立的 <code>Loan</code> 和 <code>Device</code> 表格都沒有顯示在畫面裡。原來還需要透過 <code>admin.py</code> 告訴 Admin module 要顯示哪些&nbsp;table。</p>
+<p>所以我們打開 Admin.py 輸入一些內容然後重新整理，剛剛的網頁就會看到兩個剛剛註冊的&nbsp;table:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># loans/admin.py</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Loan</span><span class="p">,</span> <span class="n">Device</span>
+
+<span class="c1">#admin.site.register(Loan)</span>
+<span class="c1">#admin.site.register(Device)</span>
+
+<span class="nd">@admin.register</span><span class="p">(</span><span class="n">Loan</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoanAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;owner&#39;</span><span class="p">,</span> <span class="s1">&#39;purpose&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">]</span>
+
+
+<span class="nd">@admin.register</span><span class="p">(</span><span class="n">Device</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoanAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;isn&#39;</span><span class="p">,</span> <span class="s1">&#39;unit_no&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">]</span>
+</pre></div>
+
+
+<p>上面這段 code 你會發現我註解掉兩行註冊 table 的程式碼，取代是兩個用 decorator 註冊的類別，因為如果只留下註解的兩行程式碼， admin 畫面只會顯示 model 內 <code>def __str__(self)</code> 所定義的回傳值，為了讓畫面豐富與彈性，這不過是是自行定義顯示畫面的一些技巧罷了。</p>
+<p>接著嘗試增加一些資料玩玩看吧！</p>
+<p>不過你可能馬上會發現一個問題，這個需求一開始不是希望再開需求單時就能夠填寫機器的序號嗎？可是現在變成要到各自的表格去新增資料？ 沒關係這就是 Django Admin&nbsp;強大的地方。</p>
+<p>說到這順便分享一下今年 PyCon <span class="caps">TW</span> 2016 有一個講題是<a href="https://tw.pycon.org/2016/en-us/events/talk/69827266518974528/#speaker-content">那些年，我用 Django Admin 接的案子</a>講者當年就是靠 Django Admin&nbsp;這個模組就能做出接案網站，所以不要小看這個不起眼的小模組呢。</p>
+<p>不過話題扯遠了，接下來我們將用模組內的 <code>inline admin</code> 將 <code>Device</code> 的 table 嵌入到 <code>Loan</code> 的&nbsp;table。</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DeviceInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">TabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Device</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="nd">@admin.register</span><span class="p">(</span><span class="n">Loan</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoanAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;owner&#39;</span><span class="p">,</span> <span class="s1">&#39;purpose&#39;</span><span class="p">,</span> <span class="s1">&#39;created_at&#39;</span><span class="p">]</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">DeviceInline</span><span class="p">]</span>
+</pre></div>
+
+
+<p>上面我們新增一個類別叫做 <code>DeviceInline</code> 然後添加一個 inlines 的變數並且 assign 成為 <code>list</code> 且 <code>list</code> 內存放 <code>DeviceInline</code>。</p>
+<p>接著你會發現新增一筆 Loan 資料 Device 就會自動顯示在下方，Jack&nbsp;這真是太神了啦！</p>
+<hr />
+<p>那今天我們就先到這邊，下回待續囉。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>關於這個觀點是 <span class="caps">TP</span> 大大提出，可以參考這篇內容 <a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/05-django-apps.md">django-apps</a>&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../tag/coding.html">Coding</a>
+      <a href="../../../tag/django.html">Django</a>
+    </p>
+  </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'chairco';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; chairco 2016 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79798833-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " chairco's blog ",
+  "url" : "../../..",
+  "image": "/pics/7709136.png",
+  "description": "Jason's Blog"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Django 教學第二篇-建立第一個 APP",
+  "headline": "Django 教學第二篇-建立第一個 APP",
+  "datePublished": "2016-07-01 13:51:07+08:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "chairco",
+    "url": "../../../author/chairco.html"
+  },
+  "image": "/pics/7709136.png",
+  "url": "../../../posts/2016/07/Django-Tutorial-02.html",
+  "description": "GITHUB: [https://github.com/chairco/django-tutorial-borrow] 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。一開始希望不要就計劃太複雜功能，會將主要框架給規劃出來等這些細小功能就能伴隨元件慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性，原因是 Django ..."
+}
+</script></body>
+</html>

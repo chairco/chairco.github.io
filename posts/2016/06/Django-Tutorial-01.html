@@ -139,7 +139,7 @@ source env/bin/activate
 </table>
 <hr />
 <p>其實就是建立一個 <code>settings</code> 資料夾再歸納不同的環境變數 <code>.py</code>。
-所以接下來將 <code>settings.py</code> 移到 <code>settings</code> 資料夾並改名為 <code>base.py</code>。然後在 settings 目錄裡建立三個空白檔案：<code>\__init__.py</code>、<code>local.py</code>、<code>production.py</code>:</p>
+所以接下來將 <code>settings.py</code> 移到 <code>settings</code> 資料夾並改名為 <code>base.py</code>。然後在 settings 目錄裡建立三個空白檔案：<code>__init__.py</code>、<code>local.py</code>、<code>production.py</code>:</p>
 <div class="codehilite"><pre><span></span>(env)cd cd borrow/borrow
 (env)mv settings.py ./settings/base.py
 (env)touch __init__.py local.py production.py
