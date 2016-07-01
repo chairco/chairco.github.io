@@ -20,11 +20,11 @@
 
 
 <meta name="author" content="chairco" />
-<meta name="description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..." />
+<meta name="description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估 ..." />
 <meta name="keywords" content="Coding, Django">
 <meta property="og:site_name" content="chairco's blog"/>
 <meta property="og:title" content="Django 教學第一篇-專案與環境設定"/>
-<meta property="og:description" content="開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..."/>
+<meta property="og:description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估 ..."/>
 <meta property="og:locale" content="zh_TW"/>
 <meta property="og:url" content="../../../posts/2016/06/Django-Tutorial-01.html"/>
 <meta property="og:type" content="article"/>
@@ -74,7 +74,8 @@
     <p>Posted on  6 30, 2016 in <a href="../../../category/coding.html">Coding</a></p>
   </header>
   <div>
-    <p>開始我們第一篇教學吧。一開始還是要感謝 <span class="caps">TP</span> 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(<span class="caps">E.M.</span>Rogers)所寫的管理書籍叫做 <strong>創新的擴散</strong>，大意是創新分了幾個階段，對於我而言接觸 Django&nbsp;這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。</p>
+    <p><span class="caps">GITHUB</span>: <a href="https://github.com/chairco/django-tutorial-borrow">https://github.com/chairco/django-tutorial-borrow</a></p>
+<p>開始我們第一篇教學吧。一開始還是要感謝 <span class="caps">TP</span> 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(<span class="caps">E.M.</span>Rogers)所寫的管理書籍叫做 <strong>創新的擴散</strong>，大意是創新分了幾個階段，對於我而言接觸 Django&nbsp;這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。</p>
 <h3>環境說明</h3>
 <p>Django&nbsp;要開啟一個新的專案主要有幾個步驟：</p>
 <ul>
@@ -84,7 +85,7 @@
 <li>建立一個新的 <span class="caps">APP</span></li>
 <li>開始開發程式</li>
 </ul>
-<p>通常許多教學內容比較少談論到怎麼處理 Django 的環境變數與設定專案資料夾內的 setting.py，因為 Django 是透過專案內的 <code>wsgi.py</code> 這隻檔案把專案變成 <span class="caps">WSGI</span> 應用程式<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/02-how-does-django-work.md">註1</a>，打開 <code>wsgi.py</code> 的內容會發現它可以設定 <code>setting.py</code> 位置，並透過 <code>setting.py</code> 來處理專案的環境變數，因為這個方式，可以據此來切換不同模式例如 共同設定、開發模式與部署正式機設定<a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/04-run-your-project.md">註3</a>[^3]。</p>
+<p>通常許多教學內容比較少談論到怎麼處理 Django 的環境變數與設定專案資料夾內的 <code>setting.py</code>，因為 Django 是透過專案內的 <code>wsgi.py</code> 這隻檔案把專案變成 <span class="caps">WSGI</span> 應用程式<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>，打開 <code>wsgi.py</code> 的內容會發現它可以設定 <code>setting.py</code> 位置，並透過 <code>setting.py</code> 來處理專案的環境變數<sup id="fnref:2"><a class="footnote-ref" href="#fn:2" rel="footnote">2</a></sup>，因為這個方式，可以據此來切換不同模式例如 共同設定、開發模式與部署正式機設定<sup id="fnref:3"><a class="footnote-ref" href="#fn:3" rel="footnote">3</a></sup>。</p>
 <h3>專案說明</h3>
 <p>這次想做一個專案是類似借東西系統，因為有參與產品研發，在研發初期會有很多不同 Function Team&nbsp;要借用產品進行驗證與測試，希望可以透過一個平台根據序號與目的填寫借用表單。</p>
 <p>因為一個借用單可能一次包含很多產品需求，因此要能夠一張表單對應多個產品序號。</p>
@@ -97,18 +98,18 @@ source env/bin/activate
 </pre></div>
 
 
-<p>這個指令會幫你建立一個 env 的虛擬環境變數（你可以命名為其它的名稱），這等於是建立一個全新的 python 3 環境，可以試試 <code>pip list</code> 原先本機端套件都消失了。不過我習慣在這之前先 update 一下 pip 這個套件然後再進行 Django 的安裝。這個教學撰寫時 Django 已經演進到 1.9.7 版本，如果你還是習慣 1.8.x 版本記得安裝時指定一下 <code>pip install "django&lt;1.9"</code>，但我喜歡 1.9.x 之後 admin&nbsp;畫面所以就安裝最新版:</p>
+<p>這個指令會幫你建立一個 env 的虛擬環境變數（你可以命名為其它的名稱），這等於是建立一個全新的 python 3 環境，可以試試在終端機鍵入 <code>pip list</code> 指令，會發現原本機端套件都消失了。不過我習慣在這之前先 update 一下 pip 這個套件然後再進行 Django 的安裝。這個教學撰寫時 Django 已經演進到 1.9.7 版本，如果你還是習慣 1.8.x 版本記得安裝時指定一下 <code>pip install "django&lt;1.9"</code>，但我喜歡 1.9.x 之後 admin&nbsp;畫面所以就安裝最新版:</p>
 <div class="codehilite"><pre><span></span>(env)pip install --upgrade pip
 (env)pip install django
 </pre></div>
 
 
-<p>現在已經可以先建立一個 Django 專案，這個專案名稱我們就叫&nbsp;borrow:</p>
+<p>現在已經可以先建立一個 Django 專案，專案名稱我們就取名叫&nbsp;borrow:</p>
 <div class="codehilite"><pre><span></span>(env)django-admin startproject borrow
 </pre></div>
 
 
-<p>這個專案的結構會像這樣, borrow 這個專案內的 borrow&nbsp;資料夾放的就是專案的環境變數:</p>
+<p>這個專案的結構會長這樣, borrow 專案內所產生的 borrow&nbsp;資料夾放的就是專案的環境變數:</p>
 <div class="codehilite"><pre><span></span>borrow
 ├── borrow
 │   ├── __init__.py
@@ -119,7 +120,7 @@ source env/bin/activate
 </pre></div>
 
 
-<p>如之前所說，因為開發 Web 時會先在本機端開發，然後再把程式部署到正式機，需要處理環境變數。首先在這邊我會做簡單整理與歸納目前我看到 2&nbsp;種方法：</p>
+<p>如之前所說，因為開發 Web 時會先在本機端開發，然後再把程式部署到正式機，需要處理環境變數。首先在這邊我會做簡單整理與歸納目前我看 3個教學分出的 2&nbsp;種方法：</p>
 <table>
 <thead>
 <tr>
@@ -138,7 +139,7 @@ source env/bin/activate
 </table>
 <hr />
 <p>其實就是建立一個 <code>settings</code> 資料夾再歸納不同的環境變數 <code>.py</code>。
-所以接下來將 <code>settings.py</code> 移到 <code>settings</code> 資料夾並改名為 base.py。然後在 settings&nbsp;目錄裡建立三個空白檔案：__init__.py、local.py、production.py:</p>
+所以接下來將 <code>settings.py</code> 移到 <code>settings</code> 資料夾並改名為 <code>base.py</code>。然後在 settings 目錄裡建立三個空白檔案：<code>\__init__.py</code>、<code>local.py</code>、<code>production.py</code>:</p>
 <div class="codehilite"><pre><span></span>(env)cd cd borrow/borrow
 (env)mv settings.py ./settings/base.py
 (env)touch __init__.py local.py production.py
@@ -162,9 +163,9 @@ source env/bin/activate
 
 <p>接下來照 <span class="caps">TP</span>&nbsp;的解釋這三個新設定作用會是：</p>
 <ul>
-<li>base.py：用來存放所有設定中共通的部分。</li>
-<li>local.py：本機（開發機）用的設定。</li>
-<li>production.py：正式部署到 production server&nbsp;時用的設定。</li>
+<li><code>base.py</code>：用來存放所有設定中共通的部分。</li>
+<li><code>local.py</code>：本機（開發機）用的設定。</li>
+<li><code>production.py</code>：正式部署到 production server&nbsp;時用的設定。</li>
 </ul>
 <p>新增內容到這 <code>local.py</code>:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
@@ -175,7 +176,7 @@ source env/bin/activate
 
 
 <p>修改 <code>base.py</code> 內容 mark <code>#SECRET_KEY</code> 和 <code>#DEBUG = True</code>, 並修改 <code>BASE_DIR</code> 如下:</p>
-<p><code>BASE_DIR</code> 這個內容是要傳回當前執行檔的所在路徑，因為多了一個 settings 資料夾，因此要再多一層 <code>os.path.dirname()</code> 這個很直覺。</p>
+<p><code>BASE_DIR</code> 這個內容是要傳回當前執行檔的所在路徑，因為多了一個 <code>settings</code> 資料夾，因此要再多一層 <code>os.path.dirname()</code> 這個很直覺。</p>
 <div class="codehilite"><pre><span></span><span class="c1">#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))</span>
 <span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
@@ -189,7 +190,7 @@ source env/bin/activate
 </pre></div>
 
 
-<p>前面那個 os.path.dirname() 講得太含糊，順便解釋一下好了 os.path.dirname() 其實就是回傳 os.path.split() 的第一個元素。我乾脆在 <code>settings</code> 底下建立一個 <code>test.py</code> 來印出:</p>
+<p>寫到這邊，覺得前面那個 <code>os.path.dirname()</code> 說明得太含糊，順便解釋一下好了 <code>os.path.dirname()</code> 這個函式其實就是回傳 <code>os.path.split()</code> 的第一個元素。乾脆在 <code>settings</code> 底下建立一個 <code>test.py</code> 來驗證:</p>
 <div class="codehilite"><pre><span></span>print(os.path.abspath(__file__))
 /Users/chairco/OneDrive/SourceCode/django/allo/borrow/borrow/settings/test.py
 
@@ -203,11 +204,11 @@ print(os.path.dirname(os.path.abspath(__file__)))
 
 <ul>
 <li>第一個範例可以看到因為變數代入是 <code>__file__</code> 所以印出了 <code>test.py</code> 所在位置</li>
-<li>第二個範例只是要告訴你 os.path.split() 就是把檔案位置和檔案名稱回傳一個 <code>iterator</code>,&nbsp;第一個元素傳位置，第二個元素傳名稱</li>
-<li>第三個範例就是告訴你多加一個 os.path.dirname() 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 os.path.dirname()&nbsp;來往上移動囉。</li>
+<li>第二個範例只是要告訴你 <code>os.path.split()</code> 就是把檔案位置和檔案名稱回傳一個 <code>iterator</code>,&nbsp;第一個元素傳位置，第二個元素傳名稱</li>
+<li>第三個範例就是告訴你多加一個 <code>os.path.dirname()</code> 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 <code>os.path.dirname()</code> 來往上移動囉。</li>
 </ul>
-<p>夠直覺了吧。</p>
-<p>最後來到比較重要部分，因為設定三個 <code>.py</code> 目的就是為了要區分本機開發環境與部署的環境，最前面我們有提到 Django 是透過一個 <code>wsgi.py</code> 來設定環境變數，內容如下:</p>
+<p>所以應該明白這一串長長的程式碼意思，夠直覺了吧。</p>
+<p>最後來到比較重要部分，因為設定三個 <code>.py</code> 目的就是為了要區分本機開發環境與部署的環境，最前面我們有提到 Django 是透過一個 <code>wsgi.py</code> 來設定環境變數，打開的內容是長這樣滴:</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">django.core.wsgi</span> <span class="kn">import</span> <span class="n">get_wsgi_application</span>
@@ -218,7 +219,7 @@ print(os.path.dirname(os.path.abspath(__file__)))
 </pre></div>
 
 
-<p>所以我們在目前的虛擬環境只要告訴 Django 目前要使用的環境變數為 <code>local.py</code>, 然後到部署的環境設定 <code>production.py</code> 為環境變數就大功告成囉。</p>
+<p>所以只要在目前的虛擬環境告訴 Django 目前開發端要使用的環境變數為 <code>local.py</code>, 接著到部署機器的環境將變數設定成 <code>production.py</code> 就完成我們想要區分本機端與部屬端的環境變數囉。</p>
 <div class="codehilite"><pre><span></span>export DJANGO_SETTINGS_MODULE=borrow.settings.local
 </pre></div>
 
@@ -228,11 +229,151 @@ print(os.path.dirname(os.path.abspath(__file__)))
 </pre></div>
 
 
-<p>走到這邊大概 Django 的環境也設定差不多了，接下來我們處理一下資料庫的環境變數，就可以進入到第二篇的 <span class="caps">APP</span>&nbsp;開發囉。</p>
 <hr />
-<p>註 1: WSGI的全寫是 Web Server Gateway Interface，它的發音有點像是&nbsp;whiskey，它是Python定義網頁程式和伺服器溝通的介面。</p>
-<p>註 2: 連結文章很清楚說明 Django 的 wsgi.py&nbsp;的目的。</p>
-<p>[^3]註 3:&nbsp;網頁開發比較麻煩就是在本機端測試完成後部署到正式機需要不同的環境設定變數，身為開發者當然希望有更聰明與簡單的方式避免出錯，因此針對不同的需求區分環境變數是需要的。</p>
+<p>走到這邊大概 Django 的環境也設定差不多了，接下來我們處理一下資料庫的環境變數，就可以進入到第二篇的 <span class="caps">APP</span>&nbsp;開發囉。</p>
+<p>因為 Django 是一個 <span class="caps">MVC</span> 架構(正確來說是 <span class="caps">MTV</span>) 因此資料庫對 Django 來說是一個很重要的賣點，在 Django 稱資料庫這塊為 Model 因此我們會透過撰寫 app 內的 <code>models.py</code> 程式碼來與資料庫進行溝通。</p>
+<p>Django 預設的資料庫為 SQLite 3，當然如果你喜歡 NoSQL 的 MongoDB，或是在 python 底下一直都很高使用率的 PostgreSQL 與關聯式資料庫的 MySQL 官方都有支援套件。所以如果你要用其他資料庫記得要用 <code>pip</code> 安裝合適的套件。</p>
+<p>如同之前所說本機端和部署端可能用不同資料庫因此我們要將 <code>base.py</code> 內的資料庫設定移轉到 <code>local.py</code> 和 <code>production.py</code>。</p>
+<p>Mark <code>base.py</code> 的這段設定:</p>
+<div class="codehilite"><pre><span></span>#DATABASES = {
+#    &#39;default&#39;: {
+#        &#39;ENGINE&#39;: &#39;django.db.backends.sqlite3&#39;,
+#        &#39;NAME&#39;: os.path.join(BASE_DIR, &#39;db.sqlite3&#39;),
+#    }
+#}
+</pre></div>
+
+
+<p>然後將上面那段程式碼加入到 <code>local.py</code>(記得註解要拿掉)，接著我們做了幾個修改:</p>
+<ul>
+<li>修改資料庫位置: <code>os.path.join(os.path.dirname(BASE_DIR)</code>。這邊要做說明為什麼要把資料庫再往外移出一層原因是，這樣在做 source control 如 git&nbsp;時就可以不用特別排除本機端機料庫檔案。</li>
+<li>修改資料庫名稱: <code>'borrow_db.sqlite3'</code></li>
+</ul>
+<p>最後修改後的 <code>local.py</code> 會長成這樣:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s1">&#39;自行加入 secret key&#39;</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.sqlite3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">),</span> <span class="s1">&#39;borrow_db.sqlite3&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>設定完成之後就可以做 migrate 來初始化資料庫了，所以我們切換路徑到 <code>manage.py</code> 底下然後執行:</p>
+<div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+
+
+<p>如果出現類似像這樣錯誤畫面，確認一下你有沒有正確 export Django settings 的環境變數。可以再重複執行一下 <code>export DJANGO_SETTINGS_MODULE=borrow.settings.local</code> </p>
+<div class="codehilite"><pre><span></span>Traceback (most recent call last):
+  File &quot;manage.py&quot;, line 10, in &lt;module&gt;
+    execute_from_command_line(sys.argv)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&quot;, line 353, in execute_from_command_line
+    utility.execute()
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&quot;, line 345, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&quot;, line 195, in fetch_command
+    klass = load_command_class(app_name, subcommand)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&quot;, line 39, in load_command_class
+    module = import_module(&#39;%s.management.commands.%s&#39; % (app_name, name))
+  File &quot;/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/importlib/__init__.py&quot;, line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 986, in _gcd_import
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 969, in _find_and_load
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 958, in _find_and_load_unlocked
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 673, in _load_unlocked
+  File &quot;&lt;frozen importlib._bootstrap_external&gt;&quot;, line 662, in exec_module
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 222, in _call_with_frames_removed
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/commands/migrate.py&quot;, line 16, in &lt;module&gt;
+    from django.db.migrations.autodetector import MigrationAutodetector
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/autodetector.py&quot;, line 14, in &lt;module&gt;
+    from django.db.migrations.questioner import MigrationQuestioner
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/questioner.py&quot;, line 12, in &lt;module&gt;
+    from .loader import MigrationLoader
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/loader.py&quot;, line 10, in &lt;module&gt;
+    from django.db.migrations.recorder import MigrationRecorder
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&quot;, line 12, in &lt;module&gt;
+    class MigrationRecorder(object):
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&quot;, line 26, in MigrationRecorder
+    class Migration(models.Model):
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&quot;, line 27, in Migration
+    app = models.CharField(max_length=255)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/models/fields/__init__.py&quot;, line 1072, in __init__
+    super(CharField, self).__init__(*args, **kwargs)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/models/fields/__init__.py&quot;, line 166, in __init__
+    self.db_tablespace = db_tablespace or settings.DEFAULT_INDEX_TABLESPACE
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&quot;, line 55, in __getattr__
+    self._setup(name)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&quot;, line 43, in _setup
+    self._wrapped = Settings(settings_module)
+  File &quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&quot;, line 120, in __init__
+    raise ImproperlyConfigured(&quot;The SECRET_KEY setting must not be empty.&quot;)
+django.core.exceptions.ImproperlyConfigured: The SECRET_KEY setting must not be empty.
+</pre></div>
+
+
+<p>如果看到這個畫面恭喜你已經成功了（淚奔啊，怎麼一個設定要搞這麼久）</p>
+<div class="codehilite"><pre><span></span>Operations to perform:
+  Apply all migrations: sessions, auth, admin, contenttypes
+Running migrations:
+  Rendering model states... DONE
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying sessions.0001_initial... OK
+</pre></div>
+
+
+<p>接著我可以開始執行指令啟動網站，確認一下是不是真的成功了</p>
+<div class="codehilite"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+
+
+<p>看到以下畫面:</p>
+<div class="codehilite"><pre><span></span>Performing system checks...
+
+System check identified no issues (0 silenced).
+July 01, 2016 - 02:39:05
+Django version 1.9.7, using settings &#39;borrow.settings.local&#39;
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+</pre></div>
+
+
+<p>然後打開你的瀏覽器在網址列鍵入 <code>localhost:8000</code> 或是 <code>127.0.0.1:8000</code> 看到瀏覽器出現下面這個標題代表你已經成功啟動 Django，接下來我們將開始撰寫第一個 <span class="caps">APP</span> 來感受一下 Django&nbsp;的魅力吧。</p>
+<div class="codehilite"><pre><span></span>It worked!
+Congratulations on your first Django-powered page.
+</pre></div>
+
+
+<p>這個專案目前已經放在 <span class="caps">GITHUB</span> <a href="https://github.com/chairco/django-tutorial-borrow">https://github.com/chairco/django-tutorial-borrow</a> 歡迎 clone&nbsp;下來。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>WSGI的全寫是 Web Server Gateway Interface，它的發音有點像是 whiskey，它是Python定義網頁程式和伺服器溝通的介面。可以參考這一篇文章有很詳細說明<a href="http://blog.ez2learn.com/2010/01/27/introduction-to-wsgi/">化整為零的次世代網頁開發標準: <span class="caps">WSGI</span></a>&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/02-how-does-django-work.md">how-does-django-work</a> 很清楚說明 Django 的 wsgi.py 的關係。&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>網頁開發比較麻煩就是在本機端測試完成後部署到正式機需要不同的環境設定變數，身為開發者當然希望有更聰明與簡單的方式避免出錯，因此針對不同的需求區分環境變數是需要的。可以見此篇 <a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/04-run-your-project.md">run-your-project</a>&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
   </div>
   <div class="tag-cloud">
     <p>
@@ -309,7 +450,7 @@ print(os.path.dirname(os.path.abspath(__file__)))
   },
   "image": "/pics/7709136.png",
   "url": "../../../posts/2016/06/Django-Tutorial-01.html",
-  "description": "開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。 環境說明 Django 要開啟一個新的專案主要有幾個步驟： 建立虛擬環境 ..."
+  "description": "GITHUB: https://github.com/chairco/django-tutorial-borrow 開始我們第一篇教學吧。一開始還是要感謝 TP 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(E.M.Rogers)所寫的管理書籍叫做 創新的擴散，大意是創新分了幾個階段，對於我而言接觸 Django 這樣的處理方法也想象成是一種創新，經過評估 ..."
 }
 </script></body>
 </html>
