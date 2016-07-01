@@ -134,7 +134,7 @@
 </pre></div>
 
 
-<p>現在我們已經可以開始來規劃 loan&#8217;s model 了。概念是希望使用者登入到系統並通過認證後可以填寫借用需求單，因此借用需求單應該會有兩個 table 一個 table 會儲存需求單(loan), 另一張表格會儲存機器(device)。因為一張 <code>loan</code> 可能會對應一到多台 <code>device</code>，因此這個表格會是一個 1 對&nbsp;多的概念:</p>
+<p>現在我們已經可以開始來規劃 loan&#8217;s model 了。概念是希望使用者登入到系統並通過認證後可以填寫借用需求單，因此借用需求單應該會有兩個 table 一個 table 會儲存需求單( loan ), 另一張表格會儲存機器( device )。因為一張 <code>loan</code> 可能會對應一到多台 <code>device</code>，因此這個表格會是一個 1 對&nbsp;多的概念:</p>
 <div class="codehilite"><pre><span></span>|  loan    |              |  device  |
 |----------|              |----------|
 |  owner   |              |  ISN     |
@@ -143,8 +143,10 @@
 </pre></div>
 
 
-<p>loan 的 table:
-+ 兩個欄位和一個 Inlineform : <code>owner</code>, <code>purpose</code>, <code>menu</code> 有一個欄位指向 <code>device</code> 的 foreign key <code>ISN</code>，接著我們就可以開始撰寫 <code>models.py</code>。</p>
+<p>loan 的&nbsp;table:</p>
+<ul>
+<li>兩個欄位和一個 Inlineform : <code>owner</code>, <code>purpose</code>, <code>menu</code> 有一個欄位指向 <code>device</code> 的 foreign key <code>ISN</code>，接著我們就可以開始撰寫 <code>models.py</code>。</li>
+</ul>
 <div class="codehilite"><pre><span></span><span class="c1"># loans/models.py</span>
 <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
