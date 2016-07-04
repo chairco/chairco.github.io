@@ -141,23 +141,13 @@
 
 <p>Django 是用正規表達式( Regular Expression )來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home&nbsp;的位置就可以了囉。</p>
 <p>但突然想起一件事，還沒有建立 template&nbsp;呀！對，這才要回應前面第一段目的，在這邊我們的繼承關係會是這樣:</p>
-<div class="codehilite"><pre><span></span>| templates\base\base.html |
-</pre></div>
-
-
-<div class="codehilite"><pre><span></span>     \uparrow
-</pre></div>
-
-
-<div class="codehilite"><pre><span></span>| loans\templates\loans\_base.html |
-</pre></div>
-
-
-<div class="codehilite"><pre><span></span>     \uparrow
-</pre></div>
-
-
-<div class="codehilite"><pre><span></span>| loans\templates\loans\home.html | 
+<div class="codehilite"><pre><span></span> templates\base\base.html
+         ＾
+         ｜       
+ loans\templates\loans\_base.html 
+         ＾
+         ｜ 
+ loans\templates\loans\home.html 
 </pre></div>
 
 
