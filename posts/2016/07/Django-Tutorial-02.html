@@ -20,11 +20,11 @@
 
 
 <meta name="author" content="chairco" />
-<meta name="description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..." />
+<meta name="description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..." />
 <meta name="keywords" content="Coding, Django">
 <meta property="og:site_name" content="chairco's blog"/>
 <meta property="og:title" content="Django 教學第二篇-建立第一個 APP"/>
-<meta property="og:description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..."/>
+<meta property="og:description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..."/>
 <meta property="og:locale" content="zh_TW"/>
 <meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-02.html"/>
 <meta property="og:type" content="article"/>
@@ -77,7 +77,7 @@
   </header>
   <div>
     <p><span class="caps">GITHUB</span>: <a href="https://github.com/chairco/django-tutorial-borrow">https://github.com/chairco/django-tutorial-borrow</a></p>
-<p>延續前一篇 <a href="">Django 教學第一篇-專案與環境設定</a>一鼓作氣接著來開始建立第一個 <span class="caps">APP</span>&nbsp;吧。</p>
+<p>延續前一篇 <a href="https://chairco.github.io/posts/2016/06/Django-Tutorial-01.html#Django-Tutorial-01">Django 教學第一篇-專案與環境設定</a> 一鼓作氣接著來開始建立第一個 <span class="caps">APP</span>&nbsp;吧。</p>
 <p>首先我們要先想像一下這個 <span class="caps">APP</span>&nbsp;會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。</p>
 <p>一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 <span class="caps">APP</span>，然後只有單一依賴性，原因是 Django 重視每個 <span class="caps">APP</span> 的獨立性，儘管你可以讓 a 這個 <span class="caps">APP</span> 去依賴 b (a depend on b, 有點像是在說以前的集合論，天雨地濕，地濕天不一定雨，胡扯一下)&nbsp;但不要做出相互依賴關係。</p>
 <p>所以我們會規劃三個 <span class="caps">APP</span>:</p>
@@ -294,8 +294,12 @@ Running migrations:
 
 
 <p>上面這段 code 你會發現我註解掉兩行註冊 table 的程式碼，取代是兩個用 decorator 註冊的類別，因為如果只留下註解的兩行程式碼， admin 畫面只會顯示 model 內 <code>def __str__(self)</code> 所定義的回傳值，為了讓畫面豐富與彈性，這不過是是自行定義顯示畫面的一些技巧罷了。</p>
-<p>接著嘗試增加一些資料玩玩看吧！</p>
-<p>不過你可能馬上會發現一個問題，這個需求一開始不是希望再開需求單時就能夠填寫機器的序號嗎？可是現在變成要到各自的表格去新增資料？ 沒關係這就是 Django Admin&nbsp;強大的地方。</p>
+<p>看看例子就更清楚，上下兩張圖差異:</p>
+<p><img alt="django-tutorial-ch2-p1" src="/pics/201607/django-tutorial-ch2-p1.png" /></p>
+<p><img alt="django-tutorial-ch2-p2" src="/pics/201607/django-tutorial-ch2-p2.png" /></p>
+<p>然後點選 <span class="caps">ADD</span> <span class="caps">LOAN</span>+&nbsp;開始嘗試增加一些資料玩玩看吧！</p>
+<p>誒，有點怪！馬上就發現一個問題，這個需求一開始不是希望再開需求單時就能夠填寫機器的序號嗎？可是現在變成要到各自的表格去新增資料？ 沒關係這就是 Django Admin&nbsp;強大的地方。</p>
+<p><img alt="django-tutorial-ch2-p3" src="/pics/201607/django-tutorial-ch2-p3.png" /></p>
 <p>說到這順便分享一下今年 PyCon <span class="caps">TW</span> 2016 有一個講題是<a href="https://tw.pycon.org/2016/en-us/events/talk/69827266518974528/#speaker-content">那些年，我用 Django Admin 接的案子</a>講者當年就是靠 Django Admin&nbsp;這個模組就能做出接案網站，所以不要小看這個不起眼的小模組呢。</p>
 <p>不過話題扯遠了，接下來我們將用模組內的 <code>inline admin</code> 將 <code>Device</code> 的 table 嵌入到 <code>Loan</code> 的&nbsp;table。</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">DeviceInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">TabularInline</span><span class="p">):</span>
@@ -311,7 +315,8 @@ Running migrations:
 
 
 <p>上面我們新增一個類別叫做 <code>DeviceInline</code> 然後添加一個 inlines 的變數並且 assign 成為 <code>list</code> 且 <code>list</code> 內存放 <code>DeviceInline</code>。</p>
-<p>接著你會發現新增一筆 Loan 資料 Device 就會自動顯示在下方，Jack&nbsp;這真是太神了啦！</p>
+<p>接著我們重新整理下網頁，嘗試再一次新增一筆 Loan 資料。 這時 Device 已經會自動顯示在下方了。Jack&nbsp;這真是太神了啦！</p>
+<p><img alt="django-tutorial-ch2-p4" src="/pics/201607/django-tutorial-ch2-p4.png" /></p>
 <hr />
 <p>那今天我們就先到這邊，下回待續囉。</p>
 <div class="footnote">
@@ -398,7 +403,7 @@ Running migrations:
   },
   "image": "/pics/7709136.png",
   "url": "../../../posts/2016/07/Django-Tutorial-02.html",
-  "description": "GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..."
+  "description": "GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 APP 會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。 一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 APP，然後只有單一依賴性 ..."
 }
 </script></body>
 </html>
