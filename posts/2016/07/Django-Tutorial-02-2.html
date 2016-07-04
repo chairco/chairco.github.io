@@ -79,7 +79,7 @@
     <p>兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 <span class="caps">APP</span>。</p>
 <p>在開始動手寫程式之前要先瞭解一下 Django 這個 <a href="http://mropengate.blogspot.tw/2015/08/mvcdjangomtv.html" title="MTV(Model-Template-View)"><span class="caps">MTV</span></a> 架構(Model-Template-View)。簡單來說在 Django 是使用 View 去取得哪一筆資料並透過 Template&nbsp;決定怎麼呈現。</p>
 <h3>第一個頁面</h3>
-<p>首先先來設計一個 <code>base.html</code> 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 <code>templates/base/base.html</code> 讓所有頁面可以繼承它。</p>
+<p>首先先來設計一個 <code>base.html</code> 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 <code>templates/base/base.html</code> 讓所有頁面可以繼承它。然後同時也建立一個 <code>static\base\...</code> 來放一些 css、js&nbsp;檔案</p>
 <p>直接看結構吧:</p>
 <div class="codehilite"><pre><span></span>borrow
 ├── borrow
@@ -104,7 +104,7 @@
 </pre></div>
 
 
-<p>做完之後很重要一點是要修改 <code>settings/base.py</code> 裡告訴 Django 新的 templates&nbsp;位置:</p>
+<p>做完之後很重要一點是要修改 <code>settings/base.py</code> 裡 <code>TEMPLATES</code> 變數告訴 Django 新的 templates&nbsp;位置:</p>
 <div class="codehilite"><pre><span></span>TEMPLATES = [
     {
         &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
@@ -116,7 +116,7 @@
 </pre></div>
 
 
-<p>然後新增 <code>STATICFILES_DIRS</code> 變數讓 Django 知道 static 位置(這個 folder 用來放 css, js 的&nbsp;檔案):</p>
+<p>然後也新增 <code>STATICFILES_DIRS</code> 變數讓 Django 知道 static 位置(這個 folder 用來放 css, js 的&nbsp;檔案):</p>
 <div class="codehilite"><pre><span></span>STATICFILES_DIRS = (
     os.path.join(BASE_DIR, &quot;static&quot;),
 )
