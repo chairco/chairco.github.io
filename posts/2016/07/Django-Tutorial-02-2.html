@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../theme/stylesheet/style.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+
+<meta name="author" content="chairco" />
+<meta name="description" content="GITHUB: [https://github.com/chairco/django-tutorial-borrow] 兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 Django 這個 ..." />
+<meta name="keywords" content="Coding, Django">
+<meta property="og:site_name" content="chairco's blog"/>
+<meta property="og:title" content="Django 教學第二篇-建立第一個 APP(續)"/>
+<meta property="og:description" content="GITHUB: [https://github.com/chairco/django-tutorial-borrow] 兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 Django 這個 ..."/>
+<meta property="og:locale" content="zh_TW"/>
+<meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-02-2.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2016-07-04 10:46:15+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="../../../author/chairco.html">
+<meta property="article:section" content="Coding"/>
+<meta property="article:tag" content="Coding"/>
+<meta property="article:tag" content="Django"/>
+<meta property="og:image" content="/pics/7709136.png">
+  <title>chairco's blog &ndash; Django 教學第二篇-建立第一個 APP(續)</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../..">
+        <img src="/pics/7709136.png" alt="Jason's Blog" title="Jason's Blog">
+      </a>
+      <h1><a href="../../..">Jason's Blog</a></h1>
+<p>Code / Travel / Other</p>      <nav>
+        <ul class="list">
+          <li><a href="../../../pages/About-Me/#About-Me">About&nbsp;Me</a></li>
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-google" href="#" target="_blank"><i class="fa fa-google"></i></a></li>
+        <li><a class="sc-twitter" href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/chairco" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/chairco" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-envelope-o" href="mailto:chairco@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+        <li><a class="sc-linkedin" href="#" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+      </ul>
+    </div>
+    <div>
+      <iframe src="https://www.facebook.com/plugins/follow.php?href=https%3A%2F%2Fwww.facebook.com%2Fchairco&width=76&height=21&layout=button_count&size=small&show_faces=true&appId=242673589413437" width="76" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    </div>
+  </aside>
+  <main>
+    <nav>
+      <a href="../../..">Home</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+    </nav>
+
+<article>
+  <header>
+    <h1 id="Django-Tutorial-02-2">Django 教學第二篇-建立第一個 <span class="caps">APP</span>(續)</h1>
+    <p>Posted on  7 04, 2016 in <a href="../../../category/coding.html">Coding</a></p>
+  </header>
+  <div>
+    <p><span class="caps">GITHUB</span>:&nbsp;[https://github.com/chairco/django-tutorial-borrow]</p>
+<p>兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 <span class="caps">APP</span>。</p>
+<p>在開始動手寫程式之前要先瞭解一下 Django 這個 <a href="http://mropengate.blogspot.tw/2015/08/mvcdjangomtv.html" title="MTV(Model-Template-View)"><span class="caps">MTV</span></a> 架構(Model-Template-View)。簡單來說在 Django 是使用 View 去取得哪一筆資料並透過 Template&nbsp;決定怎麼呈現。</p>
+<h3>第一個頁面</h3>
+<p>首先先來設計一個 <code>base.html</code> 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 <code>templates/base/base.html</code> 讓所有頁面可以繼承它。</p>
+<p>直接看結構吧:</p>
+<div class="codehilite"><pre><span></span>borrow
+├── borrow
+│   ├── __init__.py
+│   └── 略...
+├── loans
+│   ├── __init__.py
+│   ├── 略...
+│   └── templates
+│       └── loans
+│           ├── _base.html
+│           └── home.html
+├── static
+│   └── base
+│       ├── css
+│       │   └── 略...
+│       └── js
+│           └── 略...
+└── templates
+    └── base
+        └── base.html
+</pre></div>
+
+
+<p>做完之後很重要一點是要修改 <code>settings/base.py</code> 裡告訴 Django 新的 templates&nbsp;位置:</p>
+<div class="codehilite"><pre><span></span>TEMPLATES = [
+    {
+        &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+        &#39;DIRS&#39;: [
+                    os.path.join(BASE_DIR, &#39;templates&#39;).replace(&#39;\\&#39;, &#39;/&#39;),
+                    os.path.join(BASE_DIR, &#39;templates/base&#39;).replace(&#39;\\&#39;, &#39;/&#39;),
+        ],
+略...
+</pre></div>
+
+
+<p>然後新增 <code>STATICFILES_DIRS</code> 變數讓 Django 知道 static 位置(這個 folder 用來放 css, js 的&nbsp;檔案):</p>
+<div class="codehilite"><pre><span></span>STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, &quot;static&quot;),
+)
+</pre></div>
+
+
+<p>前面我們有提到在 Django View 是用來取得資料並且用 Template 來呈現資料樣貌，所以接下來我們可以開發第一個 view 了，打開 loans/views.py，然後鍵入下面的 code，這段 code 就是建立 function home 然後印出 <code>home.html</code> 這個頁面:</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;loans/home.html&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>接著要讓 Django 透過 <span class="caps">WSGI</span> 來拜訪這個頁面，因次我們打開 <code>borrow/urls.py</code> 來設定 routing&nbsp;的位置:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">loans.views</span> <span class="kn">import</span> <span class="n">home</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<p>Django 是用正規表達式( Regular Expression )來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home&nbsp;的位置就可以了囉。</p>
+<p>但突然想起一件事，還沒有建立 template&nbsp;呀！對，這才要回應前面第一段目的，在這邊我們的繼承關係會是這樣:</p>
+<div class="codehilite"><pre><span></span><span class="o">|</span> templates\base\base.html <span class="o">&lt;-</span> loans\templates\loans\\_base.html <span class="o">&lt;-</span> loans\templates\loans\home.html 
+</pre></div>
+
+
+<p>有點繁瑣，講一下概念:</p>
+<ul>
+<li><code>templates\base\base.html</code>: 所有 app 網頁的 base，像 nav&nbsp;等物件都放在這邊。</li>
+<li><code>loans\templates\loans\_base.html</code>: 這是每一個 app 的 base，這邊可以設定 <code>&lt;body&gt;&lt;/body&gt;</code></li>
+<li><code>loans\templates\loans\home.html</code>: 實際處理內容的&nbsp;template</li>
+</ul>
+<p>所以 template 的 code&nbsp;會長成這樣:</p>
+<div class="codehilite"><pre><span></span><span class="c">{# base/base.html #}</span>
+<span class="cp">{%</span> <span class="k">load</span> <span class="nv">staticfiles</span> <span class="cp">%}</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">title</span> <span class="cp">%}</span>物品借用系統<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">title</span> <span class="cp">%}</span><span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+
+<span class="nt">&lt;body&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}</span>
+<span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">&quot;navbar navbar-default navbar-static-top&quot;</span> <span class="na">role=</span><span class="s">&quot;navigation&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;navbar-header&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;navbar-brand&quot;</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="s1">&#39;home&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span><span class="nt">&gt;</span>物品借用系統<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/nav&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">body</span> <span class="cp">%}</span>
+
+<span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;//code.jquery.com/jquery-2.1.1.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script</span> <span class="na">src=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">&#39;base/js/base.js&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="nv">js</span> <span class="cp">%}</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="c">{# loans/_base.html #}</span>
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;base.html&#39;</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">body</span> <span class="cp">%}</span>
+<span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}{%</span> <span class="k">endblock</span> <span class="nv">content</span> <span class="cp">%}</span><span class="nt">&lt;/div&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">body</span> <span class="cp">%}</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="c">{# loans/home.html #}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;loans/_base.html&#39;</span> <span class="cp">%}</span><span class="x"></span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="nv">content</span> <span class="cp">%}</span><span class="x"></span>
+</pre></div>
+
+
+<p>輸入 <code>http://localhost:8000/</code> 看看是不是跑出畫面了呢？</p>
+<p><img alt="django-tutorial-ch2-2-p1" src="/pics/201607/django-tutorial-ch2-2-p1.png" /></p>
+<hr />
+<p>有一點成就感了嗎？ 其實 Django&nbsp;架構真的很複雜，第一次總會遇到些問題打擊信心，但一步步慢慢來總是可以學會。然後隨著架構愈趨複雜你會發現這些前置步驟的重要性。</p>
+<h2>先喘一下，我們會加快腳步用最快速度把第一個系統建立起來囉。</h2>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../tag/coding.html">Coding</a>
+      <a href="../../../tag/django.html">Django</a>
+    </p>
+  </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'chairco';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; chairco 2016 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79798833-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " chairco's blog ",
+  "url" : "../../..",
+  "image": "/pics/7709136.png",
+  "description": "Jason's Blog"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Django 教學第二篇-建立第一個 APP(續)",
+  "headline": "Django 教學第二篇-建立第一個 APP(續)",
+  "datePublished": "2016-07-04 10:46:15+08:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "chairco",
+    "url": "../../../author/chairco.html"
+  },
+  "image": "/pics/7709136.png",
+  "url": "../../../posts/2016/07/Django-Tutorial-02-2.html",
+  "description": "GITHUB: [https://github.com/chairco/django-tutorial-borrow] 兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 Django 這個 ..."
+}
+</script></body>
+</html>
