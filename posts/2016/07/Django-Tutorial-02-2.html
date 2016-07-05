@@ -141,21 +141,21 @@
 
 <p>Django 是用正規表達式( Regular Expression )來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home&nbsp;的位置就可以了囉。</p>
 <p>但突然想起一件事，還沒有建立 template&nbsp;呀！對，這才要回應前面第一段目的，在這邊我們的繼承關係會是這樣:</p>
-<div class="codehilite"><pre><span></span> templates\base\base.html
+<div class="codehilite"><pre><span></span> templates/base/base.html
          ＾
          ｜       
- loans\templates\loans\_base.html 
+ loans/templates/loans/_base.html 
          ＾
          ｜ 
- loans\templates\loans\home.html 
+ loans/templates/loans/home.html 
 </pre></div>
 
 
 <p>有點繁瑣，講一下概念:</p>
 <ul>
-<li><code>templates\base\base.html</code>: 所有 app 網頁的 base，像 nav&nbsp;等物件都放在這邊。</li>
-<li><code>loans\templates\loans\_base.html</code>: 這是每一個 app 的 base，這邊可以設定 <code>&lt;body&gt;&lt;/body&gt;</code></li>
-<li><code>loans\templates\loans\home.html</code>: 實際處理內容的&nbsp;template</li>
+<li><code>templates/base/base.html</code>: 所有 app 網頁的 base，像 nav&nbsp;等物件都放在這邊。</li>
+<li><code>loans/templates/loans/_base.html</code>: 這是每一個 app 的 base，這邊可以設定 <code>&lt;body&gt;&lt;/body&gt;</code></li>
+<li><code>loans/templates/loans/home.html</code>: 實際處理內容的&nbsp;template</li>
 </ul>
 <p>所以 template 的 code&nbsp;會長成這樣:</p>
 <div class="codehilite"><pre><span></span><span class="c">{# base/base.html #}</span>
@@ -246,7 +246,7 @@
 
 
 <p>你沒看錯，就短短的幾行這就是 <span class="caps">CBV</span> 威力。我們透過繼承 <code>ListView</code> 這個 class，然後呼叫 as_view() 這個 function 印出 model 內所有值<sup id="fnref:3"><a class="footnote-ref" href="#fn:3" rel="footnote">3</a></sup>。</p>
-<p>接著就是撰寫 template 來呈現資料樣貌，所以我們在 <code>loans\templates\loans\</code> 底下新增一個 <code>loan_list.html</code> 然後裡面的程式碼如下:</p>
+<p>接著就是撰寫 template 來呈現資料樣貌，所以我們在 <code>loans/templates/loans/</code> 底下新增一個 <code>loan_list.html</code> 然後裡面的程式碼如下:</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span><span class="c1"># loans/loan_list.html #}</span>
 <span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="s1">&#39;loans/_base.html&#39;</span> <span class="o">%</span><span class="p">}</span>
 
@@ -306,7 +306,7 @@
 
 
 <p>所以我們要在 <code>borrow/urls.py</code> 告訴他 <span class="caps">APP</span> loans 的位置，然後再到 <code>loans/urls.py</code> 設定 <code>loan_list</code></p>
-<div class="codehilite"><pre><span></span><span class="c1"># borrow\urls.py</span>
+<div class="codehilite"><pre><span></span><span class="c1"># borrow/urls.py</span>
 <span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 <span class="kn">from</span> <span class="nn">loans.views</span> <span class="kn">import</span> <span class="n">home</span>
