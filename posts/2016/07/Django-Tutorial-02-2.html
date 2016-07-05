@@ -305,7 +305,7 @@
 </pre></div>
 
 
-<p>所以我們要在 <code>borrow/urls.py</code> 告訴他 <span class="caps">APP</span> loans 的位置，然後再到 <code>loans\urls.py</code> 設定 <code>loan_list</code></p>
+<p>所以我們要在 <code>borrow/urls.py</code> 告訴他 <span class="caps">APP</span> loans 的位置，然後再到 <code>loans/urls.py</code> 設定 <code>loan_list</code></p>
 <div class="codehilite"><pre><span></span><span class="c1"># borrow\urls.py</span>
 <span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
@@ -333,13 +333,13 @@
 
 <p>設定完之後，我們打開瀏覽器打入網址 <code>http://localhost:8000/loan/</code> 看看是不是輸入的資料都跑出來了呢？</p>
 <p><img alt="django-tutorial-ch2-2-p2" src="/pics/201607/django-tutorial-ch2-2-p2.png" /></p>
-<p>哇，有沒有發現其實開發網頁並沒有想像中的困難嘛，接下來我們就照著這樣的開發思維(再複習一次):</p>
+<p>哇，有沒有發現其實開發網頁並沒有想像中的困難嘛，接下來我們就照著這樣的開發思維接著進入下一個流程，建立一個頁面讓使用者可以填單囉。(再複習一次):</p>
 <ul>
 <li>建立 view (當需要輸入資料庫就需要編輯&nbsp;form)</li>
 <li>透過 template&nbsp;呈現畫面</li>
 <li>urls pattern 告訴 django&nbsp;連接對應的頁面</li>
 </ul>
-<p>接著就要進入下一個流程，建立一個頁面讓使用者可以填單囉。不過教學還是有點冗長，所以我們再開一個新的頁面來說吧。</p>
+<p>教學還是有點冗長，所以我們再開一個新的頁面來說吧。</p>
 <div class="footnote">
 <hr />
 <ol>
