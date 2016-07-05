@@ -79,7 +79,7 @@
     <p>兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成兩篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 <span class="caps">APP</span>。</p>
 <p>在開始動手寫程式之前要先瞭解一下 Django 這個 <a href="http://mropengate.blogspot.tw/2015/08/mvcdjangomtv.html" title="MTV(Model-Template-View)"><span class="caps">MTV</span></a> 架構(Model-Template-View)。簡單來說在 Django 是使用 View 去取得哪一筆資料並透過 Template&nbsp;決定怎麼呈現。</p>
 <h3>第一個頁面</h3>
-<p>首先先來設計一個 <code>base.html</code> 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 <code>templates/base/base.html</code> 讓所有頁面可以繼承它。然後同時也建立一個 <code>static\base\...</code> 來放一些 css、js&nbsp;檔案</p>
+<p>首先先來設計一個 <code>base.html</code> 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 <code>templates/base/base.html</code> 讓所有頁面可以繼承它。然後同時也建立一個 <code>static/base/...</code> 來放一些 css、js&nbsp;檔案</p>
 <p>直接看結構吧:</p>
 <div class="codehilite"><pre><span></span>borrow
 ├── borrow
@@ -212,6 +212,148 @@
 <hr />
 <p>有一點成就感了嗎？ 其實 Django&nbsp;架構真的很複雜，第一次總會遇到些問題打擊信心，但一步步慢慢來總是可以學會。然後隨著架構愈趨複雜你會發現這些前置步驟的重要性。</p>
 <p>先喘一下，我們會加快腳步用最快速度把第一個系統建立起來囉。</p>
+<hr />
+<h3>進入開發第一步</h3>
+<p>打鐵要趁熱，接下來我們要建立一個借用系統表單流程，這個流程的使用者情境 (user story)&nbsp;應該會是這樣:</p>
+<div class="codehilite"><pre><span></span>新增表單 -&gt; 填寫表單 -&gt; 送出表單
+</pre></div>
+
+
+<p>但對於系統開發流程大體來說會是這樣:</p>
+<div class="codehilite"><pre><span></span>1. 新增表單 -&gt; [urls pattern 找到對應 view] -&gt; [view 根據對應 template] -&gt; [顯示 html]
+2. 填寫表單 -&gt; [view 根據 form 找到 model ] -&gt; [ 印出對應欄位給使用者填寫 ] -&gt; [如果有多筆 device， 按下增加按鈕就會透過 js 新增一個欄位給使用者填寫]
+3. 送出表單 -&gt; [view 會檢查欄位內容的型態是否正確] -&gt; [正確就會存進資料庫] -&gt; [網站轉址]
+</pre></div>
+
+
+<p>所以我們在開發順序的思維就會是</p>
+<ul>
+<li>建立 view (當需要輸入資料庫就需要編輯&nbsp;form)</li>
+<li>透過 template&nbsp;呈現畫面</li>
+<li>urls pattern 告訴 django&nbsp;連接對應的頁面</li>
+</ul>
+<p>還記得一開始時我們在 admin module 建立了幾筆資料嗎？ 那就先從印出資料畫面著手吧，首先打開 <code>loans/views.py</code>。</p>
+<p>這邊會捨棄 <span class="caps">FBV</span>(Function-Based-View) 直接用 <span class="caps">CBV</span>(Class-Based-View) 來做開發<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>，程式碼會長這樣:</p>
+<div class="codehilite"><pre><span></span><span class="c1">#  loans/views.py</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">ListView</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Loan</span>
+
+<span class="k">class</span> <span class="nc">LoanList</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Loan</span>
+</pre></div>
+
+
+<p>你沒看錯，就短短的幾行這就是 <span class="caps">CBV</span> 威力。我們透過繼承 <code>ListView</code> 這個 class，然後呼叫 as_view() 這個 function 印出 model 內所有值<sup id="fnref:3"><a class="footnote-ref" href="#fn:3" rel="footnote">3</a></sup>。</p>
+<p>接著就是撰寫 template 來呈現資料樣貌，所以我們在 <code>loans\templates\loans\</code> 底下新增一個 <code>loan_list.html</code> 然後裡面的程式碼如下:</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="c1"># loans/loan_list.html #}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="s1">&#39;loans/_base.html&#39;</span> <span class="o">%</span><span class="p">}</span>
+
+<span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">title</span> <span class="o">%</span><span class="p">}</span><span class="n">Loans</span> <span class="o">|</span> <span class="p">{{</span> <span class="n">block</span><span class="o">.</span><span class="n">super</span> <span class="p">}}{</span><span class="o">%</span> <span class="n">endblock</span> <span class="n">title</span> <span class="o">%</span><span class="p">}</span>
+
+<span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">content</span> <span class="o">%</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;page-header&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;btn btn-primary pull-right&quot;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;{</span><span class="si">% u</span><span class="s2">rl &#39;loan_add&#39; %}&quot;</span><span class="o">&gt;</span><span class="n">Add</span> <span class="n">Loan</span> <span class="n">Request</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">Loan</span> <span class="n">List</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">table</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;table table-striped&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">th</span><span class="o">&gt;</span><span class="c1">#&lt;/th&gt;</span>
+            <span class="o">&lt;</span><span class="n">th</span><span class="o">&gt;</span><span class="n">purpose</span><span class="o">&lt;/</span><span class="n">th</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">th</span><span class="o">&gt;</span><span class="n">owner</span><span class="o">&lt;/</span><span class="n">th</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">th</span><span class="o">&gt;</span><span class="n">created_at</span><span class="o">&lt;/</span><span class="n">th</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">tr</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">object_list</span> <span class="o">%</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="nb">object</span><span class="o">.</span><span class="n">id</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;{{ object.get_absolute_url }}&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="nb">object</span><span class="o">.</span><span class="n">purpose</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="o">&gt;</span><span class="p">{{</span> <span class="nb">object</span><span class="o">.</span><span class="n">owner</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="nb">object</span><span class="o">.</span><span class="n">created_at</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">tr</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+    <span class="o">&lt;/</span><span class="n">table</span><span class="o">&gt;</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="n">content</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+
+
+<p>首先不要忘記繼承 <code>loans/_base.html</code> 這個 template，然後在 <code>{% block content %}{% endblock content %}</code> 的內容之間撰寫 <span class="caps">HTML</span>&nbsp;的程式碼。</p>
+<p>這個頁面我希望用表格方式顯示，所以用 for 迴圈把從 <code>views.py</code> 內取得的回傳得值 <code>object_list</code> 資料印出來。</p>
+<p>其中一行程式碼 <code>{% url 'loan_add' %}</code> 要先改成 <code>#</code> 因為 <code>loan_add</code> 是我們在 urls pattern 可用來代換的名稱，因為當我們有一天修改 urls pattern 裡對應 <code>views.py</code> 的函式時，就不需要再去修改 template&nbsp;內的超連結網址囉。</p>
+<p>但是目前在 urls pattern 內還沒有這個名稱，所以我們就先用 <code>#</code> 來代替，不然網頁執行就會因為找不到名稱而出錯。</p>
+<p>最後只要在 urls.py 建立 pattern。先跳出來說明，Django 專案建立時會在專案名稱目錄下產生一個 <code>urls.py</code> 以這個範例來看就是位於環境變數的資料夾底下 <code>borrow/urls.py</code>。</p>
+<p>但你要想想，一個專案可能有很多 <span class="caps">APP</span>，而這些 <span class="caps">APP</span> 可能有一些類似功能，我們總不希望把所有 pattern 扁平化吧？還是希望分層，如果根據 <span class="caps">APP</span>&nbsp;名稱會是不錯的方法。因此一個網站的分類就會如下:</p>
+<div class="codehilite"><pre><span></span><span class="n">localhost</span><span class="o">:</span><span class="mi">8000</span><span class="o">/</span>
+<span class="n">localhost</span><span class="o">:</span><span class="mi">8000</span><span class="sr">/aaa/</span><span class="n">list</span>
+<span class="n">localhost</span><span class="o">:</span><span class="mi">8000</span><span class="sr">/bbb/</span><span class="n">list</span>
+</pre></div>
+
+
+<p>所以有這個觀念後就在 <code>loans/</code> 路徑底下建立一個 <code>urls.py</code>，所以你看到的結構會是這樣</p>
+<div class="codehilite"><pre><span></span>borrow
+├── borrow
+│   ├── __init__.py
+│   ├── 略...
+│   ├── urls.py
+│   └── wsgi.py
+└── loans
+    ├── __init__.py
+    ├── 略...
+    ├── urls.py
+    └── views.py
+</pre></div>
+
+
+<p>所以我們要在 <code>borrow/urls.py</code> 告訴他 <span class="caps">APP</span> loans 的位置，然後再到 <code>loans\urls.py</code> 設定 <code>loan_list</code></p>
+<div class="codehilite"><pre><span></span><span class="c1"># borrow\urls.py</span>
+<span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">loans.views</span> <span class="kn">import</span> <span class="n">home</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^loan/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;loans.urls&#39;</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;home&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="c1"># loans/urls.py</span>
+<span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">LoanList</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;loan_list&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<p>設定完之後，我們打開瀏覽器打入網址 <code>http://localhost:8000/loan/</code> 看看是不是輸入的資料都跑出來了呢？</p>
+<p><img alt="django-tutorial-ch2-2-p2" src="/pics/201607/django-tutorial-ch2-2-p2.png" /></p>
+<p>哇，有沒有發現其實開發網頁並沒有想像中的困難嘛，接下來我們就照著這樣的開發思維(再複習一次):</p>
+<ul>
+<li>建立 view (當需要輸入資料庫就需要編輯&nbsp;form)</li>
+<li>透過 template&nbsp;呈現畫面</li>
+<li>urls pattern 告訴 django&nbsp;連接對應的頁面</li>
+</ul>
+<p>接著就要進入下一個流程，建立一個頁面讓使用者可以填單囉。不過教學還是有點冗長，所以我們再開一個新的頁面來說吧。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>使用過 Class 類別都知道在開發程式碼時有時我們會儘量避免重複的程式碼一直出現，在 python 裡有一個格言是 there should be one—and preferably only one—obvious way to do it<sup id="fnref:2"><a class="footnote-ref" href="#fn:2" rel="footnote">2</a></sup> 中文翻譯 &#8220;用一種方法，最好是只有一種方法來做一件事&#8221;。 <span class="caps">CBV</span> 就是用繼承方式避免重複的程式碼不斷發生，可參考 <span class="caps">TP</span> 這一篇 <a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/19-class-based-view.md">class-based-view</a>。&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Peters, Tim (19 August 2004). <a href="https://www.python.org/dev/peps/pep-0020/"><span class="caps">PEP</span> 20 – The Zen of Python</a>. Python Enhancement Proposals. Python Software Foundation. Retrieved 24 November 2008.&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>關於詳細的實作可以參考 <a href="http://ccbv.co.uk/projects/Django/1.9/django.views.generic.list/ListView/">ccbv ListView</a>&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
   </div>
   <div class="tag-cloud">
     <p>
