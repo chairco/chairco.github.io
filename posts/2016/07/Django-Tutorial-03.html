@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="../../../theme/stylesheet/style.css">
+
+  <link rel="stylesheet" type="text/css" href="../../../theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="../../../theme/font-awesome/css/font-awesome.min.css">
+
+
+
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="" />
+
+
+<meta name="author" content="chairco" />
+<meta name="description" content="有了觀念之後，在撰寫程式過程中就會有一些很直覺的想法，面對繁瑣的流程也就比較容易駕輕就熟(好像學習數學的感覺啊) 這個教學也希望用這種方法來開發，畢竟一時間要搞懂所有的觀念與技術對多數人來說都比較困難，但做中學讓自己投入，就會像堆積木一樣慢慢把不足的知識補足。 回顧前面兩篇文章，其實我們已經把整個 Django 後端都建立起來。接下來就是將前端與後端做一個橋接，前端就像是一個動作流程，後端就是邏輯執行。 所以在回顧一下流程與程式邏輯: 1. 新增表單 -> [urls pattern 找到對應 view] -> [view 根據對應 ..." />
+<meta name="keywords" content="Coding, Django">
+<meta property="og:site_name" content="chairco's blog"/>
+<meta property="og:title" content="Django 教學第三篇-建立 MODEL 和用 CBV 來做程式開發"/>
+<meta property="og:description" content="有了觀念之後，在撰寫程式過程中就會有一些很直覺的想法，面對繁瑣的流程也就比較容易駕輕就熟(好像學習數學的感覺啊) 這個教學也希望用這種方法來開發，畢竟一時間要搞懂所有的觀念與技術對多數人來說都比較困難，但做中學讓自己投入，就會像堆積木一樣慢慢把不足的知識補足。 回顧前面兩篇文章，其實我們已經把整個 Django 後端都建立起來。接下來就是將前端與後端做一個橋接，前端就像是一個動作流程，後端就是邏輯執行。 所以在回顧一下流程與程式邏輯: 1. 新增表單 -> [urls pattern 找到對應 view] -> [view 根據對應 ..."/>
+<meta property="og:locale" content="zh_TW"/>
+<meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-03.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2016-07-06 14:59:23+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="../../../author/chairco.html">
+<meta property="article:section" content="Coding"/>
+<meta property="article:tag" content="Coding"/>
+<meta property="article:tag" content="Django"/>
+<meta property="og:image" content="/pics/7709136.png">
+  <title>chairco's blog &ndash; Django 教學第三篇-建立 MODEL 和用 CBV 來做程式開發</title>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="../../..">
+        <img src="/pics/7709136.png" alt="Jason's Blog" title="Jason's Blog">
+      </a>
+      <h1><a href="../../..">Jason's Blog</a></h1>
+<p>Code / Travel / Other</p>      <nav>
+        <ul class="list">
+          <li><a href="../../../pages/about-me/#about-me">About&nbsp;Me</a></li>
+        </ul>
+      </nav>
+      <ul class="social">
+        <li><a class="sc-google" href="#" target="_blank"><i class="fa fa-google"></i></a></li>
+        <li><a class="sc-twitter" href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="sc-facebook" href="https://www.facebook.com/chairco" target="_blank"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/chairco" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-envelope-o" href="mailto:chairco@gmail.com" target="_blank"><i class="fa fa-envelope-o"></i></a></li>
+        <li><a class="sc-linkedin" href="#" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+      </ul>
+    </div>
+    <div>
+      <iframe src="https://www.facebook.com/plugins/follow.php?href=https%3A%2F%2Fwww.facebook.com%2Fchairco&width=76&height=21&layout=button_count&size=small&show_faces=true&appId=242673589413437" width="76" height="21" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    </div>
+  </aside>
+  <main>
+    <nav>
+      <a href="../../..">Home</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+    </nav>
+
+<article>
+  <header>
+    <h1 id="Django-Tutorial-03">Django 教學第三篇-建立 <span class="caps">MODEL</span> 和用 <span class="caps">CBV</span>&nbsp;來做程式開發</h1>
+    <p>Posted on  7 06, 2016 in <a href="../../../category/coding.html">Coding</a></p>
+  </header>
+  <div>
+    <p>有了觀念之後，在撰寫程式過程中就會有一些很直覺的想法，面對繁瑣的流程也就比較容易駕輕就熟(好像學習數學的感覺啊)</p>
+<p>這個教學也希望用這種方法來開發，畢竟一時間要搞懂所有的觀念與技術對多數人來說都比較困難，但做中學讓自己投入，就會像堆積木一樣慢慢把不足的知識補足。</p>
+<p>回顧前面兩篇文章，其實我們已經把整個 Django&nbsp;後端都建立起來。接下來就是將前端與後端做一個橋接，前端就像是一個動作流程，後端就是邏輯執行。</p>
+<p>所以在回顧一下流程與程式邏輯:</p>
+<div class="codehilite"><pre><span></span>1. 新增表單 -&gt; [urls pattern 找到對應 view] -&gt; [view 根據對應 template] -&gt; [顯示 html]
+2. 填寫表單 -&gt; [view 根據 form 找到 model ] -&gt; [ 印出對應欄位給使用者填寫 ] -&gt; [如果有多筆 device， 按下增加按鈕就會透過 js 新增一個欄位給使用者填寫]
+3. 送出表單 -&gt; [view 會檢查欄位內容的型態是否正確] -&gt; [正確就會存進資料庫] -&gt; [網站轉址]
+</pre></div>
+
+
+<p>所以我們需要的程式邏輯應該會有:</p>
+<ul>
+<li>Create, Add loan request:&nbsp;新增表單</li>
+<li>Edit, Update loan request:&nbsp;編輯表單</li>
+<li>Mixin both form: Loan and Device: Loan 和 Device 兩個 table 的 form&nbsp;要合併在一起。</li>
+</ul>
+<h3>建立 view 與 form&nbsp;取得資料</h3>
+<p>所以我們可以開始建立 view, 首先是新增表單的部分，不要忘記我們也希望使用者在新增表單同時也可以新增 Device 這時就需要透過 forms.py&nbsp;來處理這個部分。</p>
+<p>主程式會長這樣，<code>class LoanCreateView()</code> 會繼承 <code>FormsetMixin</code> 和 <code>Createview</code>，前面我們有提到這個繼承自 <code>django.views.generic</code> 的 class <code>Createview</code> 可以協助我們透過 <code>get_form</code> 產生 form class 再與 我們指定的 template_name 結合&nbsp;response。</p>
+<div class="codehilite"><pre><span></span><span class="c1">#  loans/views.py</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">CreateView</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Loan</span>
+
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">LoanForm</span><span class="p">,</span> <span class="n">LoanFormSet</span>
+
+<span class="k">class</span> <span class="nc">LoanCreateView</span><span class="p">(</span><span class="n">FormsetMixin</span><span class="p">,</span> <span class="n">CreateView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;loans/loan_formset.html&#39;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Loan</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">LoanForm</span>
+    <span class="n">formset_class</span> <span class="o">=</span> <span class="n">LoanFormSet</span>
+</pre></div>
+
+
+<p>如果我們單純只是要處理某一個 table 並把裡面的 field 回傳 form 那大概到這邊就完成了，但因為我還想將 <code>Device</code> table 內的 field&nbsp;也整併一起這時我們就需要做一些處理:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">FormsetMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;is_update_view&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+
+        <span class="n">form_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form_class</span><span class="p">()</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">(</span><span class="n">form_class</span><span class="p">)</span>
+        <span class="n">formset_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formset_class</span><span class="p">()</span>
+        <span class="n">formset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formset</span><span class="p">(</span><span class="n">formset_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="o">=</span><span class="n">formset</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;is_update_view&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_object</span><span class="p">()</span>
+
+        <span class="n">form_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form_class</span><span class="p">()</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_form</span><span class="p">(</span><span class="n">form_class</span><span class="p">)</span>
+        <span class="n">formset_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formset_class</span><span class="p">()</span>
+        <span class="n">formset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_formset</span><span class="p">(</span><span class="n">formset_class</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">formset</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">form_invalid</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_formset_class</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">formset_class</span>
+
+    <span class="k">def</span> <span class="nf">get_formset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">formset_class</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">formset_class</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_formset_kwargs</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">get_formset_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;instance&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">):</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span>
+                <span class="s1">&#39;files&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">,</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">formset</span><span class="o">.</span><span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="n">formset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">form_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="o">=</span><span class="n">formset</span><span class="p">))</span>
+</pre></div>
+
+
+<p>首先上面這段程式碼，是讓我們告訴 Django 有兩個 form, 一個是 Loan 的 form 一個是回傳自 <code>forms.py</code> 透過 <code>from django.forms.models import inlineformset_factory</code> 處理過後的 form，然後透過 <code>FormsetMixin</code> 將兩個 form&nbsp;合併之後回傳。</p>
+<p>至於 <code>forms.py</code> 是透過 <code>inlineformset_factory</code> 這個函式將 Loan 和 Device 做合併，然後可以設定一開始要印出的數量，還有需要填寫的&nbsp;field。</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">django.forms.models</span> <span class="kn">import</span> <span class="n">inlineformset_factory</span>
+
+<span class="n">LoanFormSet</span> <span class="o">=</span> <span class="n">inlineformset_factory</span><span class="p">(</span>
+    <span class="n">Loan</span><span class="p">,</span> <span class="n">Device</span><span class="p">,</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">min_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;isn&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+
+<hr />
+<p>想不到今天有點拖太久先暫時停筆，等有時間再把內容做更詳細補完和說明吧&nbsp;:)</p>
+<h3>透過 template&nbsp;呈現畫面</h3>
+<h3>urls pattern&nbsp;連接對應的頁面</h3>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="../../../tag/coding.html">Coding</a>
+      <a href="../../../tag/django.html">Django</a>
+    </p>
+  </div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'chairco';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; chairco 2016 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+</p>
+<p>Built using <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a></p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79798833-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " chairco's blog ",
+  "url" : "../../..",
+  "image": "/pics/7709136.png",
+  "description": "Jason's Blog"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "name": "Django 教學第三篇-建立 MODEL 和用 CBV 來做程式開發",
+  "headline": "Django 教學第三篇-建立 MODEL 和用 CBV 來做程式開發",
+  "datePublished": "2016-07-06 14:59:23+08:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "chairco",
+    "url": "../../../author/chairco.html"
+  },
+  "image": "/pics/7709136.png",
+  "url": "../../../posts/2016/07/Django-Tutorial-03.html",
+  "description": "有了觀念之後，在撰寫程式過程中就會有一些很直覺的想法，面對繁瑣的流程也就比較容易駕輕就熟(好像學習數學的感覺啊) 這個教學也希望用這種方法來開發，畢竟一時間要搞懂所有的觀念與技術對多數人來說都比較困難，但做中學讓自己投入，就會像堆積木一樣慢慢把不足的知識補足。 回顧前面兩篇文章，其實我們已經把整個 Django 後端都建立起來。接下來就是將前端與後端做一個橋接，前端就像是一個動作流程，後端就是邏輯執行。 所以在回顧一下流程與程式邏輯: 1. 新增表單 -> [urls pattern 找到對應 view] -> [view 根據對應 ..."
+}
+</script></body>
+</html>
