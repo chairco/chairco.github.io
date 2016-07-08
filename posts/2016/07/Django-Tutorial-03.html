@@ -399,7 +399,7 @@
 
 <p>可以發現 <code>form_valid</code> 會幫我們確認 <code>field</code> 內容是否有符合規範，然後和建立一個 loan 和 device 的 <code>formset instance</code> 接著儲存。儲存之後會回傳 <code>get_absolute_url()</code> 這個函式，使用者的頁面就會轉換過去。但 <code>get_absolute_url()</code> 是？？？</p>
 <p>因為 Django 是一個 <span class="caps">MTV</span> 架構，因此一些固定邏輯我們會希望在 Model 處理，所以我們打開 <code>models.py</code> 回顧一下當時我偷偷加的函式</p>
-<p>找到 <code>class Loan</code> 的最下面就看到這個函式，我們透過 decorator <code>@models.permarlink</code> 可以直接叫 get_absolute_url()，不過別忘記提供 pk 參數，這樣才知道要取得哪一筆資料。
+<p>找到 <code>class Loan</code> 的最下面就看到這個函式，我們透過 decorator <code>@models.permarlink</code> 可以直接呼叫 get_absolute_url()，不過別忘記提供 pk 參數，這樣才知道要取得哪一筆資料。
 <em>寫這篇同時發現 2013 後 Django 不建議用 permalink 這個 decorator<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup></em></p>
 <div class="codehilite"><pre><span></span><span class="nd">@models.permalink</span>
 <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -408,7 +408,7 @@
 </pre></div>
 
 
-<p>然後再重複一遍 views -&gt; template 在 views.py 建立一個 <code>class LoanDetail(DetailView)</code> 用來取得資料。有發現用 <span class="caps">CBV</span>&nbsp;好處了嗎？ </p>
+<p>然後再重複一遍開發流程 views -&gt; template。所以在 views.py 建立一個 <code>class LoanDetail(DetailView)</code> 用來取得資料。嘿嘿，有發現用 <span class="caps">CBV</span>&nbsp;好處了嗎？ </p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LoanDetail</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">Loan</span>
