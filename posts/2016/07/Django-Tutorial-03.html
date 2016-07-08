@@ -185,7 +185,7 @@
 <p>好了，人有惰性，但拖稿也不能拖太久 <span class="caps">XD</span></p>
 <p>前面我們透過 <code>views.py</code> 和 <code>forms.py</code> 兩隻程式幫我們處理好後端整合兩個關聯性 table 的邏輯後，接著就可以透過前端撰寫 <code>html</code> 來處理 template&nbsp;展現資料的方法。</p>
 <h3>透過 template&nbsp;呈現畫面</h3>
-<p>首先我們在 <code>loans/templates/</code> 底下新增一個 html 檔案叫 <code>loan_formset.html</code> 這個 html。其實眼尖的朋友應該想起來 <code>views.py</code> 下面的 <code>class LoanCreateView(FormsetMixin, CreateView)</code> 一開始就有設定一個 <code>template_name</code> 就指向這個檔案位置，也就是說黨我們呼叫 <code>class CreateView</code> 下的方法函式 <code>as.view()</code> 他自動會 response 一串 <code>dict</code> 內容給這個 <code>html</code></p>
+<p>首先我們在 <code>loans/templates/</code> 底下新增一個 html 檔案叫 <code>loan_formset.html</code> 這個 html。其實眼尖的朋友應該想起來 <code>views.py</code> 下面的 <code>class LoanCreateView(FormsetMixin, CreateView)</code> 一開始就有設定一個 <code>template_name</code> 就指向這個檔案位置，也就是說當我們呼叫 <code>class CreateView</code> 下的方法函式 <code>as.view()</code> 他自動會 response 一串 <code>dict</code> 內容給這個 <code>html</code></p>
 <p>所以我們開始編輯 <code>loan_formset.html</code>，一樣繼承 <code>loans/_base.html</code>。然後&#8230;</p>
 <div class="codehilite"><pre><span></span>{# loans/loan_formset.html #}
 {% extends &#39;loans/_base.html&#39; %}
@@ -397,10 +397,10 @@
 </pre></div>
 
 
-<p>可以發現 <code>form_valid</code> 會幫我們確認 <code>field</code> 內容是否有符合規範，然後和建立一個 loan 和 device 的 <code>formset instance</code> 接著儲存。儲存之後會會傳 <code>get_absolute_url()</code> 這個函式，使用者的頁面就會轉換過去。但 <code>get_absolute_url()</code> 是？？？</p>
+<p>可以發現 <code>form_valid</code> 會幫我們確認 <code>field</code> 內容是否有符合規範，然後和建立一個 loan 和 device 的 <code>formset instance</code> 接著儲存。儲存之後會回傳 <code>get_absolute_url()</code> 這個函式，使用者的頁面就會轉換過去。但 <code>get_absolute_url()</code> 是？？？</p>
 <p>因為 Django 是一個 <span class="caps">MTV</span> 架構，因此一些固定邏輯我們會希望在 Model 處理，所以我們打開 <code>models.py</code> 回顧一下當時我偷偷加的函式</p>
-<p>找到 <code>class Loan</code> 的最下面就看到這個函式，我們透過 decorator permarlink 可以直接叫 get_absolute_url，然後我們要提供 pk 參數，這樣才知道要取得哪一筆資料。
-不過在寫這篇同時發現 2013 後 Django 不建議用 permalink 這個 decorator<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup></p>
+<p>找到 <code>class Loan</code> 的最下面就看到這個函式，我們透過 decorator <code>@models.permarlink</code> 可以直接叫 get_absolute_url()，不過別忘記提供 pk 參數，這樣才知道要取得哪一筆資料。
+<em>寫這篇同時發現 2013 後 Django 不建議用 permalink 這個 decorator<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup></em></p>
 <div class="codehilite"><pre><span></span><span class="nd">@models.permalink</span>
 <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1">#return reverse(&#39;loan_detail&#39;, kwargs={&#39;pk&#39;: self.pk})</span>
