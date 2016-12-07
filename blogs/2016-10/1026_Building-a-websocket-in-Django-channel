@@ -1,0 +1,13 @@
+---
+Title: 用 Django channel 建立 Websocket
+Date: 2016-10-26 10:15:56
+Tags: Django channel, channel, real time,
+Category: Django
+Slug: Building a websocket in Django channel
+---
+
+test
+
+[Django channel 入門指南]: https://www.oschina.net/translate/in_deep_with_django_channels_the_future_of_real_time_apps_in_django
+[Django channel docs]: http://channels.readthedocs.io/en/stable/
+[PyCon 2016 us Reinventing Django for the Real-Time Web]: https://www.youtube.com/watch?v=2sEPipctTxw&feature=youtu.be
