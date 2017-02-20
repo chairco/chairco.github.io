@@ -162,23 +162,11 @@ source env/bin/activate
 
 
 <p>如之前所說，因為開發 Web 時會先在本機端開發，然後再把程式部署到正式機，需要處理環境變數。首先在這邊我會做簡單整理與歸納目前我看 3個教學分出的 2&nbsp;種方法：</p>
-<table>
-<thead>
-<tr>
-<th align="center">官方</th>
-<th align="center"><span class="caps">TP</span></th>
-<th align="center">Django Girl</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">全部放在預設 setting.py</td>
-<td align="center">建立 settings/ 再區分</td>
-<td align="center">全部放在預設 setting.py</td>
-</tr>
-</tbody>
-</table>
-<hr />
+<ul>
+<li>官方: 全部放在預設&nbsp;setting.py</li>
+<li><span class="caps">TP</span>: 建立 settings/&nbsp;再區分</li>
+<li>Django Girl: 全部放在預設&nbsp;setting.py</li>
+</ul>
 <p>其實就是建立一個 <code>settings</code> 資料夾再歸納不同的環境變數 <code>.py</code>。
 所以接下來將 <code>settings.py</code> 移到 <code>settings</code> 資料夾並改名為 <code>base.py</code>。然後在 settings 目錄裡建立三個空白檔案：<code>__init__.py</code>、<code>local.py</code>、<code>production.py</code>:</p>
 <div class="codehilite"><pre><span></span>(env)cd cd borrow/borrow
