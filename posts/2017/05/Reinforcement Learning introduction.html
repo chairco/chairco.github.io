@@ -158,7 +158,7 @@
 6.&nbsp;所以我們可以透過這樣馬可夫的動態推導機率</p>
 <p>接著談到報酬要怎麼做，提到了 Q-Learning，定義為 Q 值。所以透過馬可夫的動態決策過程我們不斷去累積報酬的折現（Q&nbsp;值）簡單講其實就是統計上的一種期望值啦，不斷的重複某種行為到最後當然就會逐漸出現一種好的結果。在做這樣的訓練過程講師認為不是要達到目標與獲得正報酬，而是要避開風險。</p>
 <h3>深度學習(Deep&nbsp;Learning)</h3>
-<p>接著課題回到了神經網路，必經增強式學習與類神經網路結合的效果很不錯，因此來談談類神經網路 <sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup>。要談類神經網路之前就要先從邏輯迴歸(Logistic Regression
+<p>接著課題回到了神經網路，增強式學習與類神經網路結合的效果很不錯，因此來談談類神經網路 <sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup>。要談類神經網路之前就要先從邏輯迴歸(Logistic Regression
 )說起。邏輯迴歸Logistic Regression)簡單來講就是在平面上透過一條線去評定兩端，因此經常用在統計學、經濟學等範疇。但通常在實務上遇到問題是我們並不知道那條線的方程式，但有很多那條線方程式所產生的資料(如果對這個有興趣可以去聽林軒田老師的機器學習基石提到的 Perception Learning Algorithm, <span class="caps">PLA</span>)那我們要怎麼找到這個方程式？</p>
 <p>簡單來說我們可以寫一個演算法，然後用資料不斷去帶入，假設 a 類帶入方程式希望是正的，b 類帶入方程式希望是負的，所以我們不斷去測試直到找到一個可以測試正確的。然後在測試過程我們要給他反饋就是所謂的 Cost Function 或是稱 Lost Function。簡而言之就是說你找到對的花費小，找到錯的花費大。而最小化 Cost Function 的演算法就是 <span class="caps">SGD</span>(Stochastic Gtadient Descent)。然後這樣複雜的事情 Keras 這個 Python&nbsp;套件讓這件事變得美好。</p>
 <h3>Q-Learning</h3>
