@@ -117,8 +117,11 @@
     <article>
         <p>這篇主要整理了今天一堂 Reinforcement Learning 課程的整天課程紀錄。所有的實作主要會在 <a href="https://console.cloud.google.com/compute">Google Cloud Platform</a>&nbsp;上完成，按照網站上說法是需要信用卡申請才能使用原因是避免機器人自動申請。</p>
 <p>課程大綱可以參考<a href="https://sites.google.com/view/caigame/%E9%A6%96%E9%A0%81?authuser=0">網站</a>，接下來會以我今天有限的腦力紀錄。</p>
+<h3>雲端機器與 Docker&nbsp;環境設置</h3>
 <p>今天上半場主要講解如何在 <span class="caps">GCP</span> 上啟用一個 instance，並且安裝 docker <sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>，接著 pull 一個已經預先做好的 docker image，接著設定防火牆讓 jupyter notebook 可以透過外網連入 jupyter notebook 操作。要注意是一開始 demo 是不開啟 <span class="caps">GPU</span> 版本，因此可以不需要安裝 nvdia 的&nbsp;driver</p>
+<h3>OpenAI&nbsp;Gym</h3>
 <p>接著開始介紹 OpenAI Gym 這個套件 <sup id="fnref:2"><a class="footnote-ref" href="#fn:2" rel="footnote">2</a></sup>。這個套件出現的目的是用來建立一個增強式學習的平台。簡單來說就是讓環境(environment)和機器人(agent)之間相互作用的溝通平台。同時也內建了許多已經事先安裝好的環境，就是透過一些 api&nbsp;讓你的機器人可以用簡單方式與環境活動進而可以簡單的進行增強式學習。</p>
+<h3>增強式學習(Reinforcement&nbsp;Learning)</h3>
 <p>接著是增強式學習的介紹。講師以一篇 2015 年的增強式學習投影片來說明 <sup id="fnref:3"><a class="footnote-ref" href="#fn:3" rel="footnote">3</a></sup>增強式學習有一個很重要特徵:</p>
 <ul>
 <li>機器導向式的學習(Agent-oriented&nbsp;learning)</li>
@@ -144,7 +147,7 @@
 <li>Agent (Action, Response, Control)&#8212;-&gt;&nbsp;Environment </li>
 <li>Environment (state, Stimulus, Situation)&#8212;-&gt;&nbsp;Agent</li>
 </ol>
-<p>1 -&gt; 2 -&gt; 3 -&gt; 1 -&gt; 2 -&gt; 3 -&gt;&#8230;.&nbsp;不斷循環的過程</p>
+<p>1 &gt; 2 &gt; 3 &gt; 1 &gt; 2 &gt; 3 &gt;&#8230;. 不斷循環的過程&#8230; &gt; 1 &gt; 2 &gt; 3 &gt; 1 &gt; 2 &gt;&nbsp;3</p>
 <p>而在增強式學習過程中，統計學和機率是不可或缺的數學要素，因此馬可夫決策過程（Markov Decision Processesm,&nbsp;MDPs）被視為一個在增強式學習過程中處理部分隨機部份決策者控制下的一個數學模型。（其實講到這裡思考一下人類就是這樣做學習的啊，在部分隨機的外界控制和自己的決策中逐漸累積一種智慧）</p>
 <p>舉個馬可夫決策過程的，假設 A, B 路徑兩點路徑會有幾個限制
 1. 離散時間 t=1,2,3&#8230;.
@@ -154,23 +157,41 @@
 5. 所以會有 s(t), a(t), r(t+1), a(t+1)&#8230;.等
 6.&nbsp;所以我們可以透過這樣馬可夫的動態推導機率</p>
 <p>接著談到報酬要怎麼做，提到了 Q-Learning，定義為 Q 值。所以透過馬可夫的動態決策過程我們不斷去累積報酬的折現（Q&nbsp;值）簡單講其實就是統計上的一種期望值啦，不斷的重複某種行為到最後當然就會逐漸出現一種好的結果。在做這樣的訓練過程講師認為不是要達到目標與獲得正報酬，而是要避開風險。</p>
-<p>接著課題回到了神經網路，必經增強式學習與類神經網路結合的效果很不錯，因此來談談類神經網路 <sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup>。要談類神經網路之前就要先從邏輯回歸說起。羅輯回歸簡單來講就是如果用一條線去區分兩種類別。但通常在實務上遇到問題是我們不知道那條線的方程式，但我們有很多那條線方程式所產生的資料(如果對這個有興趣可以去聽林軒田老師的機器學習基石)那我們要怎麼找到這個方程式？</p>
-<p>簡單來說我們可以寫一個演算法，然後用資料不斷去帶入，假設 a 類帶入方程式希望是正的，b 類帶入方程式希望是負的，所以我們不斷去測試直到找到一個可以測試正確的。然後在測試過程我們要給他反饋就是所謂的 Cost Function 或是稱 Lost Function。簡而言之就是說你找到對的花費小，找到錯的花費大。而最小化 Cost Function 的演算法就是 <span class="caps">SGD</span>(Stochastic Gtadient Descent)。然後 Keras 讓這件事變得美好 <span class="caps">XD</span></p>
-<p>待續&#8230;</p>
+<h3>深度學習(Deep&nbsp;Learning)</h3>
+<p>接著課題回到了神經網路，必經增強式學習與類神經網路結合的效果很不錯，因此來談談類神經網路 <sup id="fnref:4"><a class="footnote-ref" href="#fn:4" rel="footnote">4</a></sup>。要談類神經網路之前就要先從邏輯迴歸(Logistic Regression
+)說起。邏輯迴歸Logistic Regression)簡單來講就是在平面上透過一條線去評定兩端，因此經常用在統計學、經濟學等範疇。但通常在實務上遇到問題是我們並不知道那條線的方程式，但有很多那條線方程式所產生的資料(如果對這個有興趣可以去聽林軒田老師的機器學習基石提到的 Perception Learning Algorithm, <span class="caps">PLA</span>)那我們要怎麼找到這個方程式？</p>
+<p>簡單來說我們可以寫一個演算法，然後用資料不斷去帶入，假設 a 類帶入方程式希望是正的，b 類帶入方程式希望是負的，所以我們不斷去測試直到找到一個可以測試正確的。然後在測試過程我們要給他反饋就是所謂的 Cost Function 或是稱 Lost Function。簡而言之就是說你找到對的花費小，找到錯的花費大。而最小化 Cost Function 的演算法就是 <span class="caps">SGD</span>(Stochastic Gtadient Descent)。然後這樣複雜的事情 Keras 這個 Python&nbsp;套件讓這件事變得美好。</p>
+<h3>Q-Learning</h3>
+<p>回過頭來談談 Q-Learning 到底在 <span class="caps">RL</span> 中要如何優化 policy? 畢竟 <span class="caps">RL</span> 報酬很稀疏又延遲實在不知道怎樣做才會得到好的報酬。方法就是都去嘗試，然後求一個期望值類似於統計學的中央極限定理(<span class="caps">CLT</span>)。因為我們認為所有的行為在經過多數之後就會趨於一個常態分配（normal distribution）所以很合理的 Q-Learning 的 Q&nbsp;值其實就是一個期望值。</p>
+<p>如何求得這個期望值呢？先了解從 finite Markov decision process (<span class="caps">MDP</span>) 上對於 Q-learning&nbsp;的公式來看：</p>
+<div class="codehilite"><pre><span></span>Q(state, action) = R(state, action) + Gamma * Max[Q(next state, all actions)]
+</pre></div>
+
+
+<p>這公式裡面需要搭配每個點的路徑，路徑我們可以給訂一個 Reward 值然後計算出 R 矩陣與 Q&nbsp;矩陣 </p>
+<ul>
+<li>s(state):&nbsp;狀態</li>
+<li>a(action):&nbsp;行為</li>
+<li>Q: Q&nbsp;值，代表每一次學習後的智慧</li>
+<li>R: R 值，代表當前狀態 R&nbsp;矩陣的值</li>
+<li>Max[Q]: 下一個狀態在 Q&nbsp;矩陣的值 </li>
+</ul>
+<p><strong><a href="http://mnemstudio.org/path-finding-q-learning-tutorial.htm">詳細可參考這篇文章</a></strong></p>
+<p>然後經過每一次路徑結果就可以不斷產生新的平均值。這個大概就是 Q-learning&nbsp;概念。</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>https://sites.google.com/view/caigame/%E9%A6%96%E9%A0%81/%E5%<span class="caps">BB</span>%<span class="caps">BA</span>%E7%<span class="caps">BD</span>%<span class="caps">AE</span>?authuser=0&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p><a href="https://sites.google.com/view/caigame/%E9%A6%96%E9%A0%81/%E5%BB%BA%E7%BD%AE?authuser=0">環境申請與安裝教學</a>&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:2">
-<p>https://docs.google.com/presentation/d/1EP9c8YUZUSFkoH-vcyeogLFTxJybJ3x7DM1Dcr1IZ9o/edit#slide=id.g21cc553694_0_128&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p><a href="https://docs.google.com/presentation/d/1EP9c8YUZUSFkoH-vcyeogLFTxJybJ3x7DM1Dcr1IZ9o/edit#slide=id.g21cc553694_0_128">OpenAI Gym 介紹</a>&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 <li id="fn:3">
-<p>(http://media.nips.cc/Conferences/2015/tutorialslides/SuttonIntroRL-nips-2015-tutorial.pdf)&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+<p><a href="http://media.nips.cc/Conferences/2015/tutorialslides/SuttonIntroRL-nips-2015-tutorial.pdf">ShuttonIntroRL</a>&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
 </li>
 <li id="fn:4">
-<p>https://docs.google.com/presentation/d/1Yw5BfhfQp0mxPvvXyJ2HC4Z80dkTg-pLXasLVdo8wGs/edit#slide=id.g21bd18b122_25_0&#160;<a class="footnote-backref" href="#fnref:4" rev="footnote" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+<p><a href="https://docs.google.com/presentation/d/1Yw5BfhfQp0mxPvvXyJ2HC4Z80dkTg-pLXasLVdo8wGs/edit#slide=id.g21bd18b122_25_0">類神經網路介紹</a>&#160;<a class="footnote-backref" href="#fnref:4" rev="footnote" title="Jump back to footnote 4 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
