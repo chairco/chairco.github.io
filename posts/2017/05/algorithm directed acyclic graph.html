@@ -123,7 +123,7 @@
 <li>Graph&nbsp;地表示方式</li>
 </ul>
 <h3>什麼是&nbsp;Graph?</h3>
-<p>Graph 稱為圖，他是比 tree 更廣義的資料結構也可以說 tree 是一種特殊的 Graph，它的組成是由點(vertex)和邊(edge)所構成。<strong>點</strong>和<strong>點</strong>之間透過<strong>邊</strong>來連接，相連得兩點代表有關聯性。</p>
+<p>Graph 稱為圖，是一種比 tree 更廣義的資料結構，當然也可以說 tree 是一種特殊的 Graph，它的組成是由點(vertex)和邊(edge)所構成。<strong>點</strong>和<strong>點</strong>之間透過<strong>邊</strong>來連接，相連得兩點代表有關聯性。</p>
 <p><img alt="graph" src="/pics/201705/Graph.png" /></p>
 <p>從圖來看，點和邊分別是：</p>
 <ul>
@@ -131,15 +131,41 @@
 <li>E(edge):{(1,4),(1,6),(2,6),(4,5),(5,6)}</li>
 </ul>
 <h3>Graph&nbsp;種類</h3>
-<p>接下來簡單介紹一下各種 Graph 包含我們會提到的 <span class="caps">DAG</span>。</p>
+<p>接下來簡單介紹一下各種 Graph 包含我們會提到的 <span class="caps">DAG</span> (假設有 m 個 edges 和 n 個&nbsp;vertex)。</p>
 <h4>Undirected&nbsp;graph</h4>
-<h4>Directed&nbsp;graph</h4>
+<p>無向圖，顧名思義就是邊(edge)是沒有方向性的。因此 edge(x,y) 等同於 edge(y,x)。不是成對排序，最大的邊數 =&nbsp;n(n-1)/2</p>
+<p><img alt="graph" src="/pics/201705/Undirected-Graph.png" /></p>
+<p>undirected, then m =&nbsp;n(n-1)/2</p>
+<h4>Directed&nbsp;graph(di-graph)</h4>
+<p>中文稱作，有向圖。有向圖指的是邊(edge) 有方向性，意思就是 edge(x,y) 定義上和 edge(y,x)&nbsp;是不同的。</p>
+<p><img alt="graph" src="/pics/201705/Directed-Graph.png" /></p>
+<p>directed, then m =&nbsp;n(n-1)</p>
 <h4>Directed Acyclic Graph (<span class="caps">DAG</span>)</h4>
+<p>有向循環圖就是有向圖但是沒有循環(cycles)</p>
+<p><img alt="graph" src="/pics/201705/DAG.png" /></p>
 <h4>Multigraph</h4>
+<p>多圖是一個無向圖，允許多個邊&nbsp;(可能有循環)。多邊意思是指兩個或以上的邊連接到兩個點，可以連結自身。</p>
 <h4>Simple&nbsp;graph</h4>
+<p>簡單圖不是多圖，是一個無向圖，不允許多個邊和循環。在簡單圖中有 n 個點，每個點最大自由度是&nbsp;n-1 </p>
+<p><img alt="graph" src="/pics/201705/Simple-Graph.png" /></p>
 <h4>Weighted and Unweighted&nbsp;graph</h4>
+<p>加權圖和沒有加權圖差異在是否賦予一個加權值給邊(edge)。</p>
+<p><img alt="graph" src="/pics/201705/Weighted-Directed-Graph.png" /></p>
 <h4>Complete&nbsp;graph</h4>
+<p>每個相鄰兩邊都都存在。</p>
+<p><img alt="graph" src="/pics/201705/Complete-graph.png" /></p>
+<p>complete, then m =&nbsp;n(n-1)/2</p>
 <h4>Connected&nbsp;graph</h4>
+<p>每個點都需要是成對的邊，意思是指沒有到不了的點。因此 <strong>disconnected grapn</strong>&nbsp;就是指都未連接。</p>
+<p><img alt="graph" src="/pics/201705/Connected-graph.png" /></p>
+<p>connected, then m = n –&nbsp;1</p>
+<h3>Graph&nbsp;地表示方式</h3>
+<p>在程式裡我們可以將這些有限的點與邊放進矩陣(matrix)內表示，在電腦則用陣列(array)存放。但用陣列存放卻不容易計算，因此有了幾種方法:</p>
+<ul>
+<li>adjacency&nbsp;matrix </li>
+<li>adjacency&nbsp;lists</li>
+<li>adjacency</li>
+</ul>
     </article>
 
         <div class="tags">
