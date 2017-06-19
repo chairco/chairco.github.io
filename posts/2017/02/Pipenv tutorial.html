@@ -33,7 +33,7 @@
 
 
 
-        <meta name="description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。 ...">
+        <meta name="description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -48,7 +48,7 @@
 	<meta property="og:url" content="../../../posts/2017/02/Pipenv tutorial.html">
 	<meta property="og:title" content="Pipenv&nbsp;使用教學">
 	<meta property="article:published_time" content="2017-02-14 09:59:40+08:00">
-            <meta property="og:description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。 ...">
+            <meta property="og:description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
         <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
 
-            <meta name="twitter:description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。 ...">
+            <meta name="twitter:description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。...">
 </head>
 
 <body>
@@ -200,6 +200,26 @@
 
 <p>最後如果要執行 Python shell 一樣透過 pipenv 輸入 <code>pipenv shell</code> 就能進去。（不過筆者不知道為什麼不行&nbsp;＠＠，至少上稿前還找不到原因。）</p>
 <p>用很簡單篇幅介紹這個新的工具，如果有更多想參考可以到 <a href="http://docs.pipenv.org/en/latest/">Pipenv 教學</a>。</p>
+<hr />
+<p>更新在 6/19，用了一陣子 Pipenv 覺得實在太好用了。不過有一些 Pip&nbsp;使用習慣轉換過來做些紀錄。</p>
+<ul>
+<li>
+<p>要如何在 Pipfile 內新增從 github 下載安裝的套件？
+執行：<code>pipenv install git+https://github.com/django/dango.git#egg=Django</code> 這邊和 pip 不同是網址後一定要加上 <strong>.git#egg={套件名稱}</strong></p>
+</li>
+<li>
+<p>如果有 requirements.txt 時要怎麼自動轉換過去 Pipfile?
+很簡單，只要在同一目錄底下執行: <code>pipenv install</code> 接著會顯示：<code>Requirements file found, instead of Pipfile! Converting...</code> 套件會花點時間將 requirements.txt 轉換成 Pipfile 格式（大約要三分鐘以上 <span class="caps">QQ</span>&nbsp;沒有研究為什麼要這麼久）</p>
+</li>
+<li>
+<p>要怎麼在我的環境安裝 Pipfile 的套件呢？
+執行: <code>pipenv install --dev</code> 接著輸入 <code>pipenv shell</code> 就完成囉。記得要退出時要執行 <code>exit</code></p>
+</li>
+<li>
+<p><code>pipenv shell</code> 沒有反應
+感覺像是環境變數問題，<a href="https://github.com/kennethreitz/pipenv/issues/415">issue#415</a> 有人在聊但沒仔細看。現在是安裝完成後可以 <code>pipenv --venv</code> 然後直接手動去吃環境變數。有點蠢。</p>
+</li>
+</ul>
     </article>
 
         <div class="tags">
