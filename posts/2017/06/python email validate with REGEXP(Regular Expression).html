@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>在 Python 上使用 <span class="caps">REGEXP</span>(Regular Expression) 驗證&nbsp;Email</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+        <!-- Custom Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+        <meta name="description" content="在 Google 下個關鍵字： Python, Regular Expression or REGEXP, email, validate, validation 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="Regular Expression">
+        <meta name="tags" content="python">
+        <meta name="tags" content="email">
+
+	                <meta property="og:locale" content="">
+		<meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/06/python email validate with REGEXP(Regular Expression).html">
+	<meta property="og:title" content="在 Python 上使用 <span class="caps">REGEXP</span>(Regular Expression) 驗證&nbsp;Email">
+	<meta property="article:published_time" content="2017-06-23 14:06:24+08:00">
+            <meta property="og:description" content="在 Google 下個關鍵字： Python, Regular Expression or REGEXP, email, validate, validation 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@#">
+        <meta name="twitter:title" content="在 Python 上使用 <span class="caps">REGEXP</span>(Regular Expression) 驗證&nbsp;Email">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="在 Google 下個關鍵字： Python, Regular Expression or REGEXP, email, validate, validation 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 ...">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/archives.html">Archives</a></li>
+                        <li><a href="/categories.html">Categories</a></li>
+                        <li><a href="/tags.html">Tags</a></li>
+
+                            <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>在 Python 上使用 <span class="caps">REGEXP</span>(Regular Expression) 驗證&nbsp;Email</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  6 23, 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <hr />
+<p>在 Google 下個關鍵字： <strong>Python, Regular Expression or <span class="caps">REGEXP</span>, email, validate, validation</strong> 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 email 格式的文章或是問題、甚至有人實作&nbsp;package。</p>
+<p>使用這個東西也一陣子，但好像從來沒認真去研究究竟細節有哪些，ctrl + c, ctrl + r&nbsp;成了常態，自然踩雷無可避免。剛好最近要修一個東西，因此順便整理細節。</p>
+<h2>瞭解套件實作方法</h2>
+<p>首先我的 Python 環境目前是 3.6.0。而切入點是從別人實作出來的套件去&nbsp;implement</p>
+<ul>
+<li>validate_email
+先瞭解一下大概比較紅的套件實作細節，找了一個星星數挺多的 <a href="https://github.com/syrusakbary/validate_email.git">validate_email</a> 最後的更新大概是兩年前，不知道在 3.6.0 上運作狀態，總之先 clone&nbsp;嘗試看看。</li>
+</ul>
+<p>首先要先安裝一個叫 pyDNS package，然後立刻 gg。
+在 <code>DNS/__ini__.py</code> 有 Type, <code>Type,Opcode,Status,Class</code> 幾個套件卻用 <code>import Type,Opcode,Status,Class</code> 這種 relative import 來處理&nbsp;@@，就噴出錯誤訊息像是：</p>
+<div class="codehilite"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">12</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">import</span> <span class="nn">DNS</span>
+  <span class="n">File</span> <span class="s2">&quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">14</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">import</span> <span class="nn">Type</span><span class="o">,</span><span class="nn">Opcode</span><span class="o">,</span><span class="nn">Status</span><span class="o">,</span><span class="nn">Class</span>
+<span class="n">ModuleNotFoundError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;Type&#39;</span>
+</pre></div>
+
+
+<p>return&nbsp;變數方法也用了古老的奇怪方法：</p>
+<div class="codehilite"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">12</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">import</span> <span class="nn">DNS</span>
+  <span class="n">File</span> <span class="s2">&quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">14</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span><span class="n">Opcode</span><span class="p">,</span><span class="n">Status</span><span class="p">,</span><span class="n">Class</span>
+  <span class="n">File</span> <span class="s2">&quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/Type.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">54</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="sb">`type`</span>
+                 <span class="o">^</span>
+<span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">invalid</span> <span class="n">syntax</span>
+</pre></div>
+
+
+<p>raise 的語法也都是 2.7&nbsp;的：</p>
+<div class="codehilite"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;setup.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">12</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">import</span> <span class="nn">DNS</span>
+  <span class="n">File</span> <span class="s2">&quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">15</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">from</span> <span class="nn">.Base</span> <span class="kn">import</span> <span class="n">DnsRequest</span><span class="p">,</span> <span class="n">DNSError</span>
+  <span class="n">File</span> <span class="s2">&quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/Base.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">119</span>
+    <span class="k">raise</span> <span class="n">TimeoutError</span><span class="p">,</span> <span class="s1">&#39;Timeout&#39;</span>
+                      <span class="o">^</span>
+<span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">invalid</span> <span class="n">syntax</span>
+</pre></div>
+
+
+<p>看起來 pyDNS 非常古老，裡面的寫法用了許多舊的語法糖，要改起來實在不容易，不過看起來和我們要做 email validate&nbsp;也沒什麼相關性。</p>
+<p>再來在 <strong>validate_email</strong> 套件的 issue tracker 和 <span class="caps">PR</span> 一堆人發了 <span class="caps">PR</span> 和&nbsp;issue，作者明顯就是射後不想理會，總之這種作者自己不想維護的東西又不想放給其他人維護的專案大概就看看囉。不過參考一下大概的邏輯還是美德。</p>
+<p>先看看的 <span class="caps">USAGE</span> (使用說明)，看起來使用了一個 validate_email&nbsp;的一級函式來處理：</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">validate_email</span> <span class="kn">import</span> <span class="n">validate_email</span>
+<span class="n">is_valid</span> <span class="o">=</span> <span class="n">validate_email</span><span class="p">(</span><span class="s1">&#39;example@example.com&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>來看看程式碼：</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">validate_email</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">check_mx</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">smtp_timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Indicate whether the given string is a valid email address</span>
+<span class="sd">    according to the &#39;addr-spec&#39; portion of RFC 2822 (see section</span>
+<span class="sd">    3.4.1).  Parts of the spec that are marked obsolete are *not*</span>
+<span class="sd">    included in this test, and certain arcane constructions that</span>
+<span class="sd">    depend on circular definitions in the spec may not pass, but in</span>
+<span class="sd">    general this should correctly identify any email address likely</span>
+<span class="sd">    to be in use as of 2011.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;validate_email&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">VALID_ADDRESS_REGEXP</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+        <span class="n">check_mx</span> <span class="o">|=</span> <span class="n">verify</span>
+        <span class="k">if</span> <span class="n">check_mx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">DNS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;For check the mx records or check if the email exists you must &#39;</span>
+                                <span class="s1">&#39;have installed pyDNS python package&#39;</span><span class="p">)</span>
+            <span class="n">hostname</span> <span class="o">=</span> <span class="n">email</span><span class="p">[</span><span class="n">email</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="n">mx_hosts</span> <span class="o">=</span> <span class="n">get_mx_ip</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mx_hosts</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">mx</span> <span class="ow">in</span> <span class="n">mx_hosts</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">verify</span> <span class="ow">and</span> <span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">MX_CHECK_CACHE</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">MX_CHECK_CACHE</span><span class="p">[</span><span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="n">smtp</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">smtp_timeout</span><span class="p">)</span>
+                    <span class="n">smtp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">MX_CHECK_CACHE</span><span class="p">[</span><span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">verify</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+                        <span class="k">except</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTPServerDisconnected</span><span class="p">:</span>
+                            <span class="k">pass</span>
+                        <span class="k">return</span> <span class="bp">True</span>
+                    <span class="n">status</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">smtp</span><span class="o">.</span><span class="n">helo</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="mi">250</span><span class="p">:</span>
+                        <span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;</span><span class="si">%s</span><span class="s1"> answer: </span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">status</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">smtp</span><span class="o">.</span><span class="n">mail</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">status</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">smtp</span><span class="o">.</span><span class="n">rcpt</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">250</span><span class="p">:</span>
+                        <span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+                        <span class="k">return</span> <span class="bp">True</span>
+                    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;</span><span class="si">%s</span><span class="s1"> answer: </span><span class="si">%s</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">status</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span>
+                    <span class="n">smtp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTPServerDisconnected</span><span class="p">:</span>  <span class="c1"># Server not permits verify user</span>
+                    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;</span><span class="si">%s</span><span class="s1"> disconected.&#39;</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">except</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTPConnectError</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;Unable to connect to </span><span class="si">%s</span><span class="s1">.&#39;</span><span class="p">,</span> <span class="n">mx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">ServerError</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;ServerError or socket.error exception raised (</span><span class="si">%s</span><span class="s1">).&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+
+
+<p>看起來也很單純用了斷句 aasert 處理 re 判斷 <code>re.match(VALID_ADDRESS_REGEXP, email) is not None</code> 如果錯誤就拋出 False。其他大概可以省去不看。所以直接來看看 VALID_ADDRESS_REGEXP&nbsp;怎麼處理。</p>
+<div class="codehilite"><pre><span></span><span class="n">WSP</span> <span class="o">=</span> <span class="s1">r&#39;[\s]&#39;</span>                                        <span class="c1"># see 2.2.2. Structured Header Field Bodies</span>
+<span class="n">CRLF</span> <span class="o">=</span> <span class="s1">r&#39;(?:\r\n)&#39;</span>                                   <span class="c1"># see 2.2.3. Long Header Fields</span>
+<span class="n">NO_WS_CTL</span> <span class="o">=</span> <span class="s1">r&#39;\x01-\x08\x0b\x0c\x0f-\x1f\x7f&#39;</span>        <span class="c1"># see 3.2.1. Primitive Tokens</span>
+<span class="n">QUOTED_PAIR</span> <span class="o">=</span> <span class="s1">r&#39;(?:</span><span class="se">\\</span><span class="s1">.)&#39;</span>                             <span class="c1"># see 3.2.2. Quoted characters</span>
+<span class="n">FWS</span> <span class="o">=</span> <span class="s1">r&#39;(?:(?:&#39;</span> <span class="o">+</span> <span class="n">WSP</span> <span class="o">+</span> <span class="s1">r&#39;*&#39;</span> <span class="o">+</span> <span class="n">CRLF</span> <span class="o">+</span> <span class="s1">r&#39;)?&#39;</span> <span class="o">+</span> \
+      <span class="n">WSP</span> <span class="o">+</span> <span class="s1">r&#39;+)&#39;</span>                                    <span class="c1"># see 3.2.3. Folding white space and comments</span>
+<span class="n">CTEXT</span> <span class="o">=</span> <span class="s1">r&#39;[&#39;</span> <span class="o">+</span> <span class="n">NO_WS_CTL</span> <span class="o">+</span> \
+        <span class="s1">r&#39;\x21-\x27\x2a-\x5b\x5d-\x7e]&#39;</span>              <span class="c1"># see 3.2.3</span>
+<span class="n">CCONTENT</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">CTEXT</span> <span class="o">+</span> <span class="s1">r&#39;|&#39;</span> <span class="o">+</span> \
+           <span class="n">QUOTED_PAIR</span> <span class="o">+</span> <span class="s1">r&#39;)&#39;</span>                        <span class="c1"># see 3.2.3 (NB: The RFC includes COMMENT here</span>
+<span class="c1"># as well, but that would be circular.)</span>
+<span class="n">COMMENT</span> <span class="o">=</span> <span class="s1">r&#39;\((?:&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">CCONTENT</span> <span class="o">+</span> \
+          <span class="s1">r&#39;)*&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">r&#39;?\)&#39;</span>                       <span class="c1"># see 3.2.3</span>
+<span class="n">CFWS</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">COMMENT</span> <span class="o">+</span> <span class="s1">&#39;)*(?:&#39;</span> <span class="o">+</span> \
+       <span class="n">FWS</span> <span class="o">+</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">COMMENT</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>         <span class="c1"># see 3.2.3</span>
+<span class="n">ATEXT</span> <span class="o">=</span> <span class="s1">r&#39;[\w!#$%&amp;</span><span class="se">\&#39;</span><span class="s1">\*\+\-/=\?\^`\{\|\}~]&#39;</span>           <span class="c1"># see 3.2.4. Atom</span>
+<span class="n">ATOM</span> <span class="o">=</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">ATEXT</span> <span class="o">+</span> <span class="s1">r&#39;+&#39;</span> <span class="o">+</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span>      <span class="c1"># see 3.2.4</span>
+<span class="n">DOT_ATOM_TEXT</span> <span class="o">=</span> <span class="n">ATEXT</span> <span class="o">+</span> <span class="s1">r&#39;+(?:\.&#39;</span> <span class="o">+</span> <span class="n">ATEXT</span> <span class="o">+</span> <span class="s1">r&#39;+)*&#39;</span>   <span class="c1"># see 3.2.4</span>
+<span class="n">DOT_ATOM</span> <span class="o">=</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">DOT_ATOM_TEXT</span> <span class="o">+</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="c1"># see 3.2.4</span>
+<span class="n">QTEXT</span> <span class="o">=</span> <span class="s1">r&#39;[&#39;</span> <span class="o">+</span> <span class="n">NO_WS_CTL</span> <span class="o">+</span> \
+        <span class="s1">r&#39;\x21\x23-\x5b\x5d-\x7e]&#39;</span>                   <span class="c1"># see 3.2.5. Quoted strings</span>
+<span class="n">QCONTENT</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">QTEXT</span> <span class="o">+</span> <span class="s1">r&#39;|&#39;</span> <span class="o">+</span> \
+           <span class="n">QUOTED_PAIR</span> <span class="o">+</span> <span class="s1">r&#39;)&#39;</span>                        <span class="c1"># see 3.2.5</span>
+<span class="n">QUOTED_STRING</span> <span class="o">=</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="s1">r&#39;&quot;(?:&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> \
+                <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">QCONTENT</span> <span class="o">+</span> <span class="s1">r&#39;)*&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> \
+                <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="s1">r&#39;&quot;&#39;</span> <span class="o">+</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span>
+<span class="n">LOCAL_PART</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">DOT_ATOM</span> <span class="o">+</span> <span class="s1">r&#39;|&#39;</span> <span class="o">+</span> \
+             <span class="n">QUOTED_STRING</span> <span class="o">+</span> <span class="s1">r&#39;)&#39;</span>                    <span class="c1"># see 3.4.1. Addr-spec specification</span>
+<span class="n">DTEXT</span> <span class="o">=</span> <span class="s1">r&#39;[&#39;</span> <span class="o">+</span> <span class="n">NO_WS_CTL</span> <span class="o">+</span> <span class="s1">r&#39;\x21-\x5a\x5e-\x7e]&#39;</span>    <span class="c1"># see 3.4.1</span>
+<span class="n">DCONTENT</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">DTEXT</span> <span class="o">+</span> <span class="s1">r&#39;|&#39;</span> <span class="o">+</span> \
+           <span class="n">QUOTED_PAIR</span> <span class="o">+</span> <span class="s1">r&#39;)&#39;</span>                        <span class="c1"># see 3.4.1</span>
+<span class="n">DOMAIN_LITERAL</span> <span class="o">=</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="s1">r&#39;\[&#39;</span> <span class="o">+</span> \
+                 <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span> <span class="o">+</span> <span class="n">DCONTENT</span> <span class="o">+</span> \
+                 <span class="s1">r&#39;)*&#39;</span> <span class="o">+</span> <span class="n">FWS</span> <span class="o">+</span> <span class="s1">r&#39;?\]&#39;</span> <span class="o">+</span> <span class="n">CFWS</span> <span class="o">+</span> <span class="s1">r&#39;?&#39;</span>  <span class="c1"># see 3.4.1</span>
+<span class="n">DOMAIN</span> <span class="o">=</span> <span class="s1">r&#39;(?:&#39;</span> <span class="o">+</span> <span class="n">DOT_ATOM</span> <span class="o">+</span> <span class="s1">r&#39;|&#39;</span> <span class="o">+</span> \
+         <span class="n">DOMAIN_LITERAL</span> <span class="o">+</span> <span class="s1">r&#39;)&#39;</span>                       <span class="c1"># see 3.4.1</span>
+<span class="n">ADDR_SPEC</span> <span class="o">=</span> <span class="n">LOCAL_PART</span> <span class="o">+</span> <span class="s1">r&#39;@&#39;</span> <span class="o">+</span> <span class="n">DOMAIN</span>               <span class="c1"># see 3.4.1</span>
+
+<span class="c1"># A valid address will match exactly the 3.4.1 addr-spec.</span>
+<span class="n">VALID_ADDRESS_REGEXP</span> <span class="o">=</span> <span class="s1">&#39;^&#39;</span> <span class="o">+</span> <span class="n">ADDR_SPEC</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span>
+</pre></div>
+
+
+<p>覺得看完這串正規表方式快暈了。到底是要相依多少變數啊 <span class="caps">QQ</span>。</p>
+<p>但我們可以嘗試把 VALID_ADDRESS_REGEXP 變數印出來看看他的正規表達式怎麼做的。從作者說明看起來是根據 <a href="https://www.ietf.org/rfc/rfc2822.txt"><span class="caps">RFC</span> 2822 <span class="caps">SEPC</span></a>&nbsp;所定義實作，因此在每個正規表達式也說明出自於哪些章節。就從上到下一個個看正規表達式意思吧。</p>
+<h3>2.2.2. Structured Header Field&nbsp;Bodies</h3>
+<p><code>WSP = r'[\s]'</code> 字元族(Character&nbsp;class)為空白字元</p>
+<h3>2.2.3. Long Header&nbsp;Fields</h3>
+<p><code>CRLF = r'(?:\r\n)'</code> 標定所有 <code>\r\n</code> 字元</p>
+<h3>3.2.1. Primitive&nbsp;Tokens</h3>
+<p><code>NO_WS_CTL = r'\x01-\x08\x0b\x0c\x0f-\x1f\x7f'</code> 十六進位 1-8, 11, 12, 14-31, 127&nbsp;等字元</p>
+<h3>3.2.2. Quoted&nbsp;characters</h3>
+<p><code>QUOTED_PAIR = r'(?:\\.)'</code> 標定特殊字元 <code>.</code></p>
+<h3>3.2.3. Folding white space and&nbsp;comments</h3>
+<p>白字元，像是隱藏在資料中的空白鍵、換行和跳格等等</p>
+<p><code>FWS = r'(?:(?:' + WSP + r'*' + CRLF + r')?' + WSP + r'+)'</code> </p>
+<ul>
+<li><code>WSP</code>：是指空白字元, <code>?:WSP</code>：標定所有空白字元</li>
+<li><code>*</code>:&nbsp;前一個比對字元可以任意多次</li>
+<li><code>CRLF</code>: 標定所有 <code>\r\n</code> 字元</li>
+<li><code>?</code> 匹配零次或一次</li>
+<li><code>'(?:(?:[\\s]*(?:\\r\\n))?[\\s]+)'</code>： 只要是 <code>__字元</code>, <code>__ 指的是空白</code>。</li>
+</ul>
+<p><code>CTEXT = r'[' + NO_WS_CTL + \r'\x21-\x27\x2a-\x5b\x5d-\x7e]'</code></p>
+<p><code>CCONTENT = r'(?:' + CTEXT + r'|' + QUOTED_PAIR + r')'</code></p>
+<p><code>COMMENT = r'\((?:' + FWS + r'?' + CCONTENT + \r')*' + FWS + r'?\)'</code></p>
+<p><code>CFWS = r'(?:' + FWS + r'?' + COMMENT + ')*(?:' + FWS + '?' + COMMENT + '|' + FWS + ')'</code></p>
+<h3>3.2.4.&nbsp;Atom</h3>
+<p><code>ATEXT = r'[\w!#$%&amp;\'\*\+\-/=\?\^`\{\|\}~]'</code></p>
+<p><code>ATOM = CFWS + r'?' + ATEXT + r'+' + CFWS + r'?'</code></p>
+<p><code>DOT_ATOM_TEXT = ATEXT + r'+(?:\.' + ATEXT + r'+)*'</code></p>
+<p><code>DOT_ATOM = CFWS + r'?' + DOT_ATOM_TEXT + CFWS + r'?'</code></p>
+<h3>3.2.5. Quoted&nbsp;strings</h3>
+<p><code>QTEXT = r'[' + NO_WS_CTL + \r'\x21\x23-\x5b\x5d-\x7e]'</code></p>
+<p><code>QCONTENT = r'(?:' + QTEXT + r'|' + \QUOTED_PAIR + r')'</code></p>
+<p><code>QUOTED_STRING = CFWS + r'?' + r'"(?:' + FWS + \r'?' + QCONTENT + r')*' + FWS + \r'?' + r'"' + CFWS + r'?'</code></p>
+<h3>3.4.1. Addr-spec&nbsp;specification</h3>
+<p><code>LOCAL_PART = r'(?:' + DOT_ATOM + r'|' + \QUOTED_STRING + r')'</code></p>
+<p><code>DTEXT = r'[' + NO_WS_CTL + r'\x21-\x5a\x5e-\x7e]'</code></p>
+<p><code>DCONTENT = r'(?:' + DTEXT + r'|' + \QUOTED_PAIR + r')'</code></p>
+<p><code>DOMAIN_LITERAL = CFWS + r'?' + r'\[' + \r'(?:' + FWS + r'?' + DCONTENT + \r')*' + FWS + r'?\]' + CFWS + r'?'</code></p>
+<p><code>DOMAIN = r'(?:' + DOT_ATOM + r'|' + \DOMAIN_LITERAL + r')'</code></p>
+<p><code>ADDR_SPEC = LOCAL_PART + r'@' + DOMAIN</code></p>
+<h2>比較其他方法異同</h2>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/regular-expression.html">Regular Expression</a>, <a href="../../../tag/python.html">python</a>, <a href="../../../tag/email.html">email</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/06/python email validate with REGEXP(Regular Expression).html';
+                //var disqus_url = '../../../posts/2017/06/python email validate with REGEXP(Regular Expression).html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/chairco">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/chairco">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:chairco@gmail.com">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                    </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>.
+</p>                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="../../../theme/js/clean-blog.min.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'chairco';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>
