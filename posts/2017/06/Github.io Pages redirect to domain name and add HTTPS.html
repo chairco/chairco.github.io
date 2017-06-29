@@ -2,21 +2,21 @@
 <html lang="zh-hant">
 
 <head>
-        <meta charset="utf-8">
+            <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-        <title>Jason's Blog</title>
+        <title>Github.io 自訂網域名稱且透過 cloudflare 申請免費&nbsp;https</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="./theme/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="./theme/css/clean-blog.min.css" rel="stylesheet">
+        <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
 
         <!-- Code highlight color scheme -->
-            <link href="./theme/css/code_blocks/darkly.css" rel="stylesheet">
+            <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
 
 
         <!-- Custom Fonts -->
@@ -31,13 +31,34 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-                <meta property="og:locale" content="">
+
+
+        <meta name="description" content="這個部落格也快一年，雖然進化得很慢但還是有在進步。最近進步的一件事（應該不能說是進步，要說跟上）終於想把用了很久的 blog 掛上網域名稱（之前是把網域名稱導過來 chairco.github.io, 喂，你搞什麼啊！！） 大概半年前在 Gandi 有申請一個 ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="https">
+        <meta name="tags" content="gandi">
+        <meta name="tags" content="github.io">
+
+	                <meta property="og:locale" content="">
 		<meta property="og:site_name" content="Jason's Blog">
-            <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:site" content="@#">
-            <meta name="twitter:title" content="Jason's Blog">
-            <meta name="twitter:description" content="Code / Travel / Other">
-                <meta name="twitter:image" content="./theme/images/post-bg.jpg">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/06/Github.io Pages redirect to domain name and add HTTPS.html">
+	<meta property="og:title" content="Github.io 自訂網域名稱且透過 cloudflare 申請免費&nbsp;https">
+	<meta property="article:published_time" content="2017-06-29 15:33:03+08:00">
+            <meta property="og:description" content="這個部落格也快一年，雖然進化得很慢但還是有在進步。最近進步的一件事（應該不能說是進步，要說跟上）終於想把用了很久的 blog 掛上網域名稱（之前是把網域名稱導過來 chairco.github.io, 喂，你搞什麼啊！！） 大概半年前在 Gandi 有申請一個 ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@#">
+        <meta name="twitter:title" content="Github.io 自訂網域名稱且透過 cloudflare 申請免費&nbsp;https">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="這個部落格也快一年，雖然進化得很慢但還是有在進步。最近進步的一件事（應該不能說是進步，要說跟上）終於想把用了很久的 blog 掛上網域名稱（之前是把網域名稱導過來 chairco.github.io, 喂，你搞什麼啊！！） 大概半年前在 Gandi 有申請一個 ...">
 </head>
 
 <body>
@@ -53,7 +74,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="./">Jason's Blog</a>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -63,7 +84,7 @@
                         <li><a href="/categories.html">Categories</a></li>
                         <li><a href="/tags.html">Tags</a></li>
 
-                            <li><a href="./pages/about-me/">About&nbsp;Me</a></li>
+                            <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -72,15 +93,17 @@
     </nav>
 
     <!-- Page Header -->
-    <!-- Set your background image for this header on the line below. -->
-        <header class="intro-header" style="background-image: url('./theme/images/home-bg.jpg')">
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="page-heading">
-                        <h1>Jason's Blog</h1>
-                            <hr class="small">
-                            <span class="subheading">Code / Travel / Other</span>
+                    <div class="post-heading">
+                        <h1>Github.io 自訂網域名稱且透過 cloudflare 申請免費&nbsp;https</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  6 29, 2017
+                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -91,72 +114,51 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <div class="post-preview">
-            <a href="./posts/2016/06/Django-Tutorial-01.html" rel="bookmark" title="Permalink to Django教學第一篇-專案與環境設定">
-                <h2 class="post-title">
-                    Django教學第一篇-專案與環境設定
-                </h2>
-            </a>
-                <p class="article-summary">
-                    GITHUB: https://github.com/chairco/django-tutorial-borrow 開始我們第一篇教學吧。一開始還是要感謝 TP ...
-                </p>
-            <p class="post-meta">Posted by
-                    <a href="./author/chaircojason.html">chairco(Jason)</a>
-                 on  6 30, 2016
-            </p>
-<p>There are <a data-disqus-identifier="posts/2016/06/Django-Tutorial-01.html" href="./posts/2016/06/Django-Tutorial-01.html#disqus_thread">comments</a>.</p>        </div>
-        <div class="post-preview">
-            <a href="./posts/2016/06/Django-Tutorial-0.html" rel="bookmark" title="Permalink to Django Tutorial教學目錄">
-                <h2 class="post-title">
-                    Django&nbsp;Tutorial教學目錄
-                </h2>
-            </a>
-                <p class="article-summary">
-                    Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 Flask, Django 真的比較複雜和較高的進入門檻。 看了不少前輩的開發教學如 Django Girl, TP大的 ...
-                </p>
-            <p class="post-meta">Posted by
-                    <a href="./author/chaircojason.html">chairco(Jason)</a>
-                 on  6 30, 2016
-            </p>
-<p>There are <a data-disqus-identifier="posts/2016/06/Django-Tutorial-0.html" href="./posts/2016/06/Django-Tutorial-0.html#disqus_thread">comments</a>.</p>        </div>
-        <div class="post-preview">
-            <a href="./posts/2016/06/GeoPandas-TWD97-CRS.html" rel="bookmark" title="Permalink to GeoPandas and Taiwan CRS以高雄腳踏車道做簡介">
-                <h2 class="post-title">
-                    GeoPandas and Taiwan&nbsp;CRS以高雄腳踏車道做簡介
-                </h2>
-            </a>
-                <p class="article-summary">
-                    PyCon TW 2016 聽了一場有趣的演講 From Pandas to GeoPandas - 地理資料處理與分析 講者很清楚地把目前世界與臺灣的地理座標系統做了一些簡介，還展示了一些使用 Jupyter 與 GeoPandas 方法。 ...
-                </p>
-            <p class="post-meta">Posted by
-                    <a href="./author/chaircojason.html">chairco(Jason)</a>
-                 on  6 23, 2016
-            </p>
-<p>There are <a data-disqus-identifier="posts/2016/06/GeoPandas-TWD97-CRS.html" href="./posts/2016/06/GeoPandas-TWD97-CRS.html#disqus_thread">comments</a>.</p>        </div>
-        <div class="post-preview">
-            <a href="./posts/2016/06/first-article.html" rel="bookmark" title="Permalink to Blog’s 第一篇文章">
-                <h2 class="post-title">
-                    Blog&#8217;s&nbsp;第一篇文章
-                </h2>
-            </a>
-                <p class="article-summary">
-                    Hello World, 好老梗 XD 前言 距離持續性寫 Blog 已經好段日子。大多是用像 Yam, PIXNET, Blogger 這類平台，但實話說感覺綁手綁腳。 沒有持續寫的理由類似是沒辦法用自己習慣編輯器寫文章，雖然後來有像是 Windows Live ...
-                </p>
-            <p class="post-meta">Posted by
-                    <a href="./author/chaircojason.html">chairco(Jason)</a>
-                 on  6 21, 2016
-            </p>
-<p>There are <a data-disqus-identifier="posts/2016/06/first-article.html" href="./posts/2016/06/first-article.html#disqus_thread">comments</a>.</p>        </div>
+    <!-- Post Content -->
+    <article>
+        <hr />
+<p>這個部落格也快一年，雖然進化得很慢但還是有在進步。最近進步的一件事（應該不能說是進步，要說跟上）終於想把用了很久的 <a href="https://chairco.github.io">blog</a> 掛上網域名稱（之前是把網域名稱導過來 chairco.github.io,&nbsp;喂，你搞什麼啊！！）</p>
+<p>大概半年前在 Gandi 有申請一個 chairco.com.tw 的網域，不過當時比較麻煩問題是不知道怎麼掛上 https，查一下解法是買一個主機架設 <span class="caps">DNS</span>，但就有點貴了。 Gandi&nbsp;似乎有提供免費？但可能我是免費一年序號，所以要花錢買，大概沒有繼續處理就這樣苟且偷生下去了。</p>
+<p>主要是最近 <strong>pay.taipei</strong> (<a href="https://www.facebook.com/schreibmal/media_set?set=a.10212928669916690.1073741842.1388906446&amp;type=3&amp;pnref=story">事件緣起</a>) 然後看到很多人在講這件事，讓我深感壓力的是很多部落主在批評時也被反說他的網站也沒做 <span class="caps">HTTPS</span>。覺得要洗別人臉自己臉真的要洗乾淨所以就決定來設定。</p>
+<p>架設 Blog、自訂網域名稱、設定 https&nbsp;主要分成三塊服務商：</p>
+<ul>
+<li>Github：靜態網頁</li>
+<li>Gandi：網域名稱供應商</li>
+<li>Cloudflare：提供 <span class="caps">DNS</span>、<span class="caps">HTTPS</span>&nbsp;傳輸服務</li>
+</ul>
+<h2>Github</h2>
+<p>大概多數靜態網頁都很容易架設在這邊，<a href="https://pages.github.com/">官方教學</a></p>
+<h2>Gandi</h2>
+<p>網域名稱供應商，註冊之後可以付費購買網域名稱，網域名稱購買之後要怎麼讓 github.io 轉址很簡單，就只要在 github.io 靜態網頁下建立一個 <span class="caps">CNAME</span>。另外也要編輯在 Gandi 的 zone file。<a href="http://spector.io/how-to-set-up-github-pages-with-a-custom-domain-on-gandi/">完整教學參考</a></p>
+<p>或是參考這篇 <a href="https://blog.dmoon.tw/github-pages-custom-domain/index.html">blog</a></p>
+<h2>Cloudflare</h2>
+<p>有了自訂網域名稱，而且也可以轉址但預設是 http，因此可以透過 Cloudflare 提供服務來掛上&nbsp;https。</p>
+<p>簡單來說先到 <a href="https://www.cloudflare.com/">Cloudflare</a> 註冊一個帳號，接著會收到回傳信件，只要根據回傳信件內容到網站上面設定好網址。接著再將它提供的 dns 位置到 Gandi&nbsp;去替換就完成囉。</p>
+<p>方法可以參考 <a href="https://blog.dmoon.tw/github-pages-with-free-ssl/">blog</a></p>
+<p>好吧，目前為止設定好一個小時似乎沒有反應。要 Debug&nbsp;了。</p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/https.html">https</a>, <a href="../../../tag/gandi.html">gandi</a>, <a href="../../../tag/githubio.html">github.io</a></p>
+        </div>
 
     <hr>
-    <!-- Pager -->
-    <ul class="pager">
-        <li class="next">
-                <a href="./index.html"> &larr; Newest Posts</a>
-        </li>
-    </ul>
-    Page 2 / 2
-    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/06/Github.io Pages redirect to domain name and add HTTPS.html';
+                //var disqus_url = '../../../posts/2017/06/Github.io Pages redirect to domain name and add HTTPS.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
             </div>
         </div>
     </div>
@@ -227,13 +229,13 @@
     </footer>
 
     <!-- jQuery -->
-    <script src="./theme/js/jquery.min.js"></script>
+    <script src="../../../theme/js/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="./theme/js/bootstrap.min.js"></script>
+    <script src="../../../theme/js/bootstrap.min.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="./theme/js/clean-blog.min.js"></script>
+        <script src="../../../theme/js/clean-blog.min.js"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
