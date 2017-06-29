@@ -131,11 +131,28 @@
 <h2>Gandi</h2>
 <p>網域名稱供應商，註冊之後可以付費購買網域名稱，網域名稱購買之後要怎麼讓 github.io 轉址很簡單，就只要在 github.io 靜態網頁下建立一個 <span class="caps">CNAME</span>。另外也要編輯在 Gandi 的 zone file。<a href="http://spector.io/how-to-set-up-github-pages-with-a-custom-domain-on-gandi/">完整教學參考</a></p>
 <p>或是參考這篇 <a href="https://blog.dmoon.tw/github-pages-custom-domain/index.html">blog</a></p>
+<p>不過這裡有個要注意的，在編輯 zone file 時一定要確認編輯完成之後 Gandi 有吃到你改的設定檔，通常有吃到之後，下圖的 <strong>Operations</strong> 會出現運作的數量，代表正在進行 <span class="caps">DNS</span> 設定。如果沒有就要注意一下。通常大概 40~60 min&nbsp;就會完成。</p>
+<p><img alt="#" src="/pics/201706/gandi_dash.png" /></p>
 <h2>Cloudflare</h2>
-<p>有了自訂網域名稱，而且也可以轉址但預設是 http，因此可以透過 Cloudflare 提供服務來掛上&nbsp;https。</p>
-<p>簡單來說先到 <a href="https://www.cloudflare.com/">Cloudflare</a> 註冊一個帳號，接著會收到回傳信件，只要根據回傳信件內容到網站上面設定好網址。接著再將它提供的 dns 位置到 Gandi&nbsp;去替換就完成囉。</p>
+<p>有了自訂網域名稱，而且也可以轉址但預設是 http，因此可以透過 Cloudflare 提供服務掛上&nbsp;https。</p>
+<p>先到 <a href="https://www.cloudflare.com/">Cloudflare</a> 註冊一個帳號，接著會收到回傳信件，只要根據回傳信件內容到網站上面設定好網址。接著再將它提供的 dns 位置到 Gandi&nbsp;去替換就完成囉。</p>
+<p>設定完成時在 <strong>overview</strong>&nbsp;畫面會顯示要你點擊測試，如果成功會顯示下面畫面：</p>
+<p><img alt="#" src="/pics/201706/Cloudflare_overview.png" /></p>
+<p>最後如果要成功掛上 https 需要針對瀏覽頁面設定 <span class="caps">SSL</span> 為 Flexible 才會顯示正確憑證，方法是在 Page rules 下增加一組 rules，以範例是指允許網域下所有頁面都透過 Flexible&nbsp;認證方式：</p>
+<p><img alt="#" src="/pics/201706/Cloudflare_pagerules.png" /></p>
 <p>方法可以參考 <a href="https://blog.dmoon.tw/github-pages-with-free-ssl/">blog</a></p>
-<p>好吧，目前為止設定好一個小時似乎沒有反應。要 Debug&nbsp;了。</p>
+<p>這邊要注意，前面 Gandi 的 zone settings 都設定完成再來啟用 Cloudflare，接著再回去設定 <span class="caps">DNS</span>，不然你先設定 Cloudflare, 會吃到 Gandi 不對的 zone file 設定，導致 Cloudflare 的 <span class="caps">DNS</span>&nbsp;參數不正確。一般來說應該會只有三個：</p>
+<p><img alt="#" src="/pics/201706/Cloudflare_DNS.png" /></p>
+<h2>Disqus&nbsp;留言轉換</h2>
+<p>簡單來說 Disqus 判斷一篇留言方式是透過網址，因為我們將 url 轉換到新的網域名稱自然而然原本的留言就會失效。不過 Disqus 有出一個不錯的工具叫 <strong>Migration Tools</strong>&nbsp;可以協助作轉換。</p>
+<p>登入 Disqus 後在 <code>https:{disqus_name}.disqus.com/admin/discussions/migrate/</code> 連結。下圖 <strong>Upload a <span class="caps">URL</span> map</strong>:</p>
+<p><img alt="#" src="/pics/201706/disqus_migrations.png" /></p>
+<p>點進去之後點選 <code>you can download a CSV here.</code> 的按鈕，他會寄送一份 csv&nbsp;檔案，接著叫照他的說明兩兩對照，舊在前新在後：</p>
+<div class="codehilite"><pre><span></span>http://example.com/old-path/old/postb.html, http://example.com/new-path/new/postb.html
+</pre></div>
+
+
+<p>接著把改好的 csv 檔案上傳，根據網頁上是說最快 24hr 會全部轉換完成。但我只有 9 則留言，一下就轉換完成了 <span class="caps">XD</span>。</p>
     </article>
 
         <div class="tags">
