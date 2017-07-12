@@ -115,6 +115,9 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
         <p>接下來我們為系統加點功能，想想一個借用系統如果沒有權限控管就不容易追蹤使用系統的人和流程。所以我想為這個系統加上權限控管。</p>
 <p>很棒的是 Django 本身就有權限管理功能，只要在 <code>borrow/urls.py</code> 加上 <code>url(r'^accounts/', include('django.contrib.auth.urls')),</code> 這個路徑就可以啟用登入的功能。所以現在 <code>borrow/borrow/urls.py</code> 這個檔案會長這樣：</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
