@@ -207,10 +207,10 @@
 </pre></div>
 
 
-<p>b.urls
-[&#8216;http://www.google.com&#8217;,&nbsp;&#8216;http://www.bbc.co.uk&#8217;]</p>
-<p>a.urls
-[&#8216;http://www.google.com&#8217;,&nbsp;&#8216;http://www.bbc.co.uk&#8217;]</p>
+<p><strong>b.urls</strong></p>
+<p>[&#8216;http://www.google.com&#8217;,&nbsp;&#8216;http://www.bbc.co.uk&#8217;]</p>
+<p><strong>a.urls</strong></p>
+<p>[&#8216;http://www.google.com&#8217;,&nbsp;&#8216;http://www.bbc.co.uk&#8217;]</p>
 <p>等等，道地發生什麼事!？ 沒有預期這樣的結果啊。 我們實例化兩個單獨的物件，a 和 b。 a 給了一個 <span class="caps">URL</span> 然後 b 給另一個。怎麼兩個物件都變成擁有兩個&nbsp;URLs？</p>
 <p>這樣的結果和前面我們舉的第一個例子是一樣的問題。 當定義的類別被建立時 URLs 的 list 就已經被<code>實例化</code>。所有類別內的的實例都會使用同樣一個&nbsp;list。現在這裡有些優秀的例子，但多數時候你不會想這樣做。你會希望不同的物件各自單獨的儲存。要做到這樣，我們必須針對程式碼做一些變動：</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">URLCatcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
