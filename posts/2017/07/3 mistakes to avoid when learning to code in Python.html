@@ -150,12 +150,13 @@
 
 
 <p>預期的輸出結果：</p>
-<p>[3]
-[4]&nbsp;[5]</p>
+<p>[3]</p>
+<p>[4]</p>
+<p>[5]</p>
 <p>但我們會非常詫異的發現實際上的結果：</p>
-<p>[3]
-[3, 4]
-[3, 4,&nbsp;5]</p>
+<p>[3]</p>
+<p>[3,&nbsp;4]</p>
+<p>[3, 4,&nbsp;5]</p>
 <p>為什麼？你看到在每一次不同的呼叫裡使用了同樣的一個 list。在 Python 當我們撰寫一個如範例的函式時，list 會被初始化成在函示一部份當這個函式被定義時。因此它不會在每一次函式執行時被實例化（譯者補充：這裡原作者意思是 Python 在函式被定義時所有的參數值就已經產生，因此不會每一次呼叫時又產生一次）。這意味著函式維持了並且不斷使用同樣的 list 物件，直到我提供了其他的 list&nbsp;物件:</p>
 <div class="codehilite"><pre><span></span><span class="c1">#定義了一個新的 list [4]</span>
 <span class="n">fn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">])</span>
@@ -181,7 +182,7 @@
 </pre></div>
 
 
-<p>這樣就能變動<code>實例化</code>從每一次模組被加載時，讓每次函式被執行都能發生。但注意對於不可變動的資料型態像是：tuples, strings 或是 ints&nbsp;這是非必要的。也意味著在對於非變動的資料型態這樣做是好的：</p>
+<p>這樣就能變動<code>實例化</code>從每一次模組被加載時，讓每次函式被執行都能發生。但注意對於不可變動的資料型態像是：<code>tuples</code>, <code>strings</code> 或是 <code>ints</code> 這是非必要的。也意味著在對於非變動的資料型態這樣做是好的：</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;my message&quot;</span><span class="p">):</span>
     <span class="k">print</span> <span class="n">message</span>
 </pre></div>
