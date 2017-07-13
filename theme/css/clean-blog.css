@@ -1,16 +1,8 @@
-/*!
- * Clean Blog v1.0.0 (http://startbootstrap.com)
- * Copyright 2014 Start Bootstrap
- * Licensed under Apache 2.0 (https://github.com/IronSummitMedia/startbootstrap/blob/gh-pages/LICENSE)
- */
-
 body {
-  font-family: 'Open Sans', 'Lora','Times New Roman',serif;
-  font-size: 16px;
-  font-weight: 500;
+  font-family: 'Lora', 'Times New Roman', serif;
+  font-size: 20px;
   color: #404040;
 }
-
 p {
   line-height: 1.5;
   margin: 30px 0;
@@ -28,11 +20,11 @@ h6 {
   font-weight: 800;
 }
 a {
-  color: #0085a1;
+  color: #404040;
 }
 a:hover,
 a:focus {
-  color: #0057a2;
+  color: #0085a1;
 }
 a img:hover,
 a img:focus {
@@ -42,10 +34,6 @@ blockquote {
   color: #808080;
   font-style: italic;
 }
-pre {
-  background-color: transparent;
-  font-size: 16px;
-}
 hr.small {
   max-width: 100px;
   margin: 15px auto;
@@ -53,6 +41,7 @@ hr.small {
   border-color: white;
 }
 .navbar-custom {
+  background: white;
   position: absolute;
   top: 0;
   left: 0;
@@ -139,8 +128,8 @@ hr.small {
   }
 }
 .intro-header {
-  background-color: #808080;
   background: no-repeat center center;
+  background-color: #808080;
   background-attachment: scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -173,8 +162,8 @@ hr.small {
 .intro-header .site-heading .subheading,
 .intro-header .page-heading .subheading {
   font-size: 24px;
-  line-height: 1.1,
-			display: block;
+  line-height: 1.1;
+  display: block;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   margin: 10px 0 0;
@@ -360,9 +349,16 @@ form .row:first-child .floating-label-form-group {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 1px;
-  padding: 15px 25px;
+  padding: 10px 5px;
   background-color: white;
   border-radius: 0;
+}
+@media only screen and (min-width: 768px) {
+  .pager li > a,
+  .pager li > span {
+    font-size: 14px;
+    padding: 15px 25px;
+  }
 }
 .pager li > a:hover,
 .pager li > a:focus {
@@ -388,11 +384,6 @@ form .row:first-child .floating-label-form-group {
   text-shadow: none;
   background: #0085a1;
 }
-img {
-  max-width: 100%;
-  height: auto;
-  width: auto\9; /* ie8 */
-}
 img::selection {
   color: white;
   background: transparent;
@@ -403,8 +394,4 @@ img::-moz-selection {
 }
 body {
   webkit-tap-highlight-color: #0085a1;
-}
-.article-summary {
-  padding-top:10px;
-  padding-bottom: 10px;
 }
