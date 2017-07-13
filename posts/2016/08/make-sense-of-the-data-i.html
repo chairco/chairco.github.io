@@ -1,36 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-hant">
 
 <head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Make Sense of the&nbsp;Data - Jason's Blog
-</title>
+        <title>Make Sense of the Data</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="../../../theme/css/bootstrap.css">
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../../../theme/css/clean-blog.css">
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="../../../theme//css/syntax.css">
+    <!-- Code highlight color scheme -->
+        <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
 
     <!-- Custom Fonts -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
+
+        <meta name="description" content="要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。 ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="machine learning">
+        <meta name="tags" content="ml">
+        <meta name="tags" content="statistic">
+
+	                <meta property="og:locale" content="">
+		<meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2016/08/make-sense-of-the-data-i.html">
+	<meta property="og:title" content="Make Sense of the Data">
+	<meta property="article:published_time" content="2016-08-19 17:11:51+08:00">
+            <meta property="og:description" content="要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。 ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="Make Sense of the Data">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。 ...">
 </head>
 
 <body>
@@ -52,9 +80,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="../../../">Home</a>
-                    </li>
+                        <li><a href="/archives.html">Archives</a></li>
+                        <li><a href="/categories.html">Categories</a></li>
+                        <li><a href="/tags.html">Tags</a></li>
+
+                            <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -62,37 +92,34 @@
         <!-- /.container -->
     </nav>
 
-
-
-        <!-- Unified Header -->
-        <header class="intro-header"
-                style="background-image: url('../../../theme/img/home-bg.jpg')">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                        <div class="post-heading
-">
-                            <h1>Make Sense of the&nbsp;Data
-</h1>
-                            <h2 class="subheading">
-</h2>
-                            <span class="meta">Posted by chairco(Jason) on  8 19, 2016
-</span>
-                        </div>
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Make Sense of the Data</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  8 19, 2016
+                        </span>
+                        
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-
-
-<!-- Post Content -->
-<article>
+    <!-- Main Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-
-                <p>要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <p>要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。
 大家都知道機器學習的概念是想讓電腦自我學習，這部分可以參考林軒田老師的<a href="https://www.youtube.com/playlist?list=PLXVfgk9fNX2I7tB6oIINGBmW50rrmFTqf">機器學習的基石</a>系列文章，如何有效的讓機器去自我學習有各種理論基礎，不過這邊我比較喜歡從統計的觀點切入，畢竟統計已經存在這個世界上百餘年歷史，許多理論模型也經幾驗證。</p>
 <p>但要先從統計切入必須要理解統計相關的知識背景，好在在大學與碩士期間有四年的學習，因此對於統計有不錯深刻的經驗。因此在這系列文章我想從最近在看的三本書 <code>Make Sense of the Data</code> 來切入。先聊聊資料的性質，機率理論與分佈，最後是推論統計。從這幾項開始回顧我認為可以更瞭解資料與處理資料，當對於資料有進一步掌握時，也許對於如何讓機器學習這件事情就會有比較清楚的想法。</p>
 <p>為什麼統計和機器學習會有很高度關聯性，讓我們想想當你在學習辨認一件事物時你怎麼做的，例如看到路上再跑的機器有機車、汽車、小貨車、公車、大客車這幾種類別，同樣都是有輪子，怎麼知道哪一種車是屬於哪一種類型，因此我們開始會去比較，然後分類。比較與分類就是統計學的最開始。</p>
@@ -100,14 +127,34 @@
 1.<a href="https://www.youtube.com/playlist?list=PLXVfgk9fNX2I7tB6oIINGBmW50rrmFTqf">機器學習的基石</a>
 2.<a href="https://medium.com/learning-new-stuff/machine-learning-in-a-week-a0da25d59850#.ptplb6g7z">Machine Learning in a Week</a>
 3.<a href="https://softnshare.wordpress.com/2016/10/17/machlearningatoz/">機器學習 A-Z: 使用 Python <span class="amp">&amp;</span> R&nbsp;實踐資料科學</a></p>
+    </article>
 
+        <div class="tags">
+            <p>tags: <a href="../../../tag/machine-learning.html">machine learning</a>, <a href="../../../tag/ml.html">ml</a>, <a href="../../../tag/statistic.html">statistic</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2016/08/make-sense-of-the-data-i.html';
+                //var disqus_url = '../../../posts/2016/08/make-sense-of-the-data-i.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
             </div>
         </div>
     </div>
-</article>
 
-<hr>
-
+    <hr>
 
     <!-- Footer -->
     <footer>
@@ -115,29 +162,115 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <ul class="list-inline text-center">
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/ChaircoChen">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/chairco">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/chairco">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:chairco@gmail.com">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
                     </ul>
-                    <p class="copyright text-muted">
-                            Copyright &copy; Jason's Blog.
-                        <br>
-                        Built with
-                        <a href="https://www.python.org/">Python</a>,
-                        <a href="http://blog.getpelican.com/">Pelican</a>,
-                        and <a href="https://github.com/mingp/pelican-clean-blog-theme">Pelican Clean Blog Theme</a>.
-                    </p>
-                </div>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  chairco(Jason)
+</p>                </div>
             </div>
         </div>
     </footer>
 
     <!-- jQuery -->
-    <script src="../../../theme/js/jquery.js"></script>
+    <script src="../../../theme/js/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="../../../theme/js/bootstrap.js"></script>
+    <script src="../../../theme/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../../../theme/js/clean-blog.js"></script>
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
 
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
 </body>
 
 </html>
