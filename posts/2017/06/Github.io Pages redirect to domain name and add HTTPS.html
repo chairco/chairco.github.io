@@ -166,7 +166,12 @@
 <p><img alt="#" src="/pics/201706/Cloudflare_DNS.png" /></p>
 <h2>Disqus&nbsp;留言轉換</h2>
 <p>簡單來說 Disqus 判斷一篇留言方式是透過網址，因為我們將 url 轉換到新的網域名稱自然而然原本的留言就會失效。不過 Disqus 有出一個不錯的工具叫 <strong>Migration Tools</strong>&nbsp;可以協助作轉換。</p>
-<p>登入 Disqus 打入以下網址：<code>https://{disqus_name}.disqus.com/admin/discussions/migrate/</code> 。會顯示下圖 <strong>Upload a <span class="caps">URL</span> map</strong>:</p>
+<p>登入 Disqus&nbsp;打入以下網址：</p>
+<div class="codehilite"><pre><span></span>https://{disqus_name}.disqus.com/admin/discussions/migrate/
+</pre></div>
+
+
+<p>會顯示下圖 <strong>Upload a <span class="caps">URL</span> map</strong>:</p>
 <p><img alt="#" src="/pics/201706/disqus_migrations.png" /></p>
 <p>點進去之後點選 <code>you can download a CSV here.</code> 的按鈕，他會寄送一份 csv&nbsp;檔案，接著叫照他的說明兩兩對照，舊在前新在後：</p>
 <div class="codehilite"><pre><span></span>http://example.com/old-path/old/postb.html, http://example.com/new-path/new/postb.html
