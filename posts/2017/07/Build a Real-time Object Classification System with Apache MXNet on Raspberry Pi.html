@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Raspberry Pi 上利用 Apache MXNet 建立一個即時物件分類系統</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
+
+    <!-- Code highlight color scheme -->
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+        <meta name="description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ In the past five years, ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="MXNet">
+        <meta name="tags" content="Raspberry Pi">
+        <meta name="tags" content="Apache">
+        <meta name="tags" content="AWS">
+        <meta name="tags" content="IOT">
+
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/07/Build a Real-time Object Classification System with Apache MXNet on Raspberry Pi.html">
+	<meta property="og:title" content="Raspberry Pi 上利用 Apache MXNet 建立一個即時物件分類系統">
+	<meta property="article:published_time" content="2017-07-16 08:09:27+08:00">
+            <meta property="og:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ In the past five years, ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="Raspberry Pi 上利用 Apache MXNet 建立一個即時物件分類系統">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ In the past five years, ...">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Raspberry Pi 上利用 Apache MXNet 建立一個即時物件分類系統</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  7 16, 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <hr />
+<blockquote>
+<p>本文翻譯至 <a href="https://aws.amazon.com/tw/blogs/ai/build-a-real-time-object-classification-system-with-apache-mxnet-on-raspberry-pi/"><span class="caps">AWS</span> <span class="caps">AI</span> Blog</a>，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。</p>
+<p>業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + <span class="caps">AWS</span>&nbsp;不失為一個不錯的低成本方案！</p>
+</blockquote>
+<p>In the past five years, deep neural networks have solved many computationally difficult problems, particularly in the field of computer vision. Because deep networks require a lot of computational power to train, often using tens of GPUs, many people assume that you can run them only on powerful cloud servers. In fact, after a deep network model has been trained, it needs relatively few computational resources to run predictions. This means that you can deploy a model on lower-powered edge (non-cloud) devices and run it without relying on an internet&nbsp;connection.</p>
+<p>過去五年裡，深度類神經網路已經解決了許多計算上困難的問題，特別是在計算機中的視覺領域。因為深度網路需要很大量的計算能力進行訓練，經常需要用到數十個 GPUs，許多人會誤認為只能在運行在強大的雲端伺服器。實際上訓練完成深度模型網路模型，只需要較少的電腦資源就能運作模型的預測。這代表你可以部署一個模型在一個非常低耗能 edge (非雲端)&nbsp;裝置上且不需要依賴網路連接就能運行它。</p>
+<p>Enter Apache MXNet, Amazon’s open source deep learning engine of choice. In addition to effectively handling multi-<span class="caps">GPU</span> training and deployment of complex models, MXNet produces very lightweight neural network model representations. You can deploy these representations on devices with limited memory and compute power. This makes MXNet perfect for running deep learning models on devices like the popular $35 Raspberry Pi&nbsp;computer.</p>
+<p>進入 Apache MXNet，Amazon 的開源深度學習引擎之一，除了有效處理多 <span class="caps">GPU</span> 訓練和部署複雜的模型外，MXNet 可以產生非常輕量級的類神經網路模型的結構(譯者：參考<a href="http://murphymind.blogspot.tw/2017/05/NeuralNetworksRepresentation.html">類神經網路結構</a>)。你可以在有限記憶體與運算的裝置上部署這些結構。這可以讓 MXNet 完美的在裝置上運作深度學習模型像是目前流行的 Raspberry Pi 電腦(僅需 $35&nbsp;美金)</p>
+<p>In this post, we walk through creating a computer vision system using MXNet for the Raspberry Pi. We also show how to use <span class="caps">AWS</span> IoT to connect to the <span class="caps">AWS</span> Cloud. This allows you to use the Cloud to manage a lightweight convolutional neural network running real-time object recognition on the&nbsp;Pi.</p>
+<p>在這篇文章，我們將會帶大家瞭解如何針對 Raspberry Pi 建立一個使用 MXNet 的計算機視覺系統。我們可以展示如何使用 <span class="caps">AWS</span> IoT 去連結 <span class="caps">AWS</span> Cloud。運行一個即時物件辨認在 Pi 上時，這允許你使用這個雲端去管理一個輕量級的卷積神蹟網路(convolutional neural network)&nbsp;。</p>
+<h2>Prerequisites</h2>
+<h2>準備</h2>
+<p>To follow this post, you need a Raspberry Pi 3 Model B device running Jessie or a later version of the Raspbian operating system, the Raspberry Pi Camera Module v2, and an <span class="caps">AWS</span>&nbsp;account.</p>
+<p>接著你需要一個 Raspberry Pi 3 Model B 一張用來運行 <code>Jessie</code> 或是最新版本的 Raspbian 作業系統，Raspberry Pi Camera 模組 v2，與一個 <span class="caps">AWS</span>&nbsp;帳戶。</p>
+<h2>Setting up the Raspberry&nbsp;Pi</h2>
+<h2>設定 Raspberry&nbsp;Pi</h2>
+<p>First, you set up the Pi with the camera module to turn it into a video camera, and then install MXNet. This allows you to start running deep network-based analysis on everything that the Pi&nbsp;“sees.”</p>
+<p>第一件事，你可以設定 Pi 的照相模組並將其轉成攝影機，接著安裝 MXNet。這樣就能允許任何 Pi &#8220;所見&#8221;&nbsp;開始運行基於深層神經網路分析。</p>
+<p>Set up your Pi with the Camera Module and connect the device to the Internet, either through the Ethernet port or with WiFi. Then, open the terminal and type the following commands to install the Python dependencies for this&nbsp;post:</p>
+<p>設定 Pi 上的相機模組並連接裝置到網際網路，透過乙太網路或是 WiFi，接著打開終端機和鍵入指令來安裝 Python dependencies&nbsp;如下：</p>
+<div class="codehilite"><pre><span></span>sudo apt-get update
+sudo apt-get install python-pip python-opencv python-scipy \
+python-picamera
+</pre></div>
+
+
+<p>Build MXNet for the Pi with the corresponding Python bindings by following the <a href="http://mxnet.io/get_started/install.html">instructions for Devices</a>. For this tutorial, you won’t need to build MXNet with&nbsp;OpenCV.</p>
+<p>按照<a href="http://mxnet.io/get_started/install.html">裝置文件說明</a> 使用對應的 Python 綁定並編譯用於 Pi 上的 MXNet。對這份教學，你不需要使用 OpenCV 來編譯&nbsp;MXNet。</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_1.gif" /></p>
+<p>Verify that the build succeeded by opening a Python 2.7 Read-Eval-Print-Loop (<span class="caps">REPL</span>) environment on your Pi’s terminal and typing the&nbsp;following:</p>
+<p>在你的 Pi 的終端機打開 Python 2.7 Read-Eval-Print-Loop (<span class="caps">REPL</span>)&nbsp;並且打入以下指令來驗證是否成功編譯：</p>
+<div class="codehilite"><pre><span></span><span class="n">python</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mxnet</span> <span class="kn">as</span> <span class="nn">mx</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+
+
+<h2>Running predictions&nbsp;locally</h2>
+<h2>在本機端運行預測</h2>
+<p>To run predictions on images captured by the Pi camera, you need to fetch a pretrained deep network model from the MXNet Model Zoo. Create a Python file in the Pi’s home directory, name load_model.py, and write a class that downloads ImageNet-trained models from the Model Zoo and loads them into MXNet on the&nbsp;Pi:</p>
+<p>對 Pi camera 抓的圖像運行預測，你需要從 MXNet Model Zoo 取得一個預訓練的深層網路模型。在 Pi 的家目錄建立一個 Python 檔案並且撰寫一個用來從模型庫下載 ImageNet-trained 模型的類別接著載入 MXNet 到 Pi&nbsp;上：</p>
+<div class="codehilite"><pre><span></span><span class="c1"># load_model.py </span>
+<span class="kn">import</span> <span class="nn">mxnet</span> <span class="kn">as</span> <span class="nn">mx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">picamera</span>
+<span class="kn">import</span> <span class="nn">cv2</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">urllib2</span><span class="o">,</span> <span class="nn">argparse</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="n">Batch</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Batch&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+
+
+<span class="k">class</span> <span class="nc">ImagenetModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a pre-trained model locally or from an external URL and returns an MXNet graph that is ready for prediction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synset_path</span><span class="p">,</span> <span class="n">network_prefix</span><span class="p">,</span> <span class="n">params_url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">symbol_url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">synset_url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">mx</span><span class="o">.</span><span class="n">cpu</span><span class="p">(),</span> <span class="n">label_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;prob_label&#39;</span><span class="p">],</span> <span class="n">input_shapes</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">224</span><span class="p">))]):</span>
+
+        <span class="c1"># Download the symbol set and network if URLs are provided</span>
+        <span class="k">if</span> <span class="n">params_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;fetching params from &quot;</span><span class="o">+</span><span class="n">params_url</span>
+            <span class="n">fetched_file</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">params_url</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">network_prefix</span><span class="o">+</span><span class="s2">&quot;-0000.params&quot;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fetched_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">symbol_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;fetching symbols from &quot;</span><span class="o">+</span><span class="n">symbol_url</span>
+            <span class="n">fetched_file</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">symbol_url</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">network_prefix</span><span class="o">+</span><span class="s2">&quot;-symbol.json&quot;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fetched_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">synset_url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s2">&quot;fetching synset from &quot;</span><span class="o">+</span><span class="n">synset_url</span>
+            <span class="n">fetched_file</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">synset_url</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">synset_path</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fetched_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="c1"># Load the symbols for the networks</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">synset_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">synsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+
+        <span class="c1"># Load the network parameters from default epoch 0</span>
+        <span class="n">sym</span><span class="p">,</span> <span class="n">arg_params</span><span class="p">,</span> <span class="n">aux_params</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_checkpoint</span><span class="p">(</span><span class="n">network_prefix</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Load the network into an MXNet module and bind the corresponding parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">Module</span><span class="p">(</span><span class="n">symbol</span><span class="o">=</span><span class="n">sym</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="n">label_names</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">for_training</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">data_shapes</span><span class="o">=</span> <span class="n">input_shapes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">arg_params</span><span class="p">,</span> <span class="n">aux_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes in an image, reshapes it, and runs it through the loaded MXNet graph for inference returning the N top labels from the softmax</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">predict_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">reshape</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span> <span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+
+        <span class="n">topN</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Switch RGB to BGR format (which ImageNet networks take)</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">topN</span>
+
+        <span class="c1"># Resize image to fit network input</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">reshape</span><span class="p">)</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Run forward on the image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">Batch</span><span class="p">([</span><span class="n">mx</span><span class="o">.</span><span class="n">nd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)]))</span>
+        <span class="n">prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">()</span>
+        <span class="n">prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+
+        <span class="c1"># Extract the top N predictions from the softmax output</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">prob</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;probability=</span><span class="si">%f</span><span class="s1">, class=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">prob</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">synsets</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">topN</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">prob</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">synsets</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">topN</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Captures an image from the PiCamera, then sends it for prediction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">predict_from_cam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capfile</span><span class="o">=</span><span class="s1">&#39;cap.jpg&#39;</span><span class="p">,</span> <span class="n">reshape</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">),</span> <span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">picamera</span><span class="o">.</span><span class="n">PiCamera</span><span class="p">()</span>
+
+        <span class="c1"># Show quick preview of what&#39;s being captured</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">start_preview</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">capture</span><span class="p">(</span><span class="n">capfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">stop_preview</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_from_file</span><span class="p">(</span><span class="n">capfile</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;pull and load pre-trained resnet model to classify one image&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--img&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;cam&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;input image for classification, if this is cam it captures from the PiCamera&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--prefix&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;squeezenet_v1.1&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the prefix of the pre-trained model&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--label-name&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;prob_label&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the name of the last layer in the loaded network (usually softmax_label)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--synset&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;synset.txt&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the path of the synset for the model&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--params-url&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the (optional) url to pull the network parameter file from&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--symbol-url&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the (optional) url to pull the network symbol JSON from&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--synset-url&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the (optional) url to pull the synset file from&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="n">ImagenetModel</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">synset</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">label_name</span><span class="p">],</span> <span class="n">params_url</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">params_url</span><span class="p">,</span> <span class="n">symbol_url</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">symbol_url</span><span class="p">,</span> <span class="n">synset_url</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">synset_url</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s2">&quot;predicting on &quot;</span><span class="o">+</span><span class="n">args</span><span class="o">.</span><span class="n">img</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">img</span> <span class="o">==</span> <span class="s2">&quot;cam&quot;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">mod</span><span class="o">.</span><span class="n">predict_from_cam</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">mod</span><span class="o">.</span><span class="n">predict_from_file</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+
+
+<p>To download the lightweight, but highly accurate, ImageNet-trained SqueezeNet V1.1 model and run it on an image of a cat, run the following command in the Pi’s home&nbsp;directory:</p>
+<p>下載這個輕量覺卻高準確率的 ImageNet-trained SqueezeNet V1.1 模型並且使用一張 cat 圖片來執行，請在 Pi&nbsp;的家目錄下執行以下指令:</p>
+<div class="codehilite"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">upload</span><span class="o">.</span><span class="n">wikimedia</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">wikipedia</span><span class="o">/</span><span class="n">commons</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">b9</span><span class="o">/</span><span class="n">CyprusShorthair</span><span class="o">.</span><span class="n">jpg</span> <span class="o">-</span><span class="n">O</span> <span class="n">cat</span><span class="o">.</span><span class="n">jpg</span>
+<span class="n">python</span> <span class="n">load_model</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">img</span> <span class="s1">&#39;cat.jpg&#39;</span> <span class="o">--</span><span class="n">prefix</span> <span class="s1">&#39;squeezenet_v1.1&#39;</span> <span class="o">--</span><span class="n">synset</span> <span class="s1">&#39;synset.txt&#39;</span> <span class="o">--</span><span class="n">params</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/squeezenet/squeezenet_v1.1-0000.params&#39;</span> <span class="o">--</span><span class="n">symbol</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/squeezenet/squeezenet_v1.1-symbol.json&#39;</span> <span class="o">--</span><span class="n">synset</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/synset.txt&#39;</span>
+</pre></div>
+
+
+<p>The output should include cat as one of the top labels, and look similar to&nbsp;this:</p>
+<p>輸出結果包含第一個 cat&nbsp;的標籤，看起來會像是這樣：</p>
+<div class="codehilite"><pre><span></span>[(0.57816696, &#39;n02123045 tabby, tabby cat&#39;), (0.19830757, &#39;n02124075 Egyptian cat&#39;), (0.16912524, &#39;n02325366 wood rabbit, cottontail, cottontail rabbit&#39;), (0.020817872, &#39;n02123159 tiger cat&#39;), (0.020065691, &#39;n02326432 hare&#39;)]
+</pre></div>
+
+
+<p>To run the pretrained model on an image captured with the Raspberry Pi camera, point the camera at an object that you want to classify and run the following command in the Pi’s home&nbsp;directory:</p>
+<p>將相機對準你要分類的目標物用 Raspberry Pi camera 擷取一張影像並且運行這個預先訓練模型，並在 Pi&nbsp;的家目錄下執行以下指令：</p>
+<div class="codehilite"><pre><span></span>python load_model.py –img ‘cam’ –prefix ‘squeezenet_v1.1’ –synset ‘synset.txt’
+</pre></div>
+
+
+<p>You will see a quick preview of the image captured by the camera. Then the model runs and returns suggested labels for the&nbsp;object.</p>
+<p>你會看到相機擷取圖片後有個很快速預覽。接著針對物件模型運行並且回傳一個建議的標籤。</p>
+<h2>Connecting to <span class="caps">AWS</span>&nbsp;IoT</h2>
+<h2>連接 <span class="caps">AWS</span> <span class="caps">IOT</span></h2>
+<p>Running a model locally on the Pi is a great first step. But to reliably centralize and store predictions and remotely update the model, you need to connect the Pi to the <span class="caps">AWS</span> Cloud. To do this, set up <span class="caps">AWS</span> IoT on the&nbsp;Pi.</p>
+<p>運行一個在 Pi 上的模型是好的開始。但為了可靠的集中、儲存預測與遠端更新模型，你需要將 Pi 連接到 <span class="caps">AWS</span> 雲端。為了做到這個，要在 Pi 上設定 <span class="caps">AWS</span>&nbsp;IoT。</p>
+<p>In the <span class="caps">AWS</span> IoT console, use the <a href="https://console.aws.amazon.com/iotv2/home?region=us-east-1#/connectdevice/"><span class="caps">AWS</span> IoT Connect wizard</a>. For platform, choose Linux/<span class="caps">OSX</span>. For <span class="caps">SDK</span> type, choose Python, and then choose&nbsp;Next.</p>
+<p>使用 <a href="https://console.aws.amazon.com/iotv2/home?region=us-east-1#/connectdevice/"><span class="caps">AWS</span> IoT Connect wizard</a> 在這個 <span class="caps">AWS</span> IoT Console。針對平台，選擇 Linux/<span class="caps">OSX</span>，針對 <span class="caps">SDK</span> type，選擇 Python, 接著點選&nbsp;Next。</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_2.gif" /></p>
+<p>Register your device with the name&nbsp;“MyRaspberryPi.”</p>
+<p>使用 <code>MyRaspberryPi.</code> 來註冊你的裝置。</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_3.gif" /></p>
+<p>Choose Next Step and download the connection kit in <code>connect_device_package.zip</code> to your Pi. When you unzip connect_device_package.zip and extract its contents into your Pi’s home directory, you see the files that you need to securely connect your device to <span class="caps">AWS</span>:</p>
+<p>點選下一步接著連接 kit 下載 <code>connect_device_package.zip</code> 到 Pi。當你解壓縮 connect_device_package.zip 並取出檔案內容放到 Pi 的家目錄，會看到幾個檔案，用來協助裝置透過安全認證方式的連接到 <span class="caps">AWS</span>：</p>
+<ul>
+<li>myraspberrypi.cert.pem</li>
+<li>myraspberrypi.private.key</li>
+<li>myraspberrypi.public.key</li>
+<li>start.sh</li>
+</ul>
+<p>To set up a secure connection between your device and the <span class="caps">AWS</span> Cloud, follow the steps on the next screen to run the start.sh script on the Pi. This script downloads the Symantec Root-<span class="caps">CA</span> certificate onto your Pi and installs the <span class="caps">AWS</span> IoT <span class="caps">SDK</span>, which lets you easily interact with <span class="caps">AWS</span> IoT from Python. The script also confirms that the Pi is talking to <span class="caps">AWS</span>&nbsp;IoT.</p>
+<p>請按照下個畫面執行 <code>start.sh</code> script 步驟設定你的裝置與 <span class="caps">AWS</span> Cloud 的安全性連接。這個 script 會下載 Symantec Root-<span class="caps">CA</span> 憑證到你的 Pi 上與安裝 <span class="caps">AWS</span> IoT <span class="caps">SDK</span>，讓你可以輕鬆的透過 Python 操作 <span class="caps">AWS</span> IoT。這個 script 也能確認 Pi 正與 <span class="caps">AWS</span> IoT&nbsp;交談。 </p>
+<p>Now you can use <span class="caps">AWS</span> IoT to create a service on the Pi that runs near-real-time object recognition and constantly pushes results to the <span class="caps">AWS</span> Cloud. It also provides a mechanism to seamlessly update the model running on the&nbsp;Pi.</p>
+<p>現在你可以使用 <span class="caps">AWS</span> IoT 在 Pi 上建立一個服務並且執行一個近乎即時的物件識別並且時時的推送結果到 <span class="caps">AWS</span> Cloud。它通識提供模型一個無縫更新模型運行在 Pi&nbsp;上。</p>
+<p>In your home directory, create a new file called iot_service.py, and add the following code to&nbsp;it:</p>
+<p>在你的家目錄下，建立一個新的檔案叫 <code>iot_service.py</code>，並且新增下列程式碼：</p>
+<div class="codehilite"><pre><span></span><span class="c1"># iot_service.py        </span>
+<span class="kn">import</span> <span class="nn">AWSIoTPythonSDK</span>
+<span class="kn">from</span> <span class="nn">AWSIoTPythonSDK.MQTTLib</span> <span class="kn">import</span> <span class="n">AWSIoTMQTTClient</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">getopt</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">load_model</span>
+
+<span class="c1"># Custom MQTT message callback</span>
+<span class="k">def</span> <span class="nf">customCallback</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Received a new message: &quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;from topic: &quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;--------------</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="s2">&quot;sdk/test/load&quot;</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">new_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="o">.</span><span class="n">ImagenetModel</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;synset&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;prefix&#39;</span><span class="p">],</span> <span class="n">label_names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]],</span> <span class="n">params_url</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;params_url&#39;</span><span class="p">],</span> <span class="n">symbol_url</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;symbol_url&#39;</span><span class="p">])</span>
+        <span class="n">global_model</span> <span class="o">=</span> <span class="n">new_model</span>
+    <span class="k">elif</span> <span class="n">message</span><span class="o">.</span><span class="n">topic</span> <span class="o">==</span> <span class="s2">&quot;sdk/test/switch&quot;</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">new_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="o">.</span><span class="n">ImagenetModel</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;synset&#39;</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;prefix&#39;</span><span class="p">],</span> <span class="n">label_names</span><span class="o">=</span><span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]])</span>
+        <span class="n">global_model</span> <span class="o">=</span> <span class="n">new_model</span>        
+
+<span class="c1"># Usage</span>
+<span class="n">usageInfo</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Usage:</span>
+
+<span class="s2">Use certificate based mutual authentication:</span>
+<span class="s2">python iot_server.py -e  -r  -c  -k </span>
+
+<span class="s2">Use MQTT over WebSocket:</span>
+<span class="s2">python iot_server.py -e  -r  -w</span>
+
+<span class="s2">Type &quot;python iot_server.py -h&quot; for available options.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Help info</span>
+<span class="n">helpInfo</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;-e, --endpoint</span>
+<span class="s2">    Your AWS IoT custom endpoint</span>
+<span class="s2">-r, --rootCA</span>
+<span class="s2">    Root CA file path</span>
+<span class="s2">-c, --cert</span>
+<span class="s2">    Certificate file path</span>
+<span class="s2">-k, --key</span>
+<span class="s2">    Private key file path</span>
+<span class="s2">-w, --websocket</span>
+<span class="s2">    Use MQTT over WebSocket</span>
+<span class="s2">-h, --help</span>
+<span class="s2">    Help information</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Read in command-line parameters</span>
+<span class="n">useWebsocket</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">host</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">rootCAPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">certificatePath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">privateKeyPath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">getopt</span><span class="o">.</span><span class="n">getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="s2">&quot;hwe:k:c:r:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;help&quot;</span><span class="p">,</span> <span class="s2">&quot;endpoint=&quot;</span><span class="p">,</span> <span class="s2">&quot;key=&quot;</span><span class="p">,</span><span class="s2">&quot;cert=&quot;</span><span class="p">,</span><span class="s2">&quot;rootCA=&quot;</span><span class="p">,</span> <span class="s2">&quot;websocket&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">getopt</span><span class="o">.</span><span class="n">GetoptError</span><span class="p">(</span><span class="s2">&quot;No input parameters!&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">opt</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--help&quot;</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">helpInfo</span><span class="p">)</span>
+            <span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;--endpoint&quot;</span><span class="p">):</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--rootCA&quot;</span><span class="p">):</span>
+            <span class="n">rootCAPath</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;--cert&quot;</span><span class="p">):</span>
+            <span class="n">certificatePath</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-k&quot;</span><span class="p">,</span> <span class="s2">&quot;--key&quot;</span><span class="p">):</span>
+            <span class="n">privateKeyPath</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="s2">&quot;--websocket&quot;</span><span class="p">):</span>
+            <span class="n">useWebsocket</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span> <span class="n">getopt</span><span class="o">.</span><span class="n">GetoptError</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">usageInfo</span><span class="p">)</span>
+    <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Missing configuration notification</span>
+<span class="n">missingConfiguration</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">host</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Missing &#39;-e&#39; or &#39;--endpoint&#39;&quot;</span><span class="p">)</span>
+    <span class="n">missingConfiguration</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">rootCAPath</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Missing &#39;-r&#39; or &#39;--rootCA&#39;&quot;</span><span class="p">)</span>
+    <span class="n">missingConfiguration</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">useWebsocket</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">certificatePath</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Missing &#39;-c&#39; or &#39;--cert&#39;&quot;</span><span class="p">)</span>
+        <span class="n">missingConfiguration</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">privateKeyPath</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Missing &#39;-k&#39; or &#39;--key&#39;&quot;</span><span class="p">)</span>
+        <span class="n">missingConfiguration</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">if</span> <span class="n">missingConfiguration</span><span class="p">:</span>
+    <span class="nb">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1"># Configure logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AWSIoTPythonSDK.core&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">streamHandler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">streamHandler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">streamHandler</span><span class="p">)</span>
+
+
+<span class="c1"># Init AWSIoTMQTTClient for publish/subscribe communication with the server</span>
+<span class="n">myAWSIoTMQTTClient</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">if</span> <span class="n">useWebsocket</span><span class="p">:</span>
+    <span class="n">myAWSIoTMQTTClient</span> <span class="o">=</span> <span class="n">AWSIoTMQTTClient</span><span class="p">(</span><span class="s2">&quot;basicPubSub&quot;</span><span class="p">,</span> <span class="n">useWebsocket</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureEndpoint</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="mi">443</span><span class="p">)</span>
+    <span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureCredentials</span><span class="p">(</span><span class="n">rootCAPath</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">myAWSIoTMQTTClient</span> <span class="o">=</span> <span class="n">AWSIoTMQTTClient</span><span class="p">(</span><span class="s2">&quot;basicPubSub&quot;</span><span class="p">)</span>
+    <span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureEndpoint</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="mi">8883</span><span class="p">)</span>
+    <span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureCredentials</span><span class="p">(</span><span class="n">rootCAPath</span><span class="p">,</span> <span class="n">privateKeyPath</span><span class="p">,</span> <span class="n">certificatePath</span><span class="p">)</span>
+
+
+<span class="c1"># AWSIoTMQTTClient connection configuration</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureAutoReconnectBackoffTime</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureOfflinePublishQueueing</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Infinite offline Publish queueing</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureDrainingFrequency</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Draining: 2 Hz</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureConnectDisconnectTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># 10 sec</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">configureMQTTOperationTimeout</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># 5 sec</span>
+
+
+<span class="c1"># Connect and subscribe to AWS IoT</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s2">&quot;sdk/test/load&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">customCallback</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1"># Tell the server we are alive</span>
+<span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;sdk/test/monitor&quot;</span><span class="p">,</span> <span class="s2">&quot;New Message: Starting IoT Server&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">global_model</span> <span class="o">=</span> <span class="n">load_model</span><span class="o">.</span><span class="n">ImagenetModel</span><span class="p">(</span><span class="s1">&#39;synset.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;squeezenet_v1.1&#39;</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">global_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">global_model</span><span class="o">.</span><span class="n">predict_from_cam</span><span class="p">()</span>
+        <span class="k">print</span> <span class="n">predictions</span>
+        <span class="n">myAWSIoTMQTTClient</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;sdk/test/monitor&quot;</span><span class="p">,</span> <span class="s2">&quot;New Prediction: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">predictions</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Now run this file by entering the following command in the Pi’s home&nbsp;directory:</p>
+<p>現在在家目錄下用以下指令來執行這個程式：</p>
+<div class="codehilite"><pre><span></span>python iot_service.py -e my-device-endpoint.amazonaws.com -r root-CA.crt -c myraspberrypi.cert.pem -k myraspberrypi.private.key
+</pre></div>
+
+
+<p>In the <span class="caps">AWS</span> IoT Console choose Test, and subscribe to the sdk/test/monitor&nbsp;topic:</p>
+<p>在 <span class="caps">AWS</span> IoT Console 選擇測試，接著 subscribe to the sdk/test/monitor&nbsp;topic:</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_4.gif" /></p>
+<p>To see the predictions streaming into <span class="caps">AWS</span> in real time, on the Test page, choose the name of the new topic. Even if the network connection slows or is dropped, <span class="caps">AWS</span> IoT ensures that packets aren’t lost and the prediction log remains up to&nbsp;date.</p>
+<p><strong>Test 頁面</strong>上選擇新主題的名稱，會看見 predictions streaming 即時進入 <span class="caps">AWS</span>。即使網路連線過慢或是掉包，<span class="caps">AWS</span> IoT&nbsp;會確保數據不會遺失且讓預測的日誌維持最新。</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_5.gif" /></p>
+<p>To send commands to the Pi to update the MXNet model it’s running, you can publish to <span class="caps">MQTT</span> topics. For example, to update the SqueezeNet model running on the Pi to a larger, but more accurate, ResNet model, in the <span class="caps">MQTT</span> client in the <strong>Publish</strong> section, send the following <span class="caps">JSON</span> to the sdk/test/load&nbsp;topic:</p>
+<p>你可以發佈 <span class="caps">MQTT</span> 主題用來發送指令給 Pi 用來更新運作中的 MXNet 模型，舉個例子，要更新正在執行在 Pi 上 SqueezeNet model 使其更大、更準確的 ResNet 模型，在 <span class="caps">MQTT</span> 客戶端中的 <strong>Publish</strong> 部份，送出如下的 <span class="caps">JSON</span> 到 sdk/test/load&nbsp;topic:</p>
+<div class="codehilite"><pre><span></span>{
+&quot;synset&quot;: &quot;synset.txt&quot;,
+&quot;prefix&quot;: &quot;resnet-18&quot;,
+&quot;label_name&quot;: &quot;softmax_label&quot;,
+&quot;params_url&quot;: &quot;http://data.mxnet.io/models/imagenet/resnet/18-layers/resnet-18-0000.params&quot;,
+&quot;symbol_url&quot;: &quot;http://data.mxnet.io/models/imagenet/resnet/18-layers/resnet-18-symbol.json&quot;
+}
+</pre></div>
+
+
+<p>This is what it looks like in the <span class="caps">MQTT</span>&nbsp;client:</p>
+<p><span class="caps">MQTT</span>&nbsp;客戶端會看到如下：</p>
+<p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_6.gif" /></p>
+<p>The Pi downloads the new network symbol and parameter files from the Model Zoo, loads them for prediction, and continues running with the new model. You don’t need to download a new synset. The two models that you’re using have been trained for the ImageNet task, so the set of objects that you’re classifying remains the&nbsp;same.</p>
+<p>Pi 會從模型庫下載新的符號與參數檔案，將載入它們來做預測，並且繼續執行新的模型。你不需要下載新的 synset。而你正在使用的兩個新模型已經用 ImageNet task&nbsp;訓練過，所以你所設定的分類會一樣保持不變。</p>
+<h2>Next&nbsp;steps</h2>
+<h2>接下來</h2>
+<p>By running MXNet for predictions on the Raspberry Pi and connecting it to the <span class="caps">AWS</span> Cloud with <span class="caps">AWS</span> IoT, you have created a near state-of-the-art computer vision system. Your system doesn’t rely on a constant high-bandwidth connection to stream video or expensive <span class="caps">GPU</span> servers in the cloud to process that video. In fact, by using <span class="caps">AWS</span> and MXNet on the Pi, you can easily create a much more reliable and cost-effective smart camera system. With this approach, you enjoy most of the benefits of cloud-based model monitoring and management. But, you reduce the price from a monthly cost of hundreds of dollars (for server and data transfer costs) to a one-time hardware cost of around $60 (the cost of the Pi and the camera&nbsp;module).</p>
+<p>在 Raspberry Pi 上執行 MXNet 用來預測並透過 <span class="caps">AWS</span> IoT 連接 <span class="caps">AWS</span> Cloud，你已經完成一個近乎先進的計算機視覺系統。你的系統不需持續依賴在一個高頻寬的影像串流連接或要昂貴的 <span class="caps">GPU</span> 伺服器來處理影像。實際上在 Pi 上使用 <span class="caps">AWS</span> 和 MXNet，你可以簡單輕鬆地建立一個可靠且低成本的智慧型相機系統。透過這種方法，你可以享有基於雲端模型監控與管理的多數優點。但，你降低了每個月原本必須付出數以百元的支出（伺服器與資料傳輸花費）大約 $60 美元的一次性成本（Pi 和&nbsp;相機模組的花費）</p>
+<p>This smart camera system is just the tip of the iceberg. You can start to iterate on it, connecting it to production services in the <span class="caps">AWS</span> Cloud, building out multi-device coordination though <span class="caps">AWS</span> IoT, and using methods like transfer learning to adapt the pretrained models to specific computer vision&nbsp;tasks.</p>
+<p>這個智慧相機系統只是相關應用的一角。你可以開始不斷重複，將他連結到 <span class="caps">AWS</span> Cloud 生產服務，透過 <span class="caps">AWS</span> IoT 建構一個多個設備間彼此串接，接這使用像是 transfer learning&nbsp;的方法將預測模型應用於特定的計算機視覺任務。</p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/mxnet.html">MXNet</a>, <a href="../../../tag/raspberry-pi.html">Raspberry Pi</a>, <a href="../../../tag/apache.html">Apache</a>, <a href="../../../tag/aws.html">AWS</a>, <a href="../../../tag/iot.html">IOT</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/07/Build a Real-time Object Classification System with Apache MXNet on Raspberry Pi.html';
+                //var disqus_url = '../../../posts/2017/07/Build a Real-time Object Classification System with Apache MXNet on Raspberry Pi.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  chairco(Jason)
+</p>            </div>
+        </div>
+    </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- Analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
+</body>
+
+</html>
