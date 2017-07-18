@@ -38,7 +38,7 @@
 
 
 
-        <meta name="description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 ...">
+        <meta name="description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 amazon 來找我 XD。 ...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -56,7 +56,7 @@
 	<meta property="og:url" content="../../../posts/2017/07/Build a Real-time Object Classification System with Apache MXNet on Raspberry Pi.html">
 	<meta property="og:title" content="Raspberry Pi 上利用 Apache MXNet 建立一個即時物件分類系統">
 	<meta property="article:published_time" content="2017-07-16 08:09:27+08:00">
-            <meta property="og:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 ...">
+            <meta property="og:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 amazon 來找我 XD。 ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -66,7 +66,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
 
-            <meta name="twitter:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 ...">
+            <meta name="twitter:description" content="本文翻譯至 AWS AI Blog，目前花了大概一點時間翻譯。如有錯誤還請指教。 業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + AWS 不失為一個不錯的低成本方案！ 再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 amazon 來找我 XD。 ...">
     
 </head>
 
@@ -129,25 +129,17 @@
         </div>
         <hr />
 <blockquote>
-<p>本文翻譯至 <a href="https://aws.amazon.com/tw/blogs/ai/build-a-real-time-object-classification-system-with-apache-mxnet-on-raspberry-pi/"><span class="caps">AWS</span> <span class="caps">AI</span> Blog</a>，目前花了大概一點時間翻譯，感覺不甚完美所以還保留對照文。如有錯誤還請指教。</p>
+<p>本文翻譯至 <a href="https://aws.amazon.com/tw/blogs/ai/build-a-real-time-object-classification-system-with-apache-mxnet-on-raspberry-pi/"><span class="caps">AWS</span> <span class="caps">AI</span> Blog</a>，目前花了大概一點時間翻譯。如有錯誤還請指教。</p>
 <p>業配文偶爾還是有值得欣賞之處呀。對於沒有太多設備的業餘玩家，Pi + <span class="caps">AWS</span>&nbsp;不失為一個不錯的低成本方案！</p>
 <p>再次澄清，我絕對沒有要幫 amazon 業配。但歡迎 amazon 來找我 <span class="caps">XD</span>。 </p>
 </blockquote>
-<p>In the past five years, deep neural networks have solved many computationally difficult problems, particularly in the field of computer vision. Because deep networks require a lot of computational power to train, often using tens of GPUs, many people assume that you can run them only on powerful cloud servers. In fact, after a deep network model has been trained, it needs relatively few computational resources to run predictions. This means that you can deploy a model on lower-powered edge (non-cloud) devices and run it without relying on an internet&nbsp;connection.</p>
 <p>過去五年裡，深度類神經網路已經解決了許多計算上困難的問題，特別是在計算機中的視覺領域。因為深度網路需要很大量的計算能力進行訓練，經常需要用到數十個 GPUs，許多人會誤認為只能在運行在強大的雲端伺服器。實際上訓練完成深度模型網路模型，只需要較少的電腦資源就能運作模型的預測。這代表你可以部署一個模型在一個非常低耗能 edge (非雲端)&nbsp;裝置上且不需要依賴網路連接就能運行它。</p>
-<p>Enter Apache MXNet, Amazon’s open source deep learning engine of choice. In addition to effectively handling multi-<span class="caps">GPU</span> training and deployment of complex models, MXNet produces very lightweight neural network model representations. You can deploy these representations on devices with limited memory and compute power. This makes MXNet perfect for running deep learning models on devices like the popular $35 Raspberry Pi&nbsp;computer.</p>
 <p>進入 Apache MXNet，Amazon 的開源深度學習引擎之一，除了有效處理多 <span class="caps">GPU</span> 訓練和部署複雜的模型外，MXNet 可以產生非常輕量級的類神經網路模型的結構(譯者：參考<a href="http://murphymind.blogspot.tw/2017/05/NeuralNetworksRepresentation.html">類神經網路結構</a>)。你可以在有限記憶體與運算的裝置上部署這些結構。這可以讓 MXNet 完美的在裝置上運作深度學習模型像是目前流行的 Raspberry Pi 電腦(僅需 $35&nbsp;美金)</p>
-<p>In this post, we walk through creating a computer vision system using MXNet for the Raspberry Pi. We also show how to use <span class="caps">AWS</span> IoT to connect to the <span class="caps">AWS</span> Cloud. This allows you to use the Cloud to manage a lightweight convolutional neural network running real-time object recognition on the&nbsp;Pi.</p>
 <p>在這篇文章，我們將會帶大家瞭解如何針對 Raspberry Pi 建立一個使用 MXNet 的計算機視覺系統。我們可以展示如何使用 <span class="caps">AWS</span> IoT 去連結 <span class="caps">AWS</span> Cloud。運行一個即時物件辨認在 Pi 上時，這允許你使用這個雲端去管理一個輕量級的卷積神蹟網路(convolutional neural network)&nbsp;。</p>
-<h2>Prerequisites</h2>
-<h2>準備</h2>
-<p>To follow this post, you need a Raspberry Pi 3 Model B device running Jessie or a later version of the Raspbian operating system, the Raspberry Pi Camera Module v2, and an <span class="caps">AWS</span>&nbsp;account.</p>
+<h2>準備(Prerequisites)</h2>
 <p>接著你需要一個 Raspberry Pi 3 Model B 一張用來運行 <code>Jessie</code> 或是最新版本的 Raspbian 作業系統，Raspberry Pi Camera 模組 v2，與一個 <span class="caps">AWS</span>&nbsp;帳戶。</p>
-<h2>Setting up the Raspberry&nbsp;Pi</h2>
 <h2>設定 Raspberry&nbsp;Pi</h2>
-<p>First, you set up the Pi with the camera module to turn it into a video camera, and then install MXNet. This allows you to start running deep network-based analysis on everything that the Pi&nbsp;“sees.”</p>
 <p>第一件事，你可以設定 Pi 的照相模組並將其轉成攝影機，接著安裝 MXNet。這樣就能允許任何 Pi &#8220;所見&#8221;&nbsp;開始運行基於深層神經網路分析。</p>
-<p>Set up your Pi with the Camera Module and connect the device to the Internet, either through the Ethernet port or with WiFi. Then, open the terminal and type the following commands to install the Python dependencies for this&nbsp;post:</p>
 <p>設定 Pi 上的相機模組並連接裝置到網際網路，透過乙太網路或是 WiFi，接著打開終端機和鍵入指令來安裝 Python dependencies&nbsp;如下：</p>
 <div class="codehilite"><pre><span></span>sudo apt-get update
 sudo apt-get install python-pip python-opencv python-scipy \
@@ -155,10 +147,8 @@ python-picamera
 </pre></div>
 
 
-<p>Build MXNet for the Pi with the corresponding Python bindings by following the <a href="http://mxnet.io/get_started/install.html">instructions for Devices</a>. For this tutorial, you won’t need to build MXNet with&nbsp;OpenCV.</p>
 <p>按照<a href="http://mxnet.io/get_started/install.html">裝置文件說明</a> 使用對應的 Python 綁定並編譯用於 Pi 上的 MXNet。對這份教學，你不需要使用 OpenCV 來編譯&nbsp;MXNet。</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_1.gif" /></p>
-<p>Verify that the build succeeded by opening a Python 2.7 Read-Eval-Print-Loop (<span class="caps">REPL</span>) environment on your Pi’s terminal and typing the&nbsp;following:</p>
 <p>在你的 Pi 的終端機打開 Python 2.7 Read-Eval-Print-Loop (<span class="caps">REPL</span>)&nbsp;並且打入以下指令來驗證是否成功編譯：</p>
 <div class="codehilite"><pre><span></span><span class="n">python</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">mxnet</span> <span class="kn">as</span> <span class="nn">mx</span>
@@ -166,9 +156,7 @@ python-picamera
 </pre></div>
 
 
-<h2>Running predictions&nbsp;locally</h2>
 <h2>在本機端運行預測</h2>
-<p>To run predictions on images captured by the Pi camera, you need to fetch a pretrained deep network model from the MXNet Model Zoo. Create a Python file in the Pi’s home directory, name load_model.py, and write a class that downloads ImageNet-trained models from the Model Zoo and loads them into MXNet on the&nbsp;Pi:</p>
 <p>對 Pi camera 抓的圖像運行預測，你需要從 MXNet Model Zoo 取得一個預訓練的深層網路模型。在 Pi 的家目錄建立一個 Python 檔案並且撰寫一個用來從模型庫下載 ImageNet-trained 模型的類別接著載入 MXNet 到 Pi&nbsp;上：</p>
 <div class="codehilite"><pre><span></span><span class="c1"># load_model.py </span>
 <span class="kn">import</span> <span class="nn">mxnet</span> <span class="kn">as</span> <span class="nn">mx</span>
@@ -283,38 +271,29 @@ python-picamera
 </pre></div>
 
 
-<p>To download the lightweight, but highly accurate, ImageNet-trained SqueezeNet V1.1 model and run it on an image of a cat, run the following command in the Pi’s home&nbsp;directory:</p>
 <p>下載這個輕量覺卻高準確率的 ImageNet-trained SqueezeNet V1.1 模型並且使用一張 cat 圖片來執行，請在 Pi&nbsp;的家目錄下執行以下指令:</p>
 <div class="codehilite"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">upload</span><span class="o">.</span><span class="n">wikimedia</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">wikipedia</span><span class="o">/</span><span class="n">commons</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">b9</span><span class="o">/</span><span class="n">CyprusShorthair</span><span class="o">.</span><span class="n">jpg</span> <span class="o">-</span><span class="n">O</span> <span class="n">cat</span><span class="o">.</span><span class="n">jpg</span>
 <span class="n">python</span> <span class="n">load_model</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">img</span> <span class="s1">&#39;cat.jpg&#39;</span> <span class="o">--</span><span class="n">prefix</span> <span class="s1">&#39;squeezenet_v1.1&#39;</span> <span class="o">--</span><span class="n">synset</span> <span class="s1">&#39;synset.txt&#39;</span> <span class="o">--</span><span class="n">params</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/squeezenet/squeezenet_v1.1-0000.params&#39;</span> <span class="o">--</span><span class="n">symbol</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/squeezenet/squeezenet_v1.1-symbol.json&#39;</span> <span class="o">--</span><span class="n">synset</span><span class="o">-</span><span class="n">url</span> <span class="s1">&#39;http://data.mxnet.io/models/imagenet/synset.txt&#39;</span>
 </pre></div>
 
 
-<p>The output should include cat as one of the top labels, and look similar to&nbsp;this:</p>
 <p>輸出結果包含第一個 cat&nbsp;的標籤，看起來會像是這樣：</p>
 <div class="codehilite"><pre><span></span>[(0.57816696, &#39;n02123045 tabby, tabby cat&#39;), (0.19830757, &#39;n02124075 Egyptian cat&#39;), (0.16912524, &#39;n02325366 wood rabbit, cottontail, cottontail rabbit&#39;), (0.020817872, &#39;n02123159 tiger cat&#39;), (0.020065691, &#39;n02326432 hare&#39;)]
 </pre></div>
 
 
-<p>To run the pretrained model on an image captured with the Raspberry Pi camera, point the camera at an object that you want to classify and run the following command in the Pi’s home&nbsp;directory:</p>
 <p>將相機對準你要分類的目標物用 Raspberry Pi camera 擷取一張影像並且運行這個預先訓練模型，並在 Pi&nbsp;的家目錄下執行以下指令：</p>
 <div class="codehilite"><pre><span></span>python load_model.py –img ‘cam’ –prefix ‘squeezenet_v1.1’ –synset ‘synset.txt’
 </pre></div>
 
 
-<p>You will see a quick preview of the image captured by the camera. Then the model runs and returns suggested labels for the&nbsp;object.</p>
 <p>你會看到相機擷取圖片後有個很快速預覽。接著針對物件模型運行並且回傳一個建議的標籤。</p>
-<h2>Connecting to <span class="caps">AWS</span>&nbsp;IoT</h2>
 <h2>連接 <span class="caps">AWS</span> <span class="caps">IOT</span></h2>
-<p>Running a model locally on the Pi is a great first step. But to reliably centralize and store predictions and remotely update the model, you need to connect the Pi to the <span class="caps">AWS</span> Cloud. To do this, set up <span class="caps">AWS</span> IoT on the&nbsp;Pi.</p>
 <p>運行一個在 Pi 上的模型是好的開始。但為了可靠的集中、儲存預測與遠端更新模型，你需要將 Pi 連接到 <span class="caps">AWS</span> 雲端。為了做到這個，要在 Pi 上設定 <span class="caps">AWS</span>&nbsp;IoT。</p>
-<p>In the <span class="caps">AWS</span> IoT console, use the <a href="https://console.aws.amazon.com/iotv2/home?region=us-east-1#/connectdevice/"><span class="caps">AWS</span> IoT Connect wizard</a>. For platform, choose Linux/<span class="caps">OSX</span>. For <span class="caps">SDK</span> type, choose Python, and then choose&nbsp;Next.</p>
 <p>使用 <a href="https://console.aws.amazon.com/iotv2/home?region=us-east-1#/connectdevice/"><span class="caps">AWS</span> IoT Connect wizard</a> 在這個 <span class="caps">AWS</span> IoT Console。針對平台，選擇 Linux/<span class="caps">OSX</span>，針對 <span class="caps">SDK</span> type，選擇 Python, 接著點選&nbsp;Next。</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_2.gif" /></p>
-<p>Register your device with the name&nbsp;“MyRaspberryPi.”</p>
 <p>使用 <code>MyRaspberryPi.</code> 來註冊你的裝置。</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_3.gif" /></p>
-<p>Choose Next Step and download the connection kit in <code>connect_device_package.zip</code> to your Pi. When you unzip connect_device_package.zip and extract its contents into your Pi’s home directory, you see the files that you need to securely connect your device to <span class="caps">AWS</span>:</p>
 <p>點選下一步接著連接 kit 下載 <code>connect_device_package.zip</code> 到 Pi。當你解壓縮 connect_device_package.zip 並取出檔案內容放到 Pi 的家目錄，會看到幾個檔案，用來協助裝置透過安全認證方式的連接到 <span class="caps">AWS</span>：</p>
 <ul>
 <li>myraspberrypi.cert.pem</li>
@@ -322,11 +301,8 @@ python-picamera
 <li>myraspberrypi.public.key</li>
 <li>start.sh</li>
 </ul>
-<p>To set up a secure connection between your device and the <span class="caps">AWS</span> Cloud, follow the steps on the next screen to run the start.sh script on the Pi. This script downloads the Symantec Root-<span class="caps">CA</span> certificate onto your Pi and installs the <span class="caps">AWS</span> IoT <span class="caps">SDK</span>, which lets you easily interact with <span class="caps">AWS</span> IoT from Python. The script also confirms that the Pi is talking to <span class="caps">AWS</span>&nbsp;IoT.</p>
 <p>請按照下個畫面執行 <code>start.sh</code> script 步驟設定你的裝置與 <span class="caps">AWS</span> Cloud 的安全性連接。這個 script 會下載 Symantec Root-<span class="caps">CA</span> 憑證到你的 Pi 上與安裝 <span class="caps">AWS</span> IoT <span class="caps">SDK</span>，讓你可以輕鬆的透過 Python 操作 <span class="caps">AWS</span> IoT。這個 script 也能確認 Pi 正與 <span class="caps">AWS</span> IoT&nbsp;交談。 </p>
-<p>Now you can use <span class="caps">AWS</span> IoT to create a service on the Pi that runs near-real-time object recognition and constantly pushes results to the <span class="caps">AWS</span> Cloud. It also provides a mechanism to seamlessly update the model running on the&nbsp;Pi.</p>
 <p>現在你可以使用 <span class="caps">AWS</span> IoT 在 Pi 上建立一個服務並且執行一個近乎即時的物件識別並且時時的推送結果到 <span class="caps">AWS</span> Cloud。它通識提供模型一個無縫更新模型運行在 Pi&nbsp;上。</p>
-<p>In your home directory, create a new file called iot_service.py, and add the following code to&nbsp;it:</p>
 <p>在你的家目錄下，建立一個新的檔案叫 <code>iot_service.py</code>，並且新增下列程式碼：</p>
 <div class="codehilite"><pre><span></span><span class="c1"># iot_service.py        </span>
 <span class="kn">import</span> <span class="nn">AWSIoTPythonSDK</span>
@@ -477,19 +453,15 @@ python-picamera
 </pre></div>
 
 
-<p>Now run this file by entering the following command in the Pi’s home&nbsp;directory:</p>
 <p>現在在家目錄下用以下指令來執行這個程式：</p>
 <div class="codehilite"><pre><span></span>python iot_service.py -e my-device-endpoint.amazonaws.com -r root-CA.crt -c myraspberrypi.cert.pem -k myraspberrypi.private.key
 </pre></div>
 
 
-<p>In the <span class="caps">AWS</span> IoT Console choose Test, and subscribe to the sdk/test/monitor&nbsp;topic:</p>
 <p>在 <span class="caps">AWS</span> IoT Console 選擇測試，接著 subscribe to the sdk/test/monitor&nbsp;topic:</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_4.gif" /></p>
-<p>To see the predictions streaming into <span class="caps">AWS</span> in real time, on the Test page, choose the name of the new topic. Even if the network connection slows or is dropped, <span class="caps">AWS</span> IoT ensures that packets aren’t lost and the prediction log remains up to&nbsp;date.</p>
 <p><strong>Test 頁面</strong>上選擇新主題的名稱，會看見 predictions streaming 即時進入 <span class="caps">AWS</span>。即使網路連線過慢或是掉包，<span class="caps">AWS</span> IoT&nbsp;會確保數據不會遺失且讓預測的日誌維持最新。</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_5.gif" /></p>
-<p>To send commands to the Pi to update the MXNet model it’s running, you can publish to <span class="caps">MQTT</span> topics. For example, to update the SqueezeNet model running on the Pi to a larger, but more accurate, ResNet model, in the <span class="caps">MQTT</span> client in the <strong>Publish</strong> section, send the following <span class="caps">JSON</span> to the sdk/test/load&nbsp;topic:</p>
 <p>你可以發佈 <span class="caps">MQTT</span> 主題用來發送指令給 Pi 用來更新運作中的 MXNet 模型，舉個例子，要更新正在執行在 Pi 上 SqueezeNet model 使其更大、更準確的 ResNet 模型，在 <span class="caps">MQTT</span> 客戶端中的 <strong>Publish</strong> 部份，送出如下的 <span class="caps">JSON</span> 到 sdk/test/load&nbsp;topic:</p>
 <div class="codehilite"><pre><span></span>{
 &quot;synset&quot;: &quot;synset.txt&quot;,
@@ -501,16 +473,11 @@ python-picamera
 </pre></div>
 
 
-<p>This is what it looks like in the <span class="caps">MQTT</span>&nbsp;client:</p>
 <p><span class="caps">MQTT</span>&nbsp;客戶端會看到如下：</p>
 <p><img alt="#" src="https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2017/06/20/MXNet_Pi_6.gif" /></p>
-<p>The Pi downloads the new network symbol and parameter files from the Model Zoo, loads them for prediction, and continues running with the new model. You don’t need to download a new synset. The two models that you’re using have been trained for the ImageNet task, so the set of objects that you’re classifying remains the&nbsp;same.</p>
 <p>Pi 會從模型庫下載新的符號與參數檔案，將載入它們來做預測，並且繼續執行新的模型。你不需要下載新的 synset。而你正在使用的兩個新模型已經用 ImageNet task&nbsp;訓練過，所以你所設定的分類會一樣保持不變。</p>
-<h2>Next&nbsp;steps</h2>
 <h2>接下來</h2>
-<p>By running MXNet for predictions on the Raspberry Pi and connecting it to the <span class="caps">AWS</span> Cloud with <span class="caps">AWS</span> IoT, you have created a near state-of-the-art computer vision system. Your system doesn’t rely on a constant high-bandwidth connection to stream video or expensive <span class="caps">GPU</span> servers in the cloud to process that video. In fact, by using <span class="caps">AWS</span> and MXNet on the Pi, you can easily create a much more reliable and cost-effective smart camera system. With this approach, you enjoy most of the benefits of cloud-based model monitoring and management. But, you reduce the price from a monthly cost of hundreds of dollars (for server and data transfer costs) to a one-time hardware cost of around $60 (the cost of the Pi and the camera&nbsp;module).</p>
 <p>在 Raspberry Pi 上執行 MXNet 用來預測並透過 <span class="caps">AWS</span> IoT 連接 <span class="caps">AWS</span> Cloud，你已經完成一個近乎先進的計算機視覺系統。你的系統不需持續依賴在一個高頻寬的影像串流連接或要昂貴的 <span class="caps">GPU</span> 伺服器來處理影像。實際上在 Pi 上使用 <span class="caps">AWS</span> 和 MXNet，你可以簡單輕鬆地建立一個可靠且低成本的智慧型相機系統。透過這種方法，你可以享有基於雲端模型監控與管理的多數優點。但，你降低了每個月原本必須付出數以百元的支出（伺服器與資料傳輸花費）大約 $60 美元的一次性成本（Pi 和&nbsp;相機模組的花費）</p>
-<p>This smart camera system is just the tip of the iceberg. You can start to iterate on it, connecting it to production services in the <span class="caps">AWS</span> Cloud, building out multi-device coordination though <span class="caps">AWS</span> IoT, and using methods like transfer learning to adapt the pretrained models to specific computer vision&nbsp;tasks.</p>
 <p>這個智慧相機系統只是相關應用的一角。你可以開始不斷重複，將他連結到 <span class="caps">AWS</span> Cloud 生產服務，透過 <span class="caps">AWS</span> IoT 建構一個多個設備間彼此串接，接這使用像是 transfer learning&nbsp;的方法將預測模型應用於特定的計算機視覺任務。</p>
 <hr />
 <p>譯者補充，關於 Apache MXNet 產品有興趣可以參考<a href="https://aws.amazon.com/tw/mxnet/">這篇</a></p>
