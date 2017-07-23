@@ -38,7 +38,7 @@
 
 
 
-        <meta name="description" content="好的測試帶你上天堂，不好的測試讓你離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些概念、工具與經驗。希望想多瞭解一些 Django apps 的測試朋友會有興趣。 For quite a while ...">
+        <meta name="description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -53,7 +53,7 @@
 	<meta property="og:url" content="../../../posts/2017/07/Let’s talk about testing Django apps.html">
 	<meta property="og:title" content="讓我們來談談 Django apps 上的測試吧">
 	<meta property="article:published_time" content="2017-07-20 15:39:46+08:00">
-            <meta property="og:description" content="好的測試帶你上天堂，不好的測試讓你離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些概念、工具與經驗。希望想多瞭解一些 Django apps 的測試朋友會有興趣。 For quite a while ...">
+            <meta property="og:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -63,7 +63,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
 
-            <meta name="twitter:description" content="好的測試帶你上天堂，不好的測試讓你離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些概念、工具與經驗。希望想多瞭解一些 Django apps 的測試朋友會有興趣。 For quite a while ...">
+            <meta name="twitter:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
     
 </head>
 
@@ -126,9 +126,10 @@
         </div>
         <hr />
 <blockquote>
-<p>好的測試帶你上天堂，不好的測試讓你離不開機房。</p>
+<p>好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。</p>
 <p>今天翻譯 Django 了一篇測試的文章，<a href="http://www.b-list.org/weblog/2017/apr/03/testing-django-apps/?utm_content=bufferca6f9&amp;utm_medium=social&amp;utm_source=facebook.com&amp;utm_campaign=buffer">原文在此</a> </p>
-<p>文章大概在說明測試 Django apps 的一些概念、工具與經驗。希望想多瞭解一些 Django apps&nbsp;的測試朋友會有興趣。</p>
+<p>文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps&nbsp;的測試設定朋友會有興趣。</p>
+<p>不過譯者後來發現這位作者原創的做法後來被自己翻盤了（他原本想用 <code>Makefile</code> 做到完美的測試設定，後來還是回到他最不想要的 <code>tox</code>。好吧，來看看他遭遇的困境與經驗也不錯啊！）</p>
 </blockquote>
 <hr />
 <p>For quite a while now, I’ve maintained <a href="http://www.b-list.org/projects/">several open-source Django applications</a>. And with Django 1.11 on the horizon, it’s time for me to go through and make any changes and clean out their issue queues while I’m at it, so I can roll new officially-compatible releases. When I’m doing this, I always like to try to evaluate the current state of the art and see if I can switch over to better ways of doing things, since Django gets a new features with every release and people in the community keep coming up with better ways to approach common tasks or&nbsp;problems.</p>
@@ -224,12 +225,14 @@
 <li>
 <p><code>test</code> runs the test suite with coverage, and prints the coverage&nbsp;report.</p>
 </li>
-</ul>
+<li>
 <p>根據涵蓋率在 test suite&nbsp;執行測試，並且印出涵蓋率報表。</p>
-<ul>
-<li>teardown cleans up afterward and will destroy the&nbsp;virtualenv.</li>
+</li>
+<li>
+<p>teardown cleans up afterward and will destroy the&nbsp;virtualenv.</p>
+</li>
 </ul>
-<p><code>testdown</code> 會在之後清除並且刪除&nbsp;virtualenv</p>
+<p>+<code>testdown</code> 會在之後清除並且刪除&nbsp;virtualenv</p>
 <p>There are a bunch of other targets in there, which do things like install the test dependencies, install the requested version of Django, etc. So now I can just specify <code>make test</code> in my <span class="caps">CI</span> configuration as the test command, and know that dependencies will be installed (previously I’d have had to use <code>test_requires</code> or manually specify installation of test dependencies), and for local testing I can test against whatever combination of Django/Python versions I want. For example, to run with Django 1.9 and Python&nbsp;3.5.2:</p>
 <p>這裡有一些目標要執行像是安裝測試相依的檔案，安裝需要的 Django 版本等。所以現在我可以在我的 <span class="caps">CI</span> 設定檔案內指定 <code>make test</code> 為指令，並且知道要安裝哪些相依檔案（之前我不得不手動安裝或是使用 <code>test_requires</code>），對於本地測試我可以指定任何我想要的 Django/Python 版本組合。舉個例，執行 Django 1.9 與 Python&nbsp;3.5.2:</p>
 <div class="codehilite"><pre><span></span>$ make venv <span class="nb">test</span> teardown <span class="nv">PYTHON_VERSION</span><span class="o">=</span>3.5.2 <span class="nv">DJANGO_VERSION</span><span class="o">=</span>1.9
@@ -254,8 +257,10 @@
 <li>
 <p>There is some reusability concern here since the <code>Makefile</code> is set up to use <code>pyenv</code>, and I know not everyone uses <code>pyenv</code>. For now, I’m relying on the fact that setting up a virtualenv is optional, and people can supply their own environment if they don’t use <code>pyenv</code>.</p>
 </li>
-</ul>
+<li>
 <p>有些重複使用的問題，目前 <code>Makefile</code> 設定使用 <code>pyenv</code>，但我知道並不是每個人都使用 <code>pyenv</code>。目前，依賴 virtualenv 是設置為選項，人們可以選擇使用他們想要的環境而不必使用 <code>pyenv</code>。</p>
+</li>
+</ul>
 <h2>The&nbsp;future</h2>
 <p>I’ll probably continue tinkering with the <code>Makefile</code> approach for a while, and if I can iron out the issues listed above, I might stick to it going forward, at least for my personal apps. If not, perhaps I’ll go back to <code>setup.py test</code>, or explore other options (like just buckling down and making <code>tox</code> work).</p>
 <p>我可能繼續修改 <code>Makefile</code> 一段時間，至少我個人應用程式，如果可以解決上面的問題我會繼續下去。但如果沒有我可能就會回到 <code>setup.py test</code>，或是探索看看其他選項（或是屈服在 <code>tox</code> 下）</p>
