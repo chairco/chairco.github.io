@@ -2,21 +2,26 @@
 <html lang="zh-hant">
 
 <head>
-            <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-        <title>Python 物件為可變參數時的使用</title>
-
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Python 物件為可變參數時的使用</title>
+    
     <!-- Bootstrap Core CSS -->
     <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Custom CSS -->
     <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
 
     <!-- Code highlight color scheme -->
-        <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
 
 
     <!-- Custom Fonts -->
@@ -27,8 +32,8 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
 
@@ -38,9 +43,10 @@
         <meta name="author" content="chairco(Jason)">
 
         <meta name="tags" content="Python">
+        <meta name="tags" content="Programming">
 
-	                <meta property="og:locale" content="">
-		<meta property="og:site_name" content="Jason's Blog">
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
 
 	<meta property="og:type" content="article">
             <meta property="article:author" content="../../../author/chaircojason.html">
@@ -50,6 +56,7 @@
             <meta property="og:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@ChaircoChen">
         <meta name="twitter:title" content="Python 物件為可變參數時的使用">
@@ -57,10 +64,10 @@
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
 
             <meta name="twitter:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class ...">
+    
 </head>
 
 <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
@@ -68,9 +75,10 @@
             <div class="navbar-header page-scroll">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
                 </button>
                 <a class="navbar-brand" href="../../../">Jason's Blog</a>
             </div>
@@ -78,11 +86,10 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/archives.html">Archives</a></li>
-                        <li><a href="/categories.html">Categories</a></li>
-                        <li><a href="/tags.html">Tags</a></li>
-
-                            <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -110,8 +117,8 @@
 
     <!-- Main Content -->
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
         <div class="twitter">
@@ -162,7 +169,7 @@
     </article>
 
         <div class="tags">
-            <p>tags: <a href="../../../tag/python.html">Python</a></p>
+            <p>tags: <a href="../../../tag/python.html">Python</a>, <a href="../../../tag/programming.html">Programming</a></p>
         </div>
 
     <hr>
@@ -182,73 +189,72 @@
             </script>
             <noscript>Please enable JavaScript to view the comments.</noscript>
         </div>
-            </div>
         </div>
     </div>
-
+    </div>
     <hr>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <ul class="list-inline text-center">
-                            <li>
-                                <a href="#">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-google fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com/ChaircoChen">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.facebook.com/chairco">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/chairco">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="mailto:chairco@gmail.com">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
 <p class="copyright text-muted">
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  chairco(Jason)
-</p>                </div>
-            </div>
+</p>            </div>
         </div>
+    </div>
     </footer>
 
     <!-- jQuery -->
@@ -260,7 +266,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="../../../theme/js/clean-blog.min.js"></script>
     
-    <!-- analysis -->
+    <!-- Analysis -->
     <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-79798833-1']);
@@ -282,7 +288,6 @@
             (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
         }());
     </script>
-
 <!--
     <section>
         <h2>Discuss</h2>
