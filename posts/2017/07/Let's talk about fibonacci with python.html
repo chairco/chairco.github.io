@@ -142,7 +142,7 @@
 </pre></div>
 
 
-<p>一般程式新手比較無法理解的就是 <code>return fibonacci(n-1)+fibonacci(n-2)</code> 這段，簡單來說就是程式不斷 callback 自己來重複處理問題。缺點就是時間複雜度很高（ <code>O(f(n))</code> ），這段程式碼如果用個人電腦 <span class="caps">MAC</span> <span class="caps">MBPR</span> 來跑大概 <code>fibonacci(n=30)</code> 應該就會卡住了。不過大學的資料結構也就提到這邊，要再深入一點去用其他解法可能要到演算法部分。</p>
+<p>一般程式新手比較無法理解的就是 <code>return fibonacci(n-1)+fibonacci(n-2)</code> 這段，簡單來說就是程式不斷 callback 自己來重複處理問題。缺點就是時間複雜度很高（ <code>O(f((2^n))</code> ），這段程式碼如果用個人電腦 <span class="caps">MAC</span> <span class="caps">MBPR</span> 來跑大概 <code>fibonacci(n=30)</code> 應該就會卡住了。不過大學的資料結構也就提到這邊，要再深入一點去用其他解法可能要到演算法部分。</p>
 <hr />
 <p>所以接下來我就來討論以演算法的觀點:</p>
 <ol>
@@ -156,7 +156,7 @@
 <p><img alt="'#'" src="http://www.csie.ntnu.edu.tw/~u91029/DPRecurrence8.png" /></p>
 <h2>Bottom-up</h2>
 <p>訂定一個計算順序，然後由最小的問題開始計算。特色是程式碼通常只有幾個迴圈。這個實作方式的好處與壞處與前一個方式恰好互補(<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html#1">引用網站</a>)。</p>
-<p>以上面遞迴的範例來看，在 Bottom-up&nbsp;就會訂定一個順序，然後把算出來的解答存起來，這樣就可以不用一直去重複，效率也快很多：</p>
+<p>以上面遞迴的範例來看，在 Bottom-up 就會訂定一個順序，然後把算出來的解答存起來，這樣就可以不用一直去重複，效率也快很多，時間複雜度會降到（<code>O(f(n))</code>）：</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">fib</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fib</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fib</span><span class="p">),</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
