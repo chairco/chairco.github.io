@@ -2,26 +2,26 @@
 <html lang="zh-hant">
 
 <head>
-    <meta charset="utf-8">
+        <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Jason's Blog - Tags</title>
+    <title>OSX 使用 brew 安裝指定 Python3 版本</title>
     
     <!-- Bootstrap Core CSS -->
-    <link href="./theme/css/bootstrap.min.css" rel="stylesheet">
-    <!--<link href="./vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Custom CSS -->
-    <link href="./theme/css/clean-blog.min.css" rel="stylesheet">
-    <!--<link href="./css/clean-blog.min.css" rel="stylesheet">-->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
 
     <!-- Custom Fonts -->
-    <!--<link href="./vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
 
     <!-- Code highlight color scheme -->
-    <link href="./theme/css/code_blocks/darkly.css" rel="stylesheet">
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
 
 
     <!-- Custom Fonts -->
@@ -36,14 +36,33 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <meta property="og:locale" content="">
+
+
+        <meta name="description" content="brew 改版前如果要安裝指定版本，例如 Python 3.5.2_3: #列出 <formula> 所有版本 $ brew versions <formula> #安裝某個指定版本 $ brew install <formula> ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="brew">
+
+	    <meta property="og:locale" content="">
     <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/07/installed specific Python3 version with brew in OSX.html">
+	<meta property="og:title" content="OSX 使用 brew 安裝指定 Python3 版本">
+	<meta property="article:published_time" content="2017-07-24 09:37:39+08:00">
+            <meta property="og:description" content="brew 改版前如果要安裝指定版本，例如 Python 3.5.2_3: #列出 <formula> 所有版本 $ brew versions <formula> #安裝某個指定版本 $ brew install <formula> ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@ChaircoChen">
-    <meta name="twitter:title" content="Jason's Blog">
-    <meta name="twitter:description" content="Code / Travel / Other">
-    <meta name="twitter:image" content="./theme/images/post-bg.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="OSX 使用 brew 安裝指定 Python3 版本">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+
+            <meta name="twitter:description" content="brew 改版前如果要安裝指定版本，例如 Python 3.5.2_3: #列出 <formula> 所有版本 $ brew versions <formula> #安裝某個指定版本 $ brew install <formula> ...">
     
 </head>
 
@@ -60,7 +79,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>-->
                 </button>
-                <a class="navbar-brand" href="./">Jason's Blog</a>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -69,7 +88,7 @@
                 <li><a href="/archives.html">Archives</a></li>
                 <li><a href="/categories.html">Categories</a></li>
                 <li><a href="/tags.html">Tags</a></li>
-                <li><a href="./pages/about-me/">About&nbsp;Me</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -78,12 +97,17 @@
     </nav>
 
     <!-- Page Header -->
-        <header class="intro-header" style="background-image: url('./theme/images/home-bg.jpg')">
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>Jason's Blog - Tags</h1>
+                        <h1>OSX 使用 brew 安裝指定 Python3 版本</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  7 24, 2017
+                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -94,33 +118,100 @@
     <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-    <h1>Tags for Jason's Blog</h1>        <li><a href="./tag/algorithm.html">algorithm</a> (1)</li>
-        <li><a href="./tag/apache.html">Apache</a> (1)</li>
-        <li><a href="./tag/aws.html">AWS</a> (1)</li>
-        <li><a href="./tag/brew.html">brew</a> (1)</li>
-        <li><a href="./tag/coding.html">Coding</a> (7)</li>
-        <li><a href="./tag/crs.html">CRS</a> (1)</li>
-        <li><a href="./tag/django.html">Django</a> (7)</li>
-        <li><a href="./tag/email.html">email</a> (1)</li>
-        <li><a href="./tag/gandi.html">gandi</a> (1)</li>
-        <li><a href="./tag/geopandas.html">GeoPandas</a> (1)</li>
-        <li><a href="./tag/githubio.html">github.io</a> (1)</li>
-        <li><a href="./tag/https.html">https</a> (1)</li>
-        <li><a href="./tag/iot.html">IOT</a> (1)</li>
-        <li><a href="./tag/jupyteer.html">Jupyteer</a> (1)</li>
-        <li><a href="./tag/machine-learning.html">Machine Learning</a> (2)</li>
-        <li><a href="./tag/ml.html">ml</a> (1)</li>
-        <li><a href="./tag/mxnet.html">MXNet</a> (1)</li>
-        <li><a href="./tag/pandas.html">Pandas</a> (1)</li>
-        <li><a href="./tag/pipenv.html">Pipenv</a> (1)</li>
-        <li><a href="./tag/programming.html">Programming</a> (2)</li>
-        <li><a href="./tag/python.html">Python</a> (4)</li>
-        <li><a href="./tag/raspberry-pi.html">Raspberry Pi</a> (1)</li>
-        <li><a href="./tag/regular-expression.html">Regular Expression</a> (1)</li>
-        <li><a href="./tag/reinforcement-learning.html">Reinforcement Learning</a> (1)</li>
-        <li><a href="./tag/statistic.html">statistic</a> (1)</li>
-        <li><a href="./tag/testing.html">testing</a> (1)</li>
-        <li><a href="./tag/world.html">world</a> (1)</li>
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <hr />
+<p>brew 改版前如果要安裝指定版本，例如 <code>Python 3.5.2_3</code>:</p>
+<div class="codehilite"><pre><span></span><span class="c1">#列出 &lt;formula&gt; 所有版本</span>
+$ brew versions &lt;formula&gt;
+
+<span class="c1">#安裝某個指定版本</span>
+$ brew install &lt;formula&gt;
+</pre></div>
+
+
+<p>改版之後這個功能似乎被拿掉了，官方上面有說明可以改成：</p>
+<blockquote>
+<p>How do I install these formulae?
+Just brew tap homebrew/versions and then brew install.
+If the formula conflicts with one from homebrew/core or another tap, you can brew install homebrew/versions/.
+You can also install via <span class="caps">URL</span>:
+brew install&nbsp;https://raw.githubusercontent.com/Homebrew/homebrew-versions/master/.rb</p>
+</blockquote>
+<p>這樣看起來還是只能區分 Python2 or Python3 沒辦法決定要安裝 Python3&nbsp;的哪個版本。（謎之音：以前那個好像也不行噎。啊！抱頭）</p>
+<p>後來查到一個解決方法，也很簡單，因為 brew 是透過 .rb 管理安裝，再透過 git 管理 .rb 套件版本，所以只要能夠用 git 去切換 .rb 歷程就解決了。 
+但在此之前需要安裝一個 homebrew-version&nbsp;套件：</p>
+<div class="codehilite"><pre><span></span>$ brew tap homebrew/versions<span class="sb">`</span>
+</pre></div>
+
+
+<p>接著到 <code>/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula</code> (or cd <code>brew --prefix</code>)</p>
+<p>來到這個資料夾底下就有所有套件的 .rb，這些 .rb 就是用來安裝不同 formula。用 git 指令看一下要將 python3&nbsp;版本歷程：</p>
+<div class="codehilite"><pre><span></span>git log python3.rb
+</pre></div>
+
+
+<p>會顯示類似：</p>
+<div class="codehilite"><pre><span></span>commit b1f976bb3c76bbb2a8d76cf46fea8b2c2235f631
+Author: BrewTestBot &lt;brew-test-bot@googlegroups.com&gt;
+Date:   Mon Jul 17 16:06:58 2017 +0000
+
+    python3: update 3.6.2 bottle.
+
+commit 77f4ca91f509f9379842f23fa945e3d7be86039a
+Author: ilovezfs &lt;ilovezfs@icloud.com&gt;
+Date:   Mon Jul 17 08:40:36 2017 -0700
+
+    python3 3.6.2
+
+    Closes #15704.
+
+    Signed-off-by: ilovezfs &lt;ilovezfs@icloud.com&gt;
+</pre></div>
+
+
+<p>接著回到你要的版本。例如我想回到&nbsp;3.5.2_3，就：</p>
+<div class="codehilite"><pre><span></span>git checkout ec545d45d4512 python3.rb
+</pre></div>
+
+
+<p>接著再重新 <code>brew install python3</code> 完成安裝了</p>
+<hr />
+<p>參考：</p>
+<ul>
+<li>
+<p>第一篇 <a href="http://blog.juxi.net/index.php/2016/05/05/installing-a-specific-software-version-with-brew/">specific software with&nbsp;brew</a></p>
+</li>
+<li>
+<p>第二篇 <a href="https://blog.kuoe0.tw/posts/2013/04/19/install-formula-of-specific-version-with-homebrew/">brew&nbsp;安裝特定版本套件</a></p>
+</li>
+</ul>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/brew.html">brew</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/07/installed specific Python3 version with brew in OSX.html';
+                //var disqus_url = '../../../posts/2017/07/installed specific Python3 version with brew in OSX.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
         </div>
     </div>
     </div>
@@ -190,13 +281,13 @@
     </footer>
 
     <!-- jQuery -->
-    <script src="./theme/js/jquery.min.js"></script>
+    <script src="../../../theme/js/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="./theme/js/bootstrap.min.js"></script>
+    <script src="../../../theme/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="./theme/js/clean-blog.min.js"></script>
+    <script src="../../../theme/js/clean-blog.min.js"></script>
     
     <!-- Analysis -->
     <script type="text/javascript">
