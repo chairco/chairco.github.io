@@ -216,7 +216,7 @@
 </pre></div>
 
 
-<p>概念其實就很簡單，會用到 Python 的 built-in function <code>map</code>。在 <code>def fibonacci(n)</code> 內會先透過 <code>list</code> 儲存結果，接著用 <code>map</code> 搭配 lambda&nbsp;將陣列內每個值都抓出來做三次方的計算。</p>
+<p>概念其實就很簡單，會用到 Python 的 built-in function <code>map</code>。在 <code>def fibonacci(n)</code> 內會先透過 <code>list</code> 儲存結果，接著用 <code>map</code> 搭配 <code>lambda</code> 將陣列內每個值都抓出來做三次方的計算。</p>
 <p>不過上面的函式可以更精簡，不知道你有想到嗎？</p>
 <div class="codehilite"><pre><span></span><span class="n">cube</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">pow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="c1"># complete the lambda function </span>
 
