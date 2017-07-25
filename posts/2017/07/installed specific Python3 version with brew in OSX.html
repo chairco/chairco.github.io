@@ -145,7 +145,7 @@ brew install&nbsp;https://raw.githubusercontent.com/Homebrew/homebrew-versions/m
 </blockquote>
 <p>這樣看起來還是只能區分 Python2 or Python3 沒辦法決定要安裝 Python3&nbsp;的哪個版本。（謎之音：以前那個好像也不行噎。啊！抱頭）</p>
 <p>後來查到一個解決方法，也很簡單，因為 brew 是透過 .rb 管理安裝，再透過 git 管理 .rb 套件版本，所以只要能夠用 git 去切換 .rb 歷程就解決了。 
-但在此之前需要安裝一個 homebrew-version&nbsp;套件：</p>
+但在此之前需要取得 homebrew/version 底下的 formula&nbsp;版本，這樣才能手動切換：</p>
 <div class="codehilite"><pre><span></span>$ brew tap homebrew/versions<span class="sb">`</span>
 </pre></div>
 
