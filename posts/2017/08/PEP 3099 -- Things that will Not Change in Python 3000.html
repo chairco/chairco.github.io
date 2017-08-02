@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PEP 3099 — Python 3000 不會改變的事</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
+
+    <!-- Code highlight color scheme -->
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+        <meta name="description" content="PEP (Python Enhancement Proposals) 中文稱為 Python 增強建議書，個人比較偏好翻譯成 Python 文件規格書，這一系列的文件主要就是讓 Python 社群在開發過程有個技術規範。PEP 0 是 PEP 文件的 index ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/08/PEP 3099 -- Things that will Not Change in Python 3000.html">
+	<meta property="og:title" content="PEP 3099 — Python 3000 不會改變的事">
+	<meta property="article:published_time" content="2017-08-01 11:55:42+08:00">
+            <meta property="og:description" content="PEP (Python Enhancement Proposals) 中文稱為 Python 增強建議書，個人比較偏好翻譯成 Python 文件規格書，這一系列的文件主要就是讓 Python 社群在開發過程有個技術規範。PEP 0 是 PEP 文件的 index ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="PEP 3099 — Python 3000 不會改變的事">
+
+        <!--
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+        -->
+        
+            <meta name="twitter:description" content="PEP (Python Enhancement Proposals) 中文稱為 Python 增強建議書，個人比較偏好翻譯成 Python 文件規格書，這一系列的文件主要就是讓 Python 社群在開發過程有個技術規範。PEP 0 是 PEP 文件的 index ...">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>PEP 3099 — Python 3000 不會改變的事</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  8 01, 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <hr />
+<blockquote>
+<p><span class="caps">PEP</span> (Python Enhancement Proposals) 中文稱為 Python 增強建議書，個人比較偏好翻譯成 Python 文件規格書，這一系列的文件主要就是讓 Python 社群在開發過程有個技術規範。<a href="https://www.python.org/dev/peps/"><span class="caps">PEP</span> 0</a> 是 <code>PEP</code> 文件的 index (索引)。<a href="https://www.python.org/dev/peps/pep-3000/"><span class="caps">PEP</span> 3000</a> 則定義 <code>Python 3.0</code> 的技術規格。耳熟能詳的 <a href="https://www.python.org/dev/peps/pep-0008/"><span class="caps">PEP</span> 8</a> 則定義 Python coding style&nbsp;(開發風格)。</p>
+<p>今天想翻譯的這篇 <a href="https://www.python.org/dev/peps/pep-3099/"><span class="caps">PEP</span> 3099</a> 是在談論關於很多人給予 <code>PEP 3000</code> 規格書上說明建議。作者開宗名義說這些爛建議會讓人很想死，不過還是很好心的列出來一個個討論，覺得挺值得一讀。</p>
+</blockquote>
+<hr />
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="caps">PEP</span>:</td>
+<td>3099</td>
+</tr>
+<tr>
+<td>Title:</td>
+<td>Things that will Not Change in Python 3000</td>
+</tr>
+<tr>
+<td>Author:</td>
+<td>Georg Brandl <georg at python.org></td>
+</tr>
+<tr>
+<td>Status:</td>
+<td>Final</td>
+</tr>
+<tr>
+<td>Type:</td>
+<td>Process</td>
+</tr>
+<tr>
+<td>Created:</td>
+<td>04-Apr-2006</td>
+</tr>
+<tr>
+<td>Post-History:</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong><span id = "contents">Contents</span></strong></p>
+<ul>
+<li><a href="#abstract">Abstract</a></li>
+<li><a href="#corelanguage">Core&nbsp;language</a></li>
+<li><a href="#builtins">Builtins</a></li>
+<li><a href="#standardtypes">Standard&nbsp;types</a></li>
+<li><a href="#codingstyle">Coding&nbsp;style</a></li>
+<li><a href="#interactiveinterpreter">Interactive&nbsp;Interpreter</a></li>
+<li><a href="#copyright">Copyright</a></li>
+</ul>
+<hr />
+<h2><span id = "abstract">Abstract</span></h2>
+<p>Some ideas are just bad. While some thoughts on Python evolution are constructive, some go against the basic tenets of Python so egregiously that it would be like asking someone to run in a circle: it gets you nowhere, even for Python 3000, where extraordinary proposals are allowed. This <span class="caps">PEP</span> tries to list all <span class="caps">BDFL</span> pronouncements on Python 3000 that refer to changes that will not happen and new features that will not be introduced, sorted by topics, along with a short explanation or a reference to the relevant thread on the python-3000 mailing&nbsp;list.</p>
+<p>有些想法可能不好。雖然有些對 Python 的演變來說是有建設性的，但某些則會違反了 Python 的基本原則，就會像是要求某人在圈子裡不斷繞著跑：會讓你無法跳脫，就算是允許非凡提議的 Python 3000 也是如此。這份 <span class="caps">PEP</span> 嘗試列出所有在 Python 3000 上 <span class="caps">BDEF</span>(Benevolent dictator for life, 仁慈獨裁者) 的聲明會根據主題排序和一份簡短的解釋或引用  python-3000&nbsp;的信件名單，包含不會發生的更改和不會被引入的新功能。</p>
+<p>If you think you should suggest any of the listed ideas it would be better to just step away from the computer, go outside, and enjoy yourself. Being active outdoors by napping in a nice patch of grass is more productive than bringing up a beating-a-dead-horse idea and having people tell you how dead the idea is. Consider yourself&nbsp;warned.</p>
+<p>假若你認為有必要提出任何想法，建議你遠離電腦走出房間玩得愉快。在一片漂亮的草地上打盹會遠比提供一個 beating-a-dead-horse&nbsp;並且讓別人告訴你這麼想法是如此讓人想死來的更好。考慮一下。</p>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "corelanguage">Core&nbsp;language</span></h2>
+<ul>
+<li>
+<p>Python 3000 will not be&nbsp;case-insensitive.</p>
+</li>
+<li>
+<p>Python 3000 will not be a rewrite from&nbsp;scratch.</p>
+</li>
+</ul>
+<blockquote>
+<p>It will also not use C++ or another language different from C as implementation language. Rather, there will be a gradual transmogrification of the codebase. There&#8217;s an excellent essay by Joel Spolsky explaining why: <a href="http://www.joelonsoftware.com/articles/fog0000000069.html">http://www.joelonsoftware.com/articles/fog0000000069.html</a></p>
+</blockquote>
+<ul>
+<li>self will not become&nbsp;implicit.</li>
+</ul>
+<blockquote>
+<p>Having self be explicit is a good thing . It makes the code clear by removing ambiguity about how a variable resolves. It also makes the difference between functions and methods&nbsp;small.</p>
+<p>Thread: &#8220;Draft proposal: Implicit self in Python 3.0&#8221;&nbsp;https://mail.python.org/pipermail/python-dev/2006-January/059468.html</p>
+</blockquote>
+<ul>
+<li>lambda will not be&nbsp;renamed.</li>
+</ul>
+<blockquote>
+<p>At one point lambda was slated for removal in Python 3000. Unfortunately no one was able to come up with a better way of providing anonymous functions. And so lambda is here to&nbsp;stay.</p>
+<p>But it is here to stay as-is. Adding support for statements is a non-starter. It would require allowing multi-line lambda expressions which would mean a multi-line expression could suddenly exist. That would allow for multi-line arguments to function calls, for instance. That is just plain&nbsp;ugly.</p>
+<p>Thread: &#8220;genexp syntax / lambda&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/001042.html</p>
+</blockquote>
+<ul>
+<li>Python will not have programmable&nbsp;syntax.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;It&#8217;s a statement! It&#8217;s a function! It&#8217;s <span class="caps">BOTH</span>!&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/000286.html</p>
+</blockquote>
+<ul>
+<li>There won&#8217;t be a syntax for zip() -style parallel&nbsp;iteration.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Parallel iteration syntax&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-March/000210.html</p>
+</blockquote>
+<ul>
+<li>Strings will stay&nbsp;iterable.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Making strings non-iterable&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/000759.html</p>
+</blockquote>
+<ul>
+<li>There will be no syntax to sort the result of a generator expression or list comprehension. sorted() covers all use&nbsp;cases.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Adding sorting to generator comprehension&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/001295.html</p>
+</blockquote>
+<ul>
+<li>Slices and extended slices won&#8217;t go away (even if the <strong>getslice</strong> and <strong>setslice</strong> APIs may be replaced) nor will they return views for the standard object&nbsp;types.</li>
+</ul>
+<blockquote>
+<p>Thread: Future of slices&nbsp;https://mail.python.org/pipermail/python-3000/2006-May/001563.html</p>
+</blockquote>
+<ul>
+<li>It will not be forbidden to reuse a loop variable inside the loop&#8217;s&nbsp;suite.</li>
+</ul>
+<blockquote>
+<p>Thread: elimination of scope bleeding of iteration variables&nbsp;https://mail.python.org/pipermail/python-dev/2006-May/064761.html</p>
+</blockquote>
+<ul>
+<li>The parser won&#8217;t be more complex than <span class="caps">LL</span>(1).</li>
+</ul>
+<blockquote>
+<p>Simple is better than complex. This idea extends to the parser. Restricting Python&#8217;s grammar to an <span class="caps">LL</span>(1) parser is a blessing, not a curse. It puts us in handcuffs that prevent us from going overboard and ending up with funky grammar rules like some other dynamic languages that will go unnamed, such as&nbsp;Perl.</p>
+</blockquote>
+<ul>
+<li>No&nbsp;braces.</li>
+</ul>
+<blockquote>
+<p>This is so obvious that it doesn&#8217;t need a reference to a mailing list. Do from <strong>future</strong> import braces to get a definitive answer on this&nbsp;subject.</p>
+</blockquote>
+<ul>
+<li>No more&nbsp;backticks.</li>
+</ul>
+<blockquote>
+<p>Backticks (`) will no longer be used as shorthand for repr &#8212; but that doesn&#8217;t mean they are available for other uses. Even ignoring the backwards compatibility confusion, the character itself causes too many problems (in some fonts, on some keyboards, when typesetting a book,&nbsp;etc).</p>
+<p>Thread: &#8220;new operators via backquoting&#8221;,&nbsp;https://mail.python.org/pipermail/python-ideas/2007-January/000054.html</p>
+</blockquote>
+<ul>
+<li>Referencing the global name foo will not be spelled globals.foo . The global statement will&nbsp;stay.</li>
+</ul>
+<blockquote>
+<p>Threads: &#8220;replace globals() and global statement with global builtin object&#8221;, https://mail.python.org/pipermail/python-3000/2006-July/002485.html , &#8220;Explicit Lexical Scoping (pre-<span class="caps">PEP</span>?)&#8221;,&nbsp;https://mail.python.org/pipermail/python-dev/2006-July/067111.html</p>
+</blockquote>
+<ul>
+<li>There will be no alternative binding operators such as :=&nbsp;.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Explicit Lexical Scoping (pre-<span class="caps">PEP</span>?)&#8221;,&nbsp;https://mail.python.org/pipermail/python-dev/2006-July/066995.html</p>
+</blockquote>
+<ul>
+<li>We won&#8217;t be removing container literals. That is, {expr: expr, &#8230;}, [expr, &#8230;] and (expr, &#8230;) will&nbsp;stay.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;No Container Literals&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-July/002550.html</p>
+</blockquote>
+<ul>
+<li>The else clause in while and for loops will not change semantics, or be&nbsp;removed.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;for/except/else syntax&#8221;&nbsp;https://mail.python.org/pipermail/python-ideas/2009-October/006083.html</p>
+</blockquote>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "builtins">Builtins</span></h2>
+<ul>
+<li>zip() won&#8217;t grow keyword arguments or other mechanisms to prevent it from stopping at the end of the shortest&nbsp;sequence.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;have zip() raise exception for sequences of different lengths&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-August/003338.html</p>
+</blockquote>
+<ul>
+<li>hash() won&#8217;t become an attribute since attributes should be cheap to compute, which isn&#8217;t necessarily the case for a&nbsp;hash.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;hash as attribute/property&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/000362.html</p>
+</blockquote>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "standardtypes">Standard&nbsp;types</span></h2>
+<ul>
+<li>Iterating over a dictionary will continue to yield the&nbsp;keys.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Iterating over a dict&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-April/000283.html</p>
+<p>Thread: have iter(mapping) generate (key, value) pairs&nbsp;https://mail.python.org/pipermail/python-3000/2006-June/002368.html</p>
+</blockquote>
+<ul>
+<li>There will be no frozenlist&nbsp;type.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Immutable lists&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-May/002219.html</p>
+</blockquote>
+<ul>
+<li>int will not support subscripts yielding a&nbsp;range.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;xrange vs. int.<strong>getslice</strong>&#8220;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-June/002450.html</p>
+</blockquote>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "codingstyle">Coding&nbsp;style</span></h2>
+<ul>
+<li>The (recommended) maximum line width will remain 80 characters, for both C and Python&nbsp;code.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;C style guide&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-March/000131.html</p>
+</blockquote>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "interactiveinterpreter">Interactive&nbsp;Interpreter</span></h2>
+<ul>
+<li>The interpreter prompt ( &gt;&gt;&gt; ) will not change. It gives Guido warm fuzzy&nbsp;feelings.</li>
+</ul>
+<blockquote>
+<p>Thread: &#8220;Low-hanging fruit: change interpreter prompt?&#8221;,&nbsp;https://mail.python.org/pipermail/python-3000/2006-November/004891.html</p>
+</blockquote>
+<p><em><a href="#contents">回標題列表</a></em></p>
+<h2><span id = "copyright">Copyright</span></h2>
+<p>This document has been placed in the public&nbsp;domain.</p>
+<p>Source:&nbsp;https://github.com/python/peps/blob/master/pep-3099.txt</p>
+<p><em><a href="#contents">回標題列表</a></em></p>
+    </article>
+
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/08/PEP 3099 -- Things that will Not Change in Python 3000.html';
+                //var disqus_url = '../../../posts/2017/08/PEP 3099 -- Things that will Not Change in Python 3000.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  chairco(Jason)
+</p>            </div>
+        </div>
+    </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- Analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
+</body>
+
+</html>

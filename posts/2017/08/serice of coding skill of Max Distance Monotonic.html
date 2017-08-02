@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>寇汀技巧系列之 Max Distance Monotonic</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
+
+    <!-- Code highlight color scheme -->
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+        <meta name="description" content="寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility 線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。 ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="Coding">
+        <meta name="tags" content="Max Distance Monotonic">
+
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/08/serice of coding skill of Max Distance Monotonic.html">
+	<meta property="og:title" content="寇汀技巧系列之 Max Distance Monotonic">
+	<meta property="article:published_time" content="2017-08-02 22:45:02+08:00">
+            <meta property="og:description" content="寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility 線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。 ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="寇汀技巧系列之 Max Distance Monotonic">
+
+        <!--
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+        -->
+        
+            <meta name="twitter:description" content="寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility 線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。 ...">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>寇汀技巧系列之 Max Distance Monotonic</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  8 02, 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <hr />
+<blockquote>
+<p>寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility&nbsp;線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。</p>
+<p>希望可以藉由自修方式把這部分補足。也可以改進自己在寫程式老喜歡硬幹的壞習慣。</p>
+</blockquote>
+<hr />
+<h2>Max Distance Monotonic, Caterpillar&nbsp;method</h2>
+<blockquote>
+<p>關於 Max Distance Monotonic（最大距離）和在這個題目底下的變形 Caterpillar&nbsp;method（毛蟲法）是經常線上測驗會出的變化題，這類變化考得到不是測試正確性，反倒有一半是在考驗程式效率。整理了幾個變化題來思考。</p>
+</blockquote>
+<p>基本題型會是這樣，有個 list(串列) A, 有 N 個 Integer, 串列有幾個變數 P, Q，就是 list A 的 index。
+要找出成對 (P, Q) 為最大值（The distance between P and Q maximal(Q-P)）條件 0&lt;=P&lt;=Q&lt;=N。P, Q 且 A[P]&lt;=&nbsp;A[Q]。</p>
+<h3>solution&nbsp;1</h3>
+<p>看到太令人興奮，兩個迴圈就能解決，也很直觀。第一個迴圈從 0~N-1(因為 A[P]&lt;=A[Q]), 第二個迴圈從 P-1~N，接著兩兩比較 Q-P&nbsp;一直找到最大的。</p>
+<p>但會有個問題：
++ 第一個時間複雜度太高，把所有可能都跑完的時間複雜度最高可能是&nbsp;O(N**2)。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">Q</span><span class="o">-</span><span class="n">P</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+
+
+<p>這段程式碼應該很直觀也就不解釋了。</p>
+<h3>solution&nbsp;2</h3>
+<p>首先要解決時間複雜度的問題就是要降低迴圈層數，有這個目標想法就是空間換時間。</p>
+<p>思維往我能不能先用一個迴圈把部分問題先解決。這個問題仔細思考要簡化的方法就是如果我能先解決 A[P]&lt;= A[Q] 這個子問題。因為一個串列是根據 index 來排序，但每個 index&nbsp;所對應的值大小不同，所以必須要做兩兩比較。但如果我們能先把這個串列的值排序就能解決要用兩層迴圈兩兩比較的問題。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">pairs</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="n">minOriginalPos</span> <span class="o">=</span> <span class="n">N</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+        <span class="n">minOriginalPos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minOriginalPos</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span> <span class="n">idx</span><span class="o">-</span><span class="n">minOriginalPos</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+
+
+<p>和 <code>solution 1</code> 差別在建立一個 pairs 的串列來存值，這樣方便我們做排序。
+接著根據小到大排序，因為要滿足 A[P]&lt;=A[Q]。有了排序再來計算 Q-P&nbsp;就簡單了。</p>
+<p>首先建立一個 minOriginalPos 變數是串列的長度，因為已經將值排序，所以概念是我希望從小值到大值找到最大的 index 差值。概念上上這個已經排列好的串列透過 min() 兩兩比較儲存最小的 idx 接著用 result 去計算哪個差是最大的。因為對於我們而言已經解決 A[P] &lt;= A[Q] 所以 value&nbsp;是什麼並不在意。</p>
+<h3>solution&nbsp;3</h3>
+<p>竟然還有更好的解法？好吧就留給讀者去想想了。因為我也是參考了大神的教學發現，但看了也是跪拜啊（雖然一開始有想過，但沒想到這是好解法）給個提示（for + while&nbsp;會是好方向）</p>
+<h2>變化題</h2>
+<p>接著來思考關於這個變化題，原本在討論的是在 A[P]&lt;=A[Q] 條件下 (P,Q) 最大值。那假設 0&lt;=P&lt;=Q&lt;=N 會產生一個 sum-distance A[P]+A[Q]+(Q-P)，換成要找一個 maximal&nbsp;sum-distance?</p>
+<h3>solution&nbsp;1</h3>
+<p>先來看看直覺解法，但效能不是很好</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">Q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="n">P</span><span class="p">]</span><span class="o">+</span><span class="n">A</span><span class="p">[</span><span class="n">Q</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="n">Q</span><span class="o">-</span><span class="n">P</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+
+
+<h3>solution&nbsp;2</h3>
+<p>動動大腦，如果我們要精簡問題，享用空間換取時間從哪邊可以下手？看起來可以從 A[P]+A[Q]? 因為我們有個準則是&nbsp;P&lt;=Q。</p>
+<p>解法是 Caterpillar method（毛蟲法）來思考，透過 while&nbsp;迴圈與兩個變數讓串列往左或是往右：</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution_1</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="mi">2000000000</span>
+    <span class="n">front_ptr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">back_ptr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">A</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="n">front_ptr</span> <span class="o">&lt;=</span> <span class="n">back_ptr</span><span class="p">:</span> 
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="n">front_ptr</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">back_ptr</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">back_ptr</span> <span class="o">-</span> <span class="n">front_ptr</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">front_ptr</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">back_ptr</span><span class="p">]):</span>
+            <span class="n">front_ptr</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">back_ptr</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+
+
+<p>大概這類題型變化不出這幾種，希望如果有機會大家遇到這樣考題可以有更多不一樣思考。</p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/coding.html">Coding</a>, <a href="../../../tag/max-distance-monotonic.html">Max Distance Monotonic</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/08/serice of coding skill of Max Distance Monotonic.html';
+                //var disqus_url = '../../../posts/2017/08/serice of coding skill of Max Distance Monotonic.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  chairco(Jason)
+</p>            </div>
+        </div>
+    </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- Analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
+</body>
+
+</html>
