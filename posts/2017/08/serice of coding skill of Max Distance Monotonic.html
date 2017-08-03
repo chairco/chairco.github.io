@@ -136,12 +136,20 @@
 <blockquote>
 <p>關於 Max Distance Monotonic（最大距離）和在這個題目底下的變形 Caterpillar&nbsp;method（毛蟲法）是經常線上測驗會出的變化題，這類變化考得到不是測試正確性，反倒有一半是在考驗程式效率。整理了幾個變化題來思考。</p>
 </blockquote>
-<p>基本題型會是這樣，有個 list(串列) A, 有 N 個 Integer, 串列有幾個變數 P, Q，就是 list A 的 index。
-要找出成對 (P, Q) 為最大值（The distance between P and Q maximal(Q-P)）條件 0&lt;=P&lt;=Q&lt;=N。P, Q 且 A[P]&lt;=&nbsp;A[Q]。</p>
+<p>基本題型原文會是這樣：</p>
+<blockquote>
+<p>You can still give it a try, but no certificate will be granted. The problem asks you to find a pair of
+indices (P, Q), such that A[P] &lt;= A[Q] and the distance between P and Q is maximal, that is
+the value Q − P is&nbsp;maximal.</p>
+</blockquote>
+<p>中文意思是 list (串列) A, 有 N 個 Integer。 串列有幾個變數 P, Q，表示 A 的 index。
+要找出成對 (P, Q) 為最大值（The distance between P and Q maximal(Q-P)）條件 0 &lt;= P &lt;= Q &lt;= N，A[P] &lt;=&nbsp;A[Q]。</p>
 <h3>solution&nbsp;1</h3>
-<p>看到太令人興奮，兩個迴圈就能解決，也很直觀。第一個迴圈從 0~N-1(因為 A[P]&lt;=A[Q]), 第二個迴圈從 P-1~N，接著兩兩比較 Q-P&nbsp;一直找到最大的。</p>
-<p>但會有個問題：
-+ 第一個時間複雜度太高，把所有可能都跑完的時間複雜度最高可能是&nbsp;O(N**2)。</p>
+<p>看到太令人興奮，兩個迴圈就能解決，也很直觀。第一個迴圈從 0~N-1(因為 A[P] &lt;= A[Q]), 第二個迴圈從 P-1 ~ N，接著兩兩比較 Q - P&nbsp;一直找到最大的。</p>
+<p>但會有個問題：</p>
+<ul>
+<li>第一個時間複雜度太高，把所有可能都跑完的時間複雜度最高可能是&nbsp;O(N**2)。</li>
+</ul>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
@@ -152,10 +160,9 @@
 </pre></div>
 
 
-<p>這段程式碼應該很直觀也就不解釋了。</p>
 <h3>solution&nbsp;2</h3>
 <p>首先要解決時間複雜度的問題就是要降低迴圈層數，有這個目標想法就是空間換時間。</p>
-<p>思維往我能不能先用一個迴圈把部分問題先解決。這個問題仔細思考要簡化的方法就是如果我能先解決 A[P]&lt;= A[Q] 這個子問題。因為一個串列是根據 index 來排序，但每個 index&nbsp;所對應的值大小不同，所以必須要做兩兩比較。但如果我們能先把這個串列的值排序就能解決要用兩層迴圈兩兩比較的問題。</p>
+<p>朝能不能先用一個迴圈把部分問題先解決來想。仔細思考要簡化的方法是: 如果能先解決 A[P] &lt;= A[Q] 這個子問題。因為一個串列是根據 index 來排序，但每個 index&nbsp;所對應的值大小不同，所以必須要做兩兩比較。但如果我們能先把這個串列的值排序就能解決要用兩層迴圈兩兩比較的問題。</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
@@ -179,7 +186,7 @@
 <h3>solution&nbsp;3</h3>
 <p>竟然還有更好的解法？好吧就留給讀者去想想了。因為我也是參考了大神的教學發現，但看了也是跪拜啊（雖然一開始有想過，但沒想到這是好解法）給個提示（for + while&nbsp;會是好方向）</p>
 <h2>變化題</h2>
-<p>接著來思考關於這個變化題，原本在討論的是在 A[P]&lt;=A[Q] 條件下 (P,Q) 最大值。那假設 0&lt;=P&lt;=Q&lt;=N 會產生一個 sum-distance A[P]+A[Q]+(Q-P)，換成要找一個 maximal&nbsp;sum-distance?</p>
+<p>接著來思考關於這個變化題，原本在討論的是在 A[P]&lt;=A[Q] 條件下 (P,Q) 最大值。那假設 0 &lt;= P &lt;= Q &lt;= N 會產生一個 sum-distance A[P]+A[Q]+(Q-P)，換成要找一個 maximal&nbsp;sum-distance?</p>
 <h3>solution&nbsp;1</h3>
 <p>先來看看直覺解法，但效能不是很好</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
