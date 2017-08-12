@@ -132,141 +132,81 @@
 <p>不過譯者後來發現這位作者原創的做法後來被自己翻盤了（他原本想用 <code>Makefile</code> 做到完美的測試設定，後來還是回到他最不想要的 <code>tox</code>。好吧，來看看他遭遇的困境與經驗也不錯啊！）</p>
 </blockquote>
 <hr />
-<p>For quite a while now, I’ve maintained <a href="http://www.b-list.org/projects/">several open-source Django applications</a>. And with Django 1.11 on the horizon, it’s time for me to go through and make any changes and clean out their issue queues while I’m at it, so I can roll new officially-compatible releases. When I’m doing this, I always like to try to evaluate the current state of the art and see if I can switch over to better ways of doing things, since Django gets a new features with every release and people in the community keep coming up with better ways to approach common tasks or&nbsp;problems.</p>
 <p>至今有段時間，我維護<a href="http://www.b-list.org/projects/">幾個 Django 的開源應用程式</a>。在不久的將來會兼容 Django 1.11，也是時候我要進行一些改變然後順便一起清理掉掛在 issue 上的問題，這樣我才可以繼續推出新的兼容官方的版本。當開始進行時，我總是喜歡嘗試評估是否可以在目前最佳的技術狀況下轉換成成更好的執行方式，由於 Django&nbsp;在每個版本發佈時都會有新的功能，社群的朋友也會不斷提出更好的方法來處理常見的一些常見任務或是問題。</p>
-<p>Lately, one that’s been on my mind a bit is testing. I’m a fan of testing, and on my personal apps I have <span class="caps">CI</span> set up to run on every pull request and every commit I push, against the full combinatorial matrix of Django/Python versions I support. I also use <a href="https://coverage.readthedocs.io/">coverage.py</a>, and have it set to break my builds if I ever go below 100% test&nbsp;coverage.</p>
 <p>最近，一直在我腦海裡的一件事是測試。我是一個測試粉（譯者：在軟體裡有派 <span class="caps">TDD</span> 喜歡所有的 future 都要有測試，可能是這種粉絲吧），同時我自己個人的 apps 我都有做 <span class="caps">CI</span> 設定，針對維護的 <code>Django/Python</code> 版本完整的組合矩陣，當每一次 pull request 和每一次的 push commit 。我也使用 <a href="https://coverage.readthedocs.io/">coverage.py</a>，當測試涵蓋率低於 100%&nbsp;就會停止軟體的建置。</p>
-<p>So far, so good. And, of course, Django itself supplies <a href="https://docs.djangoproject.com/en/dev/topics/testing/tools/">a bunch of built-in tools to make testing easier and nicer</a>.</p>
 <p>到目前為止一切都很棒。當然， Django 本身也支援<a href="https://docs.djangoproject.com/en/dev/topics/testing/tools/">許多 built-in 工具來讓測試更為容易和美好</a>。</p>
-<p>But I still feel like good patterns for testing are an area where Django could do a lot better. So let’s dig into some of the pain&nbsp;points.</p>
 <p>但我仍舊覺得要讓 Django&nbsp;的測試做得更好，最好的測試模式是分成一區塊，所以讓我們來看看一些通點。</p>
 <h2>Testing&nbsp;apps</h2>
-<p>If you’re building a site with Django, you’ve got a bunch of individual apps which (hopefully) all have their own tests, and are listed in <code>INSTALLED_APPS</code>, and then testing is easy: just run <code>manage.py test</code>. You can also pass arguments to that on the command line to run just one application’s tests, or to run a subset of&nbsp;tests.</p>
 <p>假如你正在建置了一個 Django 的網站，你會希望這一堆的 apps 有它們各自的測試，然後並列在 <code>INSTALLED_APPS</code>（譯者：INSTALLED_APPS 是一個參數設定讓 Django 知道有哪些 apps），接著測試會很簡單：只需要 run <code>manage.py test</code>。你也可以在命令列上透過參數傳遞來執行一個應用程式的測試，或是執行一個子集合的測試。</p>
-<p>But what about testing at the application level? In order to do just about anything with a Django application, you need to have settings available, and applications aren’t the level where you specify settings. Again, if you’re just building an app to integrate into a single site or service you’ll deploy, this isn’t a big hurdle since you’ll always have the larger setup available to test with, but what about applications that are meant to be distributed on their own and re-used in lots of&nbsp;places?</p>
 <p>但測試應用程序的層級怎麼辦呢？ Django 應用程序需要設置可用，是為了可以做任何事，你的這些特殊設定對應用程序並非層及。再一次說，假如你僅僅只是建立一個 app 並且將發布&nbsp;並且整合進入一個單一網站或是多個服務，這不會是個很大的阻礙，你可以有個更大型的設置來進行測試，但假如這裡指的是一個分散式程序且在許多地方被重複使用呢？</p>
-<p>For <em>that</em>, you need to provide a minimum configuration for Django to be able to run, and then execute your tests. I’ve taken to adding a file called <code>runtests.py</code> to my applications, containing the configuration needed for testing the app and the appropriate invocation to run the tests. <a href="https://github.com/ubernostrum/django-registration/blob/master/registration/runtests.py">Here’s an example from django-registration</a>; from a checkout of the code, or an unzipped copy of the release package, you can run <code>python runtests.py</code> and it will&nbsp;work.</p>
 <p>對此，你需要提供 Django 可以運行的一個最小配置設定，接著執行你的測試。我已經增加一個稱為 <code>runtests.py</code> 的檔案到我的應用程序內，包含測試應用程序所需要的配置，和適當的呼叫來執行測試。<a href="https://github.com/ubernostrum/django-registration/blob/master/registration/runtests.py">這裡提供一個 django-registrtion 範例</a>; 透過 checkout 將程式碼拉下來 (譯者: git clone 網址)，或是解壓縮一個發佈的 package (譯者：github 可以透過下載方式取得壓縮的 package)，你就可以執行 <code>python runtests.py</code> 接著就會開始工作了。</p>
-<p>The trick there is in two functions built in to Django: <code>django.conf.settings.configure()</code>, which lets you supply settings as keyword arguments, and thus use Django without a settings file or <code>DJANGO_SETTINGS_MODULE</code> variable; and <code>django.setup()</code>, which allows you to (after configuring settings) initialize the set of installed applications and gets Django ready to use. Once you’ve done those two things, you can instantiate a test runner, and use it to run the tests; that’s what the function <code>run_tests()</code> does in the file linked&nbsp;above.</p>
 <p>Django 內建置了兩個功能：一個是 <code>django.conf.settings.configure()</code>, 這個功能讓你的函式提供你使用 <code>settings</code> 內的參數關鍵字，也就不需要建立設定檔或是 <code>DJANGO_SETTING_MODULE</code> 變數; 另一個是 <code>django.setup()</code>, 這個函式則是允許你 (在設定配置後) 初始化安裝的應用程式並且讓 Django 可以使用。一旦你完成這兩件事，你就可以實例化一個測試器，並且使用它去執行測試; 這以上都是 <code>run_tests()</code> 鏈結的文件。</p>
-<p>That gets as far as being able to run the tests on demand, but of course there’s (at least) one more question left to answer: how should people invoke this? The easy answer is <code>python runtests.py</code>, of course, or <code>coverage run runtests.py</code> for running with coverage support. But it feels a little bit&nbsp;ad-hoc.</p>
 <p>這就能根據所需運作測試，但當然這裡（至少）有一個以上的問題被遺留需要被解答：人們如何呼叫它？這個簡單的問題答案是：<code>python runtests.py</code>，當然，也能使用 <code>converage run runtests.py</code> 來執行並且做到覆蓋率的支持。但會感覺到有一些些特別。</p>
 <h2>Testing with&nbsp;setuptools</h2>
-<p>The Python standard library includes the <code>distutils</code> module for building and working with packaged Python code. And there’s also <a href="https://setuptools.readthedocs.io/">setuptools</a>, which started life as part of an effort to do a lot more (and a lot more ambitious) things. Nowadays, using <code>setuptools</code> for some of the packaging-related conveniences it provides is pretty common, and one of those conveniences is the ability to specify the <code>test_suite</code> argument to the <code>setup()</code> function in <code>setup.py</code>. If you do this, then you gain access to <code>python setup.py test</code> as a command to run your tests. For example, I could pass <code>test_suite=registration.runtests.run_tests</code> in the <code>setup.py</code> of django-registration, and then <code>python setup.py test</code> (or <code>coverage run setup.py test</code>) would be the test command to advertise to people, and to specify in the <span class="caps">CI</span>&nbsp;configuration.</p>
 <p>Python 的標準函式庫包含 <code>distutils</code> 模組用來建置和運作包裝後的 Python code。它也是 <a href="https://setuptools.readthedocs.io/">setuptools</a>，用來開始進行許多重要的事（有雄心壯志）。目前，用 <code>setuptools</code> 提供一些常見對於 packaging-related 相當便利，其中一項很方便的就是在 <code>setup.py</code> 指定 <code>test_suite</code> 參數到 <code>setup()</code> 函式。假如你這樣做，這樣就可以透過 <code>python setup.py test</code> 指令來執行你的測試。舉個例：如果要測試 django-registration 可以透過 <code>setup.py</code> 內撰寫指令 <code>test_suite=registration.runtests.run_tests</code> 接著執行 <code>python setup.py test</code> (或是 <code>converage run setup.py test</code>) 可以作為宣傳測試指令使用，也可以定義在 <span class="caps">CI</span>&nbsp;的參數檔案。</p>
-<p>This feels a lot better than just telling people to run a random script inside the repository/package: it uses a standard-ish Python module (if you have <code>pip</code> nowadays, you also have <code>setuptools</code>), it hooks into a standard package-related Python command, and it’s a thing lots of packages can do, so that <code>python setup.py test</code> can just be a thing people learn to do once and then run over and&nbsp;over.</p>
 <p>這感覺起來很不錯，只要告訴人們執行一個在 repository/package 內的 random scripy: 它使用一個 standard-ish 的 Python 模組（假如有 <code>pip</code>，那你也會有 <code>setuptools</code>），它是掛接標準 package-related 的 Python 命令列，且是很多 packages 可以做的事。所以 <code>python setup.py test</code> 是讓人們學習只做一件事且一次又一次的做。</p>
-<p>But there are some bits still missing here. For one, you still need to provide a ready-made environment capable of running the tests. For a Django application, that means at least providing a supported version of Django and a supported version of Python. You can do a lot with <code>setuptools</code>, of course: you can specify <code>install_requires</code> and <code>python_requires</code> to say what versions of Django and Python are supported. Then <code>setuptools</code> will install a version of Django for you alongside the package, and will bail out if you’re using an unsupported version of Python. You can even take it a step further and specify <code>tests_require</code> to ensure test-only dependencies (in my case, coverage and <a href="http://flake8.pycqa.org/">flake8</a>) are&nbsp;available.</p>
 <p>但這裡有件沒提到的事。一方面來說你還是得有一個現成能夠執行測試的環境。對一個 Django 應用程式，代表至少需要一個可以支援 Django 和 Python 的版本環境。你可以做出很多個 <code>setuptools</code>，當然：你可以對每個 <code>install_requires</code> 和  <code>python_requires</code> 做定義告訴環境要使用哪種版本的 Django 和 Python 來支援。 接著 <code>setuptools</code> 將會安裝你指定的 Django 版本，但萬一你使用到不支援的 Python 對應版本的則會暫緩安裝。你甚至可以進步指定 <code>test_require</code> 來確保測試的可用相依性（在我的案例，converage 和 <a href="http://flake8.pycqa.org/">flake8</a>）</p>
-<p>However, this only gets to the point of running tests against a single known-supported version of Python and a single known-supported version of Django. What if — as many people do — you want to test against the full set of combinations of supported Python/Django&nbsp;versions?</p>
 <p>然而，這只能針對已知且支持的 Python 與 Django 版本進行測試。假如 - 有非常多人同時測試 - 你會希望測試引擎能夠包含支援所有的 Python/Django&nbsp;版本？</p>
 <h2>Aside:&nbsp;tox</h2>
-<p>I should pause here to mention that I’m not going to go over using <a href="https://tox.readthedocs.io/">tox</a>. This isn’t because <code>tox</code> is bad or wrong — I know a lot of folks who are very happy using it — but because tox doesn’t work for me personally. On my primary laptop, I use <a href="https://github.com/pyenv/pyenv">pyenv</a> and <a href="https://github.com/pyenv/pyenv-virtualenv">pyenv-virtualenv</a> to manage many versions of Python, switch between them, and create and use virtualenvs with whatever version of Python I&nbsp;want.</p>
 <p>我不會去使用 <a href="https://tox.readthedocs.io/">tox</a>，應該要在這邊暫停一下。這並非 <code>tox</code> 很糟或是有問題 - 我知道很多 folks 非常喜歡使用它 - 是因為 tox 不太適合我個人。我經常使用 <a href="https://github.com/pyenv/pyenv">pyenv</a> 和 <a href="https://github.com/pyenv/pyenv-virtualenv">pyenv-virtualenv</a> 來管理各種不同版本的 Python 並切換、建立與使用 <code>virtualenvs</code> 不同的 Python&nbsp;版本在我個人筆電上。</p>
-<p>And <code>tox</code> does not seem to play particularly well with this; it expects to be able to find certain specifically-named Python interpreters for different versions of Python, and I’ve never been able to make that work without hacking my <code>PATH</code> to manually inject <code>pyenv</code>-installed interpreters into a location where <code>tox</code> will find them (and I am aware of, and have tried, <a href="https://pypi.python.org/pypi/tox-pyenv/1.0.3">tox-pyenv</a>, but still couldn’t get <code>tox</code> to work without <code>PATH</code> fiddling).</p>
 <p>不過 <code>tox</code> 看起來似乎在這部分沒有運作得很好; 它希望能在不同 Python 版本找到一個共同的 Python 直譯器，每一次都需要透過手動竄改 <code>PATH</code> 將 <code>pyenv</code> 的直譯器安裝到 <code>tox</code> 找得到的位置（我也嘗試過 <a href="https://pypi.python.org/pypi/tox-pyenv/1.0.3">tox-pyenv</a>，但仍然無法不讓 <code>tox</code> 根據 <code>PATH</code> 來尋找）。</p>
-<p>If your local setup is one that <code>tox</code> works well with, or you’re <span class="caps">OK</span> with the <code>PATH</code> fiddling to get <code>tox</code> and <code>pyenv</code> working together, I encourage you to try <code>tox</code> for your testing. What I’ll detail below is mostly a reinvention of the parts of <code>tox</code> that I’d want for local testing, but in a way that automatically works well with <code>pyenv</code>.</p>
 <p>假如你的本機端僅只有安裝一個版本，那 tox 會工作的很順利，或是你覺得可以讓 <code>tox</code> 來做 <code>PATH</code> 搜尋和 <code>pyenv</code> 一起運作，我會鼓勵你使用 <code>tox</code> 來進行測試。下面我將詳細介紹部分在本地端使用 <code>tox</code> 測試，但某種程度可以自動與 <code>pyenv</code> 一起工作。</p>
 <h2>Go ahead, make my&nbsp;tests</h2>
-<p>Recently I’ve been experimenting with something a bit older. While <code>python setup.py test</code> is probably a good Python-specific standard for a test-running command, it is still Python-specific. There’s a much older, much more widespread language-agnostic way to do this: <code>make test</code>.</p>
 <p>最近我正在嘗試一些比較古早的東西。雖然 <code>python setup.py test</code> 這個測試執行指令是個很不錯的 Python-specific 標準，它仍然僅屬於 Python 特定。這裡有一個更古早且無關於語言可方法來做測試：<code>make test</code>。</p>
-<p>In the Unix world, <a href="https://en.wikipedia.org/wiki/Make_(software)">make</a> is the old-school way to automate the process of building a piece of software. It’s oriented around the idea of being able to specify tasks which need to happen, and dependencies between them, and then invoking whichever tasks you need to run. In its original use case, this would be compiling C source files and then linking them to build a final executable, but nothing about it requires you to be working with C — it’s a pretty generic&nbsp;tool.</p>
 <p>在 Unix 世界，<a href="https://en.wikipedia.org/wiki/Make_(software)">make</a> 是一個極為古老用來進行建立軟體的自動化流程方法。它的原生想法來自於圍繞在會發生的指定的任務，且相依於它們，接者呼叫需要運作的任何任務。在原生的案例，將會編譯 C 的資源檔接著鏈結它們並建立一個最終執行檔，但這不代表你必須要使用 C -&nbsp;這是一個通用的工具。</p>
-<p>Tasks — called “targets” in <code>make</code> lingo — are specified in a file, usually named <code>Makefile</code>. Each target then becomes a name you can pass to the <code>make</code> command, and can specify any other targets as dependencies, ensuring they’ll happen&nbsp;first.</p>
 <p>任務 - 在 <code>make</code> lingo 稱為 “目標” - 是一個特殊的檔案，通常被稱之為 Makefile。每個目標都會成為傳遞給 <code>make</code> 命令的名稱，並且可以讓任何目標間指定相依的關係，以確保它們先發生。</p>
-<p>If you’ve ever manually built documentation for something using <a href="http://www.sphinx-doc.org/">Sphinx</a> (and Sphinx is good stuff — you should use it for your documentation!), you’ve used this, because Sphinx generates a <code>Makefile</code> to coordinate different tasks in the build process. If you want <span class="caps">HTML</span> documentation, for example, you run <code>make html</code>, and that invokes a target in the <code>Makefile</code> which runs all the necessary steps to generate <span class="caps">HTML</span> from your source documentation&nbsp;files.</p>
 <p>假如你曾經手動使用 <a href="http://www.sphinx-doc.org/">Sphinx</a> 建置文件（Sphinx 是個好東西 - 你應該使用它來做文件！），代表你曾經使用過，因為 Sphinx 生成一個 <code>Makefile</code> 來協調建構不同任務。假如你希望 <span class="caps">HTML</span> 文件，舉例，你就執行 <code>make html</code>，就會呼叫 <code>Makefile</code> 其中一個目標來執行所有必須的步驟從你的來源文件檔案去生成一個 <span class="caps">HTML</span>。 </p>
-<p>And in many domains, <code>make test</code> is the expected standard way to run tests for a codebase. All you have to do for that is provide a <code>test</code> target in the <code>Makefile</code>, and have it run the correct set of&nbsp;commands.</p>
 <p>在許多領域，<code>make test</code> 是一個預期用來執行 codebase 測試的標準方法。你需要做的只是提供 <code>test</code> 的目標在 <code>Makefile</code>，接著它就會根據正確的指令去執行。</p>
-<p>So I started playing around with building a <code>Makefile</code> to do what I wanted. There are a few things here worth&nbsp;knowing:</p>
 <p>所以我建立一個 <code>Makefile</code> 來開始進行我想要的測試。以下有幾間是需要知道：</p>
 <ul>
 <li>
-<p>Inside a <code>Makefile</code>, you can set, test for and read variables. You can also pass variables in by specifying them on the command line, or setting them in the&nbsp;environment.</p>
-</li>
-<li>
 <p>在一個 <code>Makefile</code> 中，你可以設置用來測試的變量。你可以在命令列或是設置環境變數來傳遞變量。</p>
-</li>
-<li>
-<p>Inside a <code>make</code> target, each command is one logical line. This means if you want to spread a command out over multiple lines, you need to use a backslash to continue the logical line over multiple physical lines of the&nbsp;file.</p>
 </li>
 <li>
 <p>在每個 <code>make</code> 目標中，每條指令都是一條邏輯。這代表假如你需要講一條指令分散成數條，你需要使用一個反斜線讓不同的行間的數條指令被視為同一個邏輯指令。</p>
 </li>
 <li>
-<p>Each logical line is a command which will be executed, so it’s written in a Bash-script-like style, and you can use Bash tests (like checking whether a file/directory exists) and logical operators to control what&nbsp;happens.</p>
-</li>
-<li>
 <p>每條邏輯行都是一個指令會被執行，所以它必須是符合 Bash-script-like 的風格，你可以使用 Bash 測試（像是確認某個 檔案/資料夾&nbsp;是否存在）同時以邏輯運算來控制怎樣運行。</p>
-</li>
-<li>
-<p>Normally, each target inside a <code>Makefile</code> is expected to describe how to compile/build a file whose name is identical to the name of the target. You can create targets which don’t correspond to a filename by using the <code>.PHONY</code> declaration.</p>
 </li>
 <li>
 <p>通常， <code>Makefile</code> 的每個目標都會描述如何編譯/建構相同名稱的目標檔案。你可以使用 <code>.PHONY</code> 來聲明哪些名稱是不符合規範的。 </p>
 </li>
 </ul>
-<p>So <a href="https://github.com/ubernostrum/django-registration/tree/58c7e8bdb9d2312277f3c3bdc129187353e59ea1">here’s an example from django-registration</a>. It allows configuration of the Python/Django versions to use, which means it can be used in a loop to run against combinations of versions. The important targets here&nbsp;are:</p>
 <p>所以<a href="https://github.com/ubernostrum/django-registration/tree/58c7e8bdb9d2312277f3c3bdc129187353e59ea1">這邊有個 django-registration 的範例</a>(譯者：後來文章作者好像拿掉使用 Makefile 來做測試，改用 tox)
 。它允許使用參數的 Python/Django&nbsp;版本，這代表他可以在一個循環中確認版本組合。這裡很重要的目標有：</p>
 <ul>
 <li>
-<p><code>venv</code> uses <code>pyenv</code> to create and activate a virtualenv for the target Python version, and defaults to naming that virtualenv <code>registration_test</code>. If a virtualenv of that name already exists, it skips creation and uses the existing virtualenv regardless of what Python version that virtualenv&nbsp;has.</p>
-</li>
-<li>
 <p>venv 是使用 <code>pyenv</code> 來建立與啟用一個 virtualenv 來對應目標的 Python 版本。同時預設 virtualenv 名稱為 <code>registration_test</code>。假如一個 virtualenv 已存在同樣名稱，會忽略並且使用既有的 virtualenv 且不會管 Python&nbsp;使用的版本為和。 </p>
-</li>
-<li>
-<p><code>lint</code> runs <code>flake8</code> over the codebase, to check for any Python style&nbsp;errors.</p>
 </li>
 <li>
 <p><code>lint</code> 會在 codebase 上執行 <code>flake8</code>，來確認 Python&nbsp;風格是否有錯誤。</p>
 </li>
 <li>
-<p><code>test</code> runs the test suite with coverage, and prints the coverage&nbsp;report.</p>
-</li>
-<li>
 <p>根據涵蓋率在 test suite&nbsp;執行測試，並且印出涵蓋率報表。</p>
-</li>
-<li>
-<p><code>teardown</code> cleans up afterward and will destroy the&nbsp;virtualenv.</p>
 </li>
 <li>
 <p><code>testdown</code> 會在之後清除並且刪除&nbsp;virtualenv</p>
 </li>
 </ul>
-<p>There are a bunch of other targets in there, which do things like install the test dependencies, install the requested version of Django, etc. So now I can just specify <code>make test</code> in my <span class="caps">CI</span> configuration as the test command, and know that dependencies will be installed (previously I’d have had to use <code>test_requires</code> or manually specify installation of test dependencies), and for local testing I can test against whatever combination of Django/Python versions I want. For example, to run with Django 1.9 and Python&nbsp;3.5.2:</p>
 <p>這裡有一些目標要執行像是安裝測試相依的檔案，安裝需要的 Django 版本等。所以現在我可以在我的 <span class="caps">CI</span> 設定檔案內指定 <code>make test</code> 為指令，並且知道要安裝哪些相依檔案（之前我不得不手動安裝或是使用 <code>test_requires</code>），對於本地測試我可以指定任何我想要的 Django/Python 版本組合。舉個例，執行 Django 1.9 與 Python&nbsp;3.5.2:</p>
 <div class="codehilite"><pre><span></span>$ make venv <span class="nb">test</span> teardown <span class="nv">PYTHON_VERSION</span><span class="o">=</span>3.5.2 <span class="nv">DJANGO_VERSION</span><span class="o">=</span>1.9
 </pre></div>
 
 
-<p>Of course, this is still just an experiment, and there are things I want to fix about it. Right now the biggest annoyances&nbsp;are:</p>
 <p>當然，這其實還只是個實現，這裡會有幾件事我想修好它。現在幾個比較大的問題：</p>
 <ul>
-<li>
-<p>Specifying the Django version to install. Unfortunately, Python’s method of interpreting version specifiers isn’t really what I want here. There’s a bit of a hack in the <code>Makefile</code> linked above to ensure that I can say “1.8” or “1.9” and actually get the latest release of those series (the short version here is that Django~=1.9 will install Django 1.10, but Django~=1.9.0 installs the latest&nbsp;1.9).</p>
-</li>
 <li>
 <p>指定安裝 Django 版本。不幸的是，Python 上的符號使用方法並非我想要的，所以這邊我用一些黑客的方法在 <code>Makefile</code> 內的連結，確保我是指定 “1.8” 或是 “1.9”，但實際上他們都是安裝最近版本（簡短版本像是 Django~=1.9 將會安裝 Django 1.10, 但是 Django~=1.9.0 就會安裝最近的&nbsp;1.9）</p>
 </li>
 <li>
-<p>Cleaning up. I’ve been copy/pasting this <code>Makefile</code> into most of my repositories, and the commands to remove <code>__pycache__</code> directories and <code>.pyc</code> files need some adjustment to work with arbitrarily-deeply-nested directories of code (django-registration, for example, goes several levels&nbsp;deep).</p>
-</li>
-<li>
 <p>清理。我在 <code>Makefile</code> 做了幾次複製/貼上在儲藏庫中用來執行刪除 <code>__pycache__</code> 資料夾和 <code>.pyc</code> 檔案。需要做些調整來處理深入程式碼的目錄(django-registration，例如，要深入目錄幾層)</p>
-</li>
-<li>
-<p>There is some reusability concern here since the <code>Makefile</code> is set up to use <code>pyenv</code>, and I know not everyone uses <code>pyenv</code>. For now, I’m relying on the fact that setting up a virtualenv is optional, and people can supply their own environment if they don’t use <code>pyenv</code>.</p>
 </li>
 <li>
 <p>有些重複使用的問題，目前 <code>Makefile</code> 設定使用 <code>pyenv</code>，但我知道並不是每個人都使用 <code>pyenv</code>。目前，依賴 virtualenv 是設置為選項，人們可以選擇使用他們想要的環境而不必使用 <code>pyenv</code>。</p>
 </li>
 </ul>
 <h2>The&nbsp;future</h2>
-<p>I’ll probably continue tinkering with the <code>Makefile</code> approach for a while, and if I can iron out the issues listed above, I might stick to it going forward, at least for my personal apps. If not, perhaps I’ll go back to <code>setup.py test</code>, or explore other options (like just buckling down and making <code>tox</code> work).</p>
 <p>我可能繼續修改 <code>Makefile</code> 一段時間，至少我個人應用程式，如果可以解決上面的問題我會繼續下去。但如果沒有我可能就會回到 <code>setup.py test</code>，或是探索看看其他選項（或是屈服在 <code>tox</code> 下）</p>
-<p>In the meantime, I’d be interested to know about other approaches; I haven’t attempted any kind of scientific or even pseudoscientific survey of popular Django applications to see whether there’s any consensus on testing applications&nbsp;standalone.</p>
 <p>在這個期間，我對於嘗試其他方法很感興趣; 我還沒有嘗試任何科學或是偽科學上的關於 Django&nbsp;流行的應用程序調查來看看是否有其他獨立的測試應用的共識。</p>
     </article>
 
