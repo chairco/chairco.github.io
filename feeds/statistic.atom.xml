@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/statistic.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2016-08-19T17:11:51+08:00</updated><entry><title>Make Sense of the Data</title><link href="https://chairco.com.tw/posts/2016/08/make-sense-of-the-data-i.html" rel="alternate"></link><published>2016-08-19T17:11:51+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-08-19:posts/2016/08/make-sense-of-the-data-i.html</id><summary type="html">&lt;p&gt;要開始這一系列主題其實是針對機器學習（Machine Learning）這個題目做一個前導。
+大家都知道機器學習的概念是想讓電腦自我學習，這部分可以參考林軒田老師的&lt;a href="https://www.youtube.com/playlist?list=PLXVfgk9fNX2I7tB6oIINGBmW50rrmFTqf"&gt;機器學習的基石&lt;/a&gt;系列文章，如何有效的讓機器去自我學習有各種理論基礎，不過這邊我比較喜歡從統計的觀點切入，畢竟統計已經存在這個世界上百餘年歷史，許多理論模型也經幾驗證。&lt;/p&gt;
+&lt;p&gt;但要先從統計切入必須要理解統計相關的知識背景，好在在大學與碩士期間有四年的學習，因此對於統計有不錯深刻的經驗。因此在這系列文章我想從最近在看的三本書 &lt;code&gt;Make Sense of the Data&lt;/code&gt; 來切入。先聊聊資料的性質，機率理論與分佈，最後是推論統計。從這幾項開始回顧我認為可以更瞭解資料與處理資料，當對於資料有進一步掌握時，也許對於如何讓機器學習這件事情就會有比較清楚的想法。&lt;/p&gt;
+&lt;p&gt;為什麼統計和機器學習會有很高度關聯性，讓我們想想當你在學習辨認一件事物時你怎麼做的，例如看到路上再跑的機器有機車、汽車、小貨車、公車、大客車這幾種類別，同樣都是有輪子，怎麼知道哪一種車是屬於哪一種類型，因此我們開始會去比較，然後分類。比較與分類就是統計學的最開始。&lt;/p&gt;
+&lt;p&gt;不過從八月開始就陸續一直忙著其他事情，所以就先列出關於機器學習推薦的課程吧：
+1.&lt;a href="https://www.youtube.com/playlist?list=PLXVfgk9fNX2I7tB6oIINGBmW50rrmFTqf"&gt;機器學習的基石&lt;/a&gt;
+2.&lt;a href="https://medium.com/learning-new-stuff/machine-learning-in-a-week-a0da25d59850#.ptplb6g7z"&gt;Machine Learning in a Week&lt;/a&gt;
+3.&lt;a href="https://softnshare.wordpress.com/2016/10/17/machlearningatoz/"&gt;機器學習 A-Z: 使用 Python &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt; R&amp;nbsp;實踐資料科學&lt;/a&gt;&lt;/p&gt;</summary><category term="machine learning"></category><category term="ml"></category><category term="statistic"></category></entry></feed>

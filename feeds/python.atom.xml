@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/python.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-08-02T22:45:02+08:00</updated><entry><title>寇汀技巧系列之 Max Distance Monotonic</title><link href="https://chairco.com.tw/posts/2017/08/serice%20of%20coding%20skill%20of%20Max%20Distance%20Monotonic.html" rel="alternate"></link><published>2017-08-02T22:45:02+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-08-02:posts/2017/08/serice of coding skill of Max Distance Monotonic.html</id><summary type="html">&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;p&gt;寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility&amp;nbsp;線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。&lt;/p&gt;
+&lt;p&gt;希望可以藉由自修方式把這部分補足。也可以改進自己在寫程式老喜歡硬幹的壞習慣。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;h2&gt;Max Distance Monotonic, Caterpillar&amp;nbsp;method&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;關於 Max Distance Monotonic（最大距離）和在這個題目底下的變形 Caterpillar&amp;nbsp;method（毛蟲法）是經常線上測驗會出的變化題，這類變化考得到不是測試正確性，反倒有一半是在考驗程式效率。整理了幾個變化題來思考。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;基本題型原文會是這樣：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You can still give it a try, but no certificate will be granted. The problem asks you to find a pair of
+indices (P, Q), such that A[P] &amp;lt;= A[Q] and the distance between P and Q is maximal, that is
+the value Q − P is&amp;nbsp;maximal.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;中文意思是 list (串列) A, 有 N 個 Integer。 串列有幾個變數 P, Q，表示 A 的 index。
+要找出成對 (P, Q) 為最大值（The distance between P and Q maximal(Q-P)）條件 0 &amp;lt;= P &amp;lt;= Q &amp;lt;= N，A[P] &amp;lt;=&amp;nbsp;A[Q]。&lt;/p&gt;
+&lt;h3&gt;solution&amp;nbsp;1&lt;/h3&gt;
+&lt;p&gt;看到太令人興奮，兩個迴圈就能解決，也很直觀。第一個迴圈從 0~N-1(因為 A[P] &amp;lt;= A[Q]), 第二個迴圈從 P-1 ~ N，接著兩兩比較 Q - P&amp;nbsp;一直找到最大的。&lt;/p&gt;
+&lt;p&gt;但會有個問題：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一個時間複雜度太高，把所有可能都跑完的時間複雜度最高可能是&amp;nbsp;O(N**2)。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;P&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;Q&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Q&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;solution&amp;nbsp;2&lt;/h3&gt;
+&lt;p&gt;首先要解決時間複雜度的問題就是要降低迴圈層數，有這個目標想法就是空間換時間。&lt;/p&gt;
+&lt;p&gt;朝能不能先用一個迴圈把部分問題先解決來想。仔細思考要簡化的方法是: 如果能先解決 A[P] &amp;lt;= A[Q] 這個子問題。因為一個串列是根據 index 來排序，但每個 index&amp;nbsp;所對應的值大小不同，所以必須要做兩兩比較。但如果我們能先把這個串列的值排序就能解決要用兩層迴圈兩兩比較的問題。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;pairs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="n"&gt;minOriginalPos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;minOriginalPos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;minOriginalPos&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;minOriginalPos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;和 &lt;code&gt;solution 1&lt;/code&gt; 差別在建立一個 pairs 的串列來存值，這樣方便我們做排序。
+接著根據小到大排序，因為要滿足 A[P]&amp;lt;=A[Q]。有了排序再來計算 Q-P&amp;nbsp;就簡單了。&lt;/p&gt;
+&lt;p&gt;首先建立一個 minOriginalPos 變數是串列的長度，因為已經將值排序，所以概念是我希望從小值到大值找到最大的 index 差值。概念上上這個已經排列好的串列透過 min() 兩兩比較儲存最小的 idx 接著用 result 去計算哪個差是最大的。因為對於我們而言已經解決 A[P] &amp;lt;= A[Q] 所以 value&amp;nbsp;是什麼並不在意。&lt;/p&gt;
+&lt;h3&gt;solution&amp;nbsp;3&lt;/h3&gt;
+&lt;p&gt;竟然還有更好的解法？好吧就留給讀者去想想了。因為我也是參考了大神的教學發現，但看了也是跪拜啊（雖然一開始有想過，但沒想到這是好解法）給個提示（for + while&amp;nbsp;會是好方向）&lt;/p&gt;
+&lt;h2&gt;變化題&lt;/h2&gt;
+&lt;p&gt;接著來思考關於這個變化題，原本在討論的是在 A[P]&amp;lt;=A[Q] 條件下 (P,Q) 最大值。那假設 0 &amp;lt;= P &amp;lt;= Q &amp;lt;= N 會產生一個 sum-distance A[P]+A[Q]+(Q-P)，換成要找一個 maximal&amp;nbsp;sum-distance?&lt;/p&gt;
+&lt;h3&gt;solution&amp;nbsp;1&lt;/h3&gt;
+&lt;p&gt;先來看看直覺解法，但效能不是很好&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;solution&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;N&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;P&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;Q&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;P&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;solution&amp;nbsp;2&lt;/h3&gt;
+&lt;p&gt;動動大腦，如果我們要精簡問題，享用空間換取時間從哪邊可以下手？看起來可以從 A[P]+A[Q]? 因為我們有個準則是&amp;nbsp;P&amp;lt;=Q。&lt;/p&gt;
+&lt;p&gt;解法是 Caterpillar method（毛蟲法）來思考，透過 while&amp;nbsp;迴圈與兩個變數讓串列往左或是往右。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;solution_1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2000000000&lt;/span&gt;
+    &lt;span class="n"&gt;front_ptr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;back_ptr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;front_ptr&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;=&lt;/span&gt; &lt;span class="n"&gt;back_ptr&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; 
+        &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;front_ptr&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;back_ptr&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;back_ptr&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;front_ptr&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;front_ptr&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nb"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;back_ptr&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt;
+            &lt;span class="n"&gt;front_ptr&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;back_ptr&lt;/span&gt; &lt;span class="o"&gt;-=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;大概這類題型變化不出這幾種，希望如果有機會大家遇到這樣考題可以有更多不一樣思考。&lt;/p&gt;</summary><category term="Coding"></category><category term="Max Distance Monotonic"></category></entry><entry><title>OSX 使用 brew 安裝指定 Python3 版本</title><link href="https://chairco.com.tw/posts/2017/07/installed%20specific%20Python3%20version%20with%20brew%20in%20OSX.html" rel="alternate"></link><published>2017-07-24T09:37:39+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-07-24:posts/2017/07/installed specific Python3 version with brew in OSX.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;brew 改版前如果要安裝指定版本，例如 &lt;code&gt;Python 3.5.2_3&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#列出 &amp;lt;formula&amp;gt; 所有版本&lt;/span&gt;
+$ brew versions &amp;lt;formula&amp;gt;
+
+&lt;span class="c1"&gt;#安裝某個指定版本&lt;/span&gt;
+$ brew install &amp;lt;formula&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;改版之後這個功能似乎被拿掉了，官方上面有說明可以改成：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;How do I install these formulae?
+Just brew tap homebrew/versions and then brew install.
+If the formula conflicts with one from homebrew/core or another tap, you can brew install homebrew/versions/.
+You can also install via &lt;span class="caps"&gt;URL&lt;/span&gt;:
+brew install&amp;nbsp;https://raw.githubusercontent.com/Homebrew/homebrew-versions/master/.rb&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;這樣看起來還是只能區分 Python2 or Python3 沒辦法決定要安裝 Python3&amp;nbsp;的哪個版本。（謎之音：以前那個好像也不行噎。啊！抱頭）&lt;/p&gt;
+&lt;p&gt;後來查到一個解決方法，也很簡單，因為 brew 是透過 .rb 管理安裝，再透過 git 管理 .rb 套件版本，所以只要能夠用 git 去切換 .rb 歷程就解決了。 
+但在此之前需要取得 homebrew/version 底下的 formula&amp;nbsp;版本，這樣才能手動切換：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ brew tap homebrew/versions&lt;span class="sb"&gt;`&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著到 &lt;code&gt;/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula&lt;/code&gt; (or cd &lt;code&gt;brew --prefix&lt;/code&gt;)&lt;/p&gt;
+&lt;p&gt;來到這個資料夾底下就有所有套件的 .rb，這些 .rb 就是用來安裝不同 formula。用 git 指令列出 python3 commit&amp;nbsp;歷程：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git log python3.rb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;會顯示類似：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;commit b1f976bb3c76bbb2a8d76cf46fea8b2c2235f631
+Author: BrewTestBot &amp;lt;brew-test-bot@googlegroups.com&amp;gt;
+Date:   Mon Jul 17 16:06:58 2017 +0000
+
+    python3: update 3.6.2 bottle.
+
+commit 77f4ca91f509f9379842f23fa945e3d7be86039a
+Author: ilovezfs &amp;lt;ilovezfs@icloud.com&amp;gt;
+Date:   Mon Jul 17 08:40:36 2017 -0700
+
+    python3 3.6.2
+
+    Closes #15704.
+
+    Signed-off-by: ilovezfs &amp;lt;ilovezfs@icloud.com&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著回到你要的版本。例如我想回到&amp;nbsp;3.5.2_3，就：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git checkout ec545d45d4512 python3.rb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著再重新 &lt;code&gt;brew install python3&lt;/code&gt; 完成安裝了&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;參考：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;第一篇 &lt;a href="http://blog.juxi.net/index.php/2016/05/05/installing-a-specific-software-version-with-brew/"&gt;specific software with&amp;nbsp;brew&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;第二篇 &lt;a href="https://blog.kuoe0.tw/posts/2013/04/19/install-formula-of-specific-version-with-homebrew/"&gt;brew&amp;nbsp;安裝特定版本套件&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="brew"></category></entry><entry><title>Python 上使用REGEXP(Regular Expression) 驗證 Email</title><link href="https://chairco.com.tw/posts/2017/06/Python%20email%20validate%20with%20REGEXP.html" rel="alternate"></link><published>2017-06-23T14:06:24+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-06-23:posts/2017/06/Python email validate with REGEXP.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;在 Google 下個關鍵字： &lt;strong&gt;Python, Regular Expression or &lt;span class="caps"&gt;REGEXP&lt;/span&gt;, email, validate, validation&lt;/strong&gt; 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 email 格式的文章或是問題、甚至有人實作&amp;nbsp;package。&lt;/p&gt;
+&lt;p&gt;使用這個東西也一陣子，但好像從來沒認真去研究究竟細節有哪些，ctrl + c, ctrl + r&amp;nbsp;成了常態，自然踩雷無可避免。剛好最近要修一個東西，因此順便整理細節。&lt;/p&gt;
+&lt;h2&gt;瞭解套件實作方法&lt;/h2&gt;
+&lt;p&gt;首先我的 Python 環境目前是 3.6.0。而切入點是從別人實作出來的套件去&amp;nbsp;implement&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;validate_email
+先瞭解一下大概比較紅的套件實作細節，找了一個星星數挺多的 &lt;a href="https://github.com/syrusakbary/validate_email.git"&gt;validate_email&lt;/a&gt; 最後的更新大概是兩年前，不知道在 3.6.0 上運作狀態，總之先 clone&amp;nbsp;嘗試看看。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;首先要先安裝一個叫 pyDNS package，然後立刻 gg。
+在 &lt;code&gt;DNS/__ini__.py&lt;/code&gt; 有 Type, &lt;code&gt;Type,Opcode,Status,Class&lt;/code&gt; 幾個套件卻用 &lt;code&gt;import Type,Opcode,Status,Class&lt;/code&gt; 這種 relative import 來處理&amp;nbsp;@@，就噴出錯誤訊息像是：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Traceback&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;most&lt;/span&gt; &lt;span class="n"&gt;recent&lt;/span&gt; &lt;span class="n"&gt;call&lt;/span&gt; &lt;span class="n"&gt;last&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;setup.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;DNS&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nn"&gt;Opcode&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nn"&gt;Status&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;&lt;span class="nn"&gt;Class&lt;/span&gt;
+&lt;span class="n"&gt;ModuleNotFoundError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;No&lt;/span&gt; &lt;span class="n"&gt;module&lt;/span&gt; &lt;span class="n"&gt;named&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Type&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;return&amp;nbsp;變數方法也用了古老的奇怪方法：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Traceback&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;most&lt;/span&gt; &lt;span class="n"&gt;recent&lt;/span&gt; &lt;span class="n"&gt;call&lt;/span&gt; &lt;span class="n"&gt;last&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;setup.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;DNS&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Type&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Opcode&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;Class&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/Type.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;54&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="sb"&gt;`type`&lt;/span&gt;
+                 &lt;span class="o"&gt;^&lt;/span&gt;
+&lt;span class="ne"&gt;SyntaxError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;invalid&lt;/span&gt; &lt;span class="n"&gt;syntax&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;raise 的語法也都是 2.7&amp;nbsp;的：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Traceback&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;most&lt;/span&gt; &lt;span class="n"&gt;recent&lt;/span&gt; &lt;span class="n"&gt;call&lt;/span&gt; &lt;span class="n"&gt;last&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;setup.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;DNS&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/__init__.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;module&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.Base&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;DnsRequest&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;DNSError&lt;/span&gt;
+  &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/Users/chairco/OneDrive/SourceCode/django/temp/pydns-2.3.6/DNS/Base.py&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="mi"&gt;119&lt;/span&gt;
+    &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;TimeoutError&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Timeout&amp;#39;&lt;/span&gt;
+                      &lt;span class="o"&gt;^&lt;/span&gt;
+&lt;span class="ne"&gt;SyntaxError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;invalid&lt;/span&gt; &lt;span class="n"&gt;syntax&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;看起來 pyDNS 非常古老，裡面的寫法用了許多舊的語法糖，要改起來實在不容易，不過看起來和我們要做 email validate&amp;nbsp;也沒什麼相關性。&lt;/p&gt;
+&lt;p&gt;再來在 &lt;strong&gt;validate_email&lt;/strong&gt; 套件的 issue tracker 和 &lt;span class="caps"&gt;PR&lt;/span&gt; 一堆人發了 &lt;span class="caps"&gt;PR&lt;/span&gt; 和&amp;nbsp;issue，作者明顯就是射後不想理會，總之這種作者自己不想維護的東西又不想放給其他人維護的專案大概就看看囉。不過參考一下大概的邏輯還是美德。&lt;/p&gt;
+&lt;p&gt;先看看的 &lt;span class="caps"&gt;USAGE&lt;/span&gt; (使用說明)，看起來使用了一個 validate_email&amp;nbsp;的一級函式來處理：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;validate_email&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;validate_email&lt;/span&gt;
+&lt;span class="n"&gt;is_valid&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;validate_email&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;example@example.com&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;來看看程式碼：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;validate_email&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;check_mx&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;verify&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;smtp_timeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Indicate whether the given string is a valid email address&lt;/span&gt;
+&lt;span class="sd"&gt;    according to the &amp;#39;addr-spec&amp;#39; portion of RFC 2822 (see section&lt;/span&gt;
+&lt;span class="sd"&gt;    3.4.1).  Parts of the spec that are marked obsolete are *not*&lt;/span&gt;
+&lt;span class="sd"&gt;    included in this test, and certain arcane constructions that&lt;/span&gt;
+&lt;span class="sd"&gt;    depend on circular definitions in the spec may not pass, but in&lt;/span&gt;
+&lt;span class="sd"&gt;    general this should correctly identify any email address likely&lt;/span&gt;
+&lt;span class="sd"&gt;    to be in use as of 2011.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;logger&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;validate_email&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setLevel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DEBUG&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;logger&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VALID_ADDRESS_REGEXP&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+        &lt;span class="n"&gt;check_mx&lt;/span&gt; &lt;span class="o"&gt;|=&lt;/span&gt; &lt;span class="n"&gt;verify&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;check_mx&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;DNS&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;Exception&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;For check the mx records or check if the email exists you must &amp;#39;&lt;/span&gt;
+                                &lt;span class="s1"&gt;&amp;#39;have installed pyDNS python package&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="n"&gt;hostname&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;find&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;@&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;
+            &lt;span class="n"&gt;mx_hosts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_mx_ip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hostname&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;mx_hosts&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+            &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;mx_hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;verify&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;MX_CHECK_CACHE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;MX_CHECK_CACHE&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+                    &lt;span class="n"&gt;smtp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smtplib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SMTP&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;timeout&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;smtp_timeout&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;connect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+                    &lt;span class="n"&gt;MX_CHECK_CACHE&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;verify&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                            &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                        &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="n"&gt;smtplib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SMTPServerDisconnected&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                            &lt;span class="k"&gt;pass&lt;/span&gt;
+                        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+                    &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;helo&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                            &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt; answer: &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt; - &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                        &lt;span class="k"&gt;continue&lt;/span&gt;
+                    &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mail&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rcpt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;250&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt; answer: &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt; - &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="n"&gt;smtp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="n"&gt;smtplib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SMTPServerDisconnected&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;  &lt;span class="c1"&gt;# Server not permits verify user&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt; disconected.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+                &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="n"&gt;smtplib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SMTPConnectError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                        &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;u&amp;#39;Unable to connect to &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mx&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+    &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;AssertionError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+    &lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ServerError&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;socket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ServerError or socket.error exception raised (&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;).&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;看起來也很單純用了斷句 aasert 處理 re 判斷 &lt;code&gt;re.match(VALID_ADDRESS_REGEXP, email) is not None&lt;/code&gt; 如果錯誤就拋出 False。其他大概可以省去不看。所以直接來看看 VALID_ADDRESS_REGEXP&amp;nbsp;怎麼處理。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;WSP&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;[\s]&amp;#39;&lt;/span&gt;                                        &lt;span class="c1"&gt;# see 2.2.2. Structured Header Field Bodies&lt;/span&gt;
+&lt;span class="n"&gt;CRLF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:\r\n)&amp;#39;&lt;/span&gt;                                   &lt;span class="c1"&gt;# see 2.2.3. Long Header Fields&lt;/span&gt;
+&lt;span class="n"&gt;NO_WS_CTL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;\x01-\x08\x0b\x0c\x0f-\x1f\x7f&amp;#39;&lt;/span&gt;        &lt;span class="c1"&gt;# see 3.2.1. Primitive Tokens&lt;/span&gt;
+&lt;span class="n"&gt;QUOTED_PAIR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&lt;/span&gt;&lt;span class="se"&gt;\\&lt;/span&gt;&lt;span class="s1"&gt;.)&amp;#39;&lt;/span&gt;                             &lt;span class="c1"&gt;# see 3.2.2. Quoted characters&lt;/span&gt;
+&lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;WSP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CRLF&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+      &lt;span class="n"&gt;WSP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;+)&amp;#39;&lt;/span&gt;                                    &lt;span class="c1"&gt;# see 3.2.3. Folding white space and comments&lt;/span&gt;
+&lt;span class="n"&gt;CTEXT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;[&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;NO_WS_CTL&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+        &lt;span class="s1"&gt;r&amp;#39;\x21-\x27\x2a-\x5b\x5d-\x7e]&amp;#39;&lt;/span&gt;              &lt;span class="c1"&gt;# see 3.2.3&lt;/span&gt;
+&lt;span class="n"&gt;CCONTENT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CTEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+           &lt;span class="n"&gt;QUOTED_PAIR&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)&amp;#39;&lt;/span&gt;                        &lt;span class="c1"&gt;# see 3.2.3 (NB: The RFC includes COMMENT here&lt;/span&gt;
+&lt;span class="c1"&gt;# as well, but that would be circular.)&lt;/span&gt;
+&lt;span class="n"&gt;COMMENT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;\((?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CCONTENT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+          &lt;span class="s1"&gt;r&amp;#39;)*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?\)&amp;#39;&lt;/span&gt;                       &lt;span class="c1"&gt;# see 3.2.3&lt;/span&gt;
+&lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;COMMENT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;)*(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+       &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;COMMENT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;)&amp;#39;&lt;/span&gt;         &lt;span class="c1"&gt;# see 3.2.3&lt;/span&gt;
+&lt;span class="n"&gt;ATEXT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;[\w!#$%&amp;amp;&lt;/span&gt;&lt;span class="se"&gt;\&amp;#39;&lt;/span&gt;&lt;span class="s1"&gt;\*\+\-/=\?\^`\{\|\}~]&amp;#39;&lt;/span&gt;           &lt;span class="c1"&gt;# see 3.2.4. Atom&lt;/span&gt;
+&lt;span class="n"&gt;ATOM&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ATEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;+&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt;      &lt;span class="c1"&gt;# see 3.2.4&lt;/span&gt;
+&lt;span class="n"&gt;DOT_ATOM_TEXT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ATEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;+(?:\.&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ATEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;+)*&amp;#39;&lt;/span&gt;   &lt;span class="c1"&gt;# see 3.2.4&lt;/span&gt;
+&lt;span class="n"&gt;DOT_ATOM&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DOT_ATOM_TEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# see 3.2.4&lt;/span&gt;
+&lt;span class="n"&gt;QTEXT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;[&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;NO_WS_CTL&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+        &lt;span class="s1"&gt;r&amp;#39;\x21\x23-\x5b\x5d-\x7e]&amp;#39;&lt;/span&gt;                   &lt;span class="c1"&gt;# see 3.2.5. Quoted strings&lt;/span&gt;
+&lt;span class="n"&gt;QCONTENT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;QTEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+           &lt;span class="n"&gt;QUOTED_PAIR&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)&amp;#39;&lt;/span&gt;                        &lt;span class="c1"&gt;# see 3.2.5&lt;/span&gt;
+&lt;span class="n"&gt;QUOTED_STRING&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;&amp;quot;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+                &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;QCONTENT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+                &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;&amp;quot;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;LOCAL_PART&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DOT_ATOM&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+             &lt;span class="n"&gt;QUOTED_STRING&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)&amp;#39;&lt;/span&gt;                    &lt;span class="c1"&gt;# see 3.4.1. Addr-spec specification&lt;/span&gt;
+&lt;span class="n"&gt;DTEXT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;[&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;NO_WS_CTL&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;\x21-\x5a\x5e-\x7e]&amp;#39;&lt;/span&gt;    &lt;span class="c1"&gt;# see 3.4.1&lt;/span&gt;
+&lt;span class="n"&gt;DCONTENT&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DTEXT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+           &lt;span class="n"&gt;QUOTED_PAIR&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)&amp;#39;&lt;/span&gt;                        &lt;span class="c1"&gt;# see 3.4.1&lt;/span&gt;
+&lt;span class="n"&gt;DOMAIN_LITERAL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;\[&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+                 &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DCONTENT&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+                 &lt;span class="s1"&gt;r&amp;#39;)*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;FWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?\]&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;CFWS&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;?&amp;#39;&lt;/span&gt;  &lt;span class="c1"&gt;# see 3.4.1&lt;/span&gt;
+&lt;span class="n"&gt;DOMAIN&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;(?:&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DOT_ATOM&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; \
+         &lt;span class="n"&gt;DOMAIN_LITERAL&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;)&amp;#39;&lt;/span&gt;                       &lt;span class="c1"&gt;# see 3.4.1&lt;/span&gt;
+&lt;span class="n"&gt;ADDR_SPEC&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LOCAL_PART&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;r&amp;#39;@&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;DOMAIN&lt;/span&gt;               &lt;span class="c1"&gt;# see 3.4.1&lt;/span&gt;
+
+&lt;span class="c1"&gt;# A valid address will match exactly the 3.4.1 addr-spec.&lt;/span&gt;
+&lt;span class="n"&gt;VALID_ADDRESS_REGEXP&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;^&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ADDR_SPEC&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;$&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;覺得看完這串正規表方式快暈了。到底是要相依多少變數啊 &lt;span class="caps"&gt;QQ&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;但我們可以嘗試把 VALID_ADDRESS_REGEXP 變數印出來看看他的正規表達式怎麼做的。從作者說明看起來是根據 &lt;a href="https://www.ietf.org/rfc/rfc2822.txt"&gt;&lt;span class="caps"&gt;RFC&lt;/span&gt; 2822 &lt;span class="caps"&gt;SEPC&lt;/span&gt;&lt;/a&gt;&amp;nbsp;所定義實作，因此在每個正規表達式也說明出自於哪些章節。就從上到下一個個看正規表達式意思吧。&lt;/p&gt;
+&lt;h3&gt;2.2.2. Structured Header Field&amp;nbsp;Bodies&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;WSP = r'[\s]'&lt;/code&gt; 白字元族(Character class)同等 [\t\n\r\f] or&amp;nbsp;[:space:]&lt;/p&gt;
+&lt;h3&gt;2.2.3. Long Header&amp;nbsp;Fields&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;CRLF = r'(?:\r\n)'&lt;/code&gt; 標定所有 &lt;code&gt;\r\n&lt;/code&gt; 字元&lt;/p&gt;
+&lt;h3&gt;3.2.1. Primitive&amp;nbsp;Tokens&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;NO_WS_CTL = r'\x01-\x08\x0b\x0c\x0f-\x1f\x7f'&lt;/code&gt; 十六進位 1-8, 11, 12, 14-31, 127&amp;nbsp;等字元&lt;/p&gt;
+&lt;h3&gt;3.2.2. Quoted&amp;nbsp;characters&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;QUOTED_PAIR = r'(?:\\.)'&lt;/code&gt; 標定特殊字元 &lt;code&gt;.&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;3.2.3. Folding white space and&amp;nbsp;comments&lt;/h3&gt;
+&lt;p&gt;白字元，像是隱藏在資料中的空白鍵、換行和跳格等等&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;FWS = r'(?:(?:' + WSP + r'*' + CRLF + r')?' + WSP + r'+)'&lt;/code&gt; &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;WSP&lt;/code&gt;：是指空白字元, &lt;code&gt;?:WSP&lt;/code&gt;：標定所有空白字元&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;:&amp;nbsp;前一個比對字元可以任意多次&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CRLF&lt;/code&gt;: 標定所有 &lt;code&gt;\r\n&lt;/code&gt; 字元&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?&lt;/code&gt; 匹配零次或一次&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;'(?:(?:[\\s]*(?:\\r\\n))?[\\s]+)'&lt;/code&gt;： 只要是 &lt;code&gt;__字元&lt;/code&gt;, &lt;code&gt;__ 指的是空白&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;CTEXT = r'[' + NO_WS_CTL + \r'\x21-\x27\x2a-\x5b\x5d-\x7e]'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;CCONTENT = r'(?:' + CTEXT + r'|' + QUOTED_PAIR + r')'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;COMMENT = r'\((?:' + FWS + r'?' + CCONTENT + \r')*' + FWS + r'?\)'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;CFWS = r'(?:' + FWS + r'?' + COMMENT + ')*(?:' + FWS + '?' + COMMENT + '|' + FWS + ')'&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;3.2.4.&amp;nbsp;Atom&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ATEXT = r'[\w!#$%&amp;amp;\'\*\+\-/=\?\^`\{\|\}~]'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ATOM = CFWS + r'?' + ATEXT + r'+' + CFWS + r'?'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DOT_ATOM_TEXT = ATEXT + r'+(?:\.' + ATEXT + r'+)*'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DOT_ATOM = CFWS + r'?' + DOT_ATOM_TEXT + CFWS + r'?'&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;3.2.5. Quoted&amp;nbsp;strings&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;QTEXT = r'[' + NO_WS_CTL + \r'\x21\x23-\x5b\x5d-\x7e]'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;QCONTENT = r'(?:' + QTEXT + r'|' + \QUOTED_PAIR + r')'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;QUOTED_STRING = CFWS + r'?' + r'"(?:' + FWS + \r'?' + QCONTENT + r')*' + FWS + \r'?' + r'"' + CFWS + r'?'&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;3.4.1. Addr-spec&amp;nbsp;specification&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;LOCAL_PART = r'(?:' + DOT_ATOM + r'|' + \QUOTED_STRING + r')'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DTEXT = r'[' + NO_WS_CTL + r'\x21-\x5a\x5e-\x7e]'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DCONTENT = r'(?:' + DTEXT + r'|' + \QUOTED_PAIR + r')'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DOMAIN_LITERAL = CFWS + r'?' + r'\[' + \r'(?:' + FWS + r'?' + DCONTENT + \r')*' + FWS + r'?\]' + CFWS + r'?'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;DOMAIN = r'(?:' + DOT_ATOM + r'|' + \DOMAIN_LITERAL + r')'&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ADDR_SPEC = LOCAL_PART + r'@' + DOMAIN&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;比較其他方法異同&lt;/h2&gt;
+&lt;p&gt;&lt;span class="caps"&gt;TBD&lt;/span&gt;(筆者有點偷懶，稍晚再補上。)&lt;/p&gt;
+&lt;hr /&gt;</summary><category term="Regular Expression"></category><category term="Python"></category><category term="email"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://chairco.com.tw/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2017-02-20T20:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 &lt;code&gt;object&lt;/code&gt;，萬物都是一個 &lt;code&gt;object&lt;/code&gt; 
+所以當你產生一個 function&amp;nbsp;這個預設的參數值就產生了。我們用底下一個範例來說明：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[]):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5566&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果你這樣做印出的 &lt;code&gt;b.l&lt;/code&gt; 竟然是 &lt;code&gt;[5566]&lt;/code&gt; 這太讓人驚訝了吧！？難道是什麼神奇的鬼魂在作怪？其實不是，因為 &lt;code&gt;l&lt;/code&gt; 這個參數是使用一個可變變數 [] 
+所以當你建立一個 f 的 &lt;code&gt;Foo()&lt;/code&gt; 物件時他的預設參數也就產生了，因此當你建立 b 的 &lt;code&gt;Bar()&lt;/code&gt; 物件時他其實是指向同一個記憶體位址。&lt;/p&gt;
+&lt;p&gt;那正確做法應該怎麼做呢？應該將 l 的變數設定為一個不可變的變數 None.&amp;nbsp;這樣才不會出現幽靈事件！&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5566&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;</summary><category term="Python"></category><category term="Programming"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://chairco.com.tw/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
+&lt;p&gt;根據開發者得說法：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Python 目前開發環境已經非常成熟，各種類型的套件只要隨手一個 pip install 就信手拈來讓開發者省去很多力氣。再來 Python 的生態系裡不像 node js 有非常多的版本，目前 Pytchon 的生態系主要就分成兩個分支 Python 2.x 與 Python 3.x，簡單來講 Python&amp;nbsp;就是一個簡單易懂又容易的語言。&lt;/p&gt;
+&lt;p&gt;不過這不代表 Python 就不需要一個好的套件管理。至少 Python 在不同的 2.x 與 3.x 透過 six 這些套件完美的橋接不同的套件，但事實上在開發過程中我們有更多使用 Python 所開發的 framework，這些 framework 相依著很多不同的套件，例如 Django 有一個很棒的套件叫 &lt;code&gt;Django-Debug-Toolbar&lt;/code&gt; 這個套件在 1.5 可以支援 Django 1.9.x 的版本，但當 Django 1.10.x 後一些 api 作了改變就壞掉惹！這時就必須要升到 &lt;code&gt;Django-Debug-Toolbar&lt;/code&gt; 1.6&amp;nbsp;的版本。所以其實還是需要一個好的套件管理協助我們避免這種事情發生。&lt;/p&gt;
+&lt;p&gt;要怎麼安裝這個套件呢？首先還是先用 &lt;code&gt;pip&lt;/code&gt; 來安裝 &lt;code&gt;pipenv&lt;/code&gt; 這個套件。（如果有 py2.x, py3.x&amp;nbsp;只要在其中一個環境安裝就可以了）&lt;/p&gt;
+&lt;p&gt;Python 2.x:
+&lt;code&gt;pip install pipenv&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Python 3.x:
+&lt;code&gt;pip3 install pipenv&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;安裝完成之後可以試試看在 commandline 下輸入 &lt;code&gt;pipenv&lt;/code&gt; 就會輸出相關使用方法：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Usage&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pipenv&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;OPTIONS&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="n"&gt;COMMAND&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ARGS&lt;/span&gt;&lt;span class="o"&gt;]...&lt;/span&gt;
+
+&lt;span class="n"&gt;Options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;where&lt;/span&gt;          &lt;span class="n"&gt;Output&lt;/span&gt; &lt;span class="n"&gt;project&lt;/span&gt; &lt;span class="n"&gt;home&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;venv&lt;/span&gt;           &lt;span class="n"&gt;Output&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;rm&lt;/span&gt;             &lt;span class="n"&gt;Remove&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;bare&lt;/span&gt;           &lt;span class="n"&gt;Minimal&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;three&lt;/span&gt; &lt;span class="sr"&gt;/ --two  Use Python 3/&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="n"&gt;when&lt;/span&gt; &lt;span class="n"&gt;creating&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;TEXT&lt;/span&gt;    &lt;span class="n"&gt;Specify&lt;/span&gt; &lt;span class="n"&gt;which&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;use&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;help&lt;/span&gt;       &lt;span class="n"&gt;Show&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt; &lt;span class="n"&gt;then&lt;/span&gt; &lt;span class="n"&gt;exit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;version&lt;/span&gt;        &lt;span class="n"&gt;Show&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;exit&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+
+
+&lt;span class="n"&gt;Usage&lt;/span&gt; &lt;span class="n"&gt;Examples&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+   &lt;span class="n"&gt;Create&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;project&lt;/span&gt; &lt;span class="n"&gt;using&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+   &lt;span class="n"&gt;$&lt;/span&gt; &lt;span class="n"&gt;pipenv&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;three&lt;/span&gt;
+
+   &lt;span class="n"&gt;Install&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="n"&gt;dependencies&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;project&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;including&lt;/span&gt; &lt;span class="n"&gt;dev&lt;/span&gt;&lt;span class="o"&gt;):&lt;/span&gt;
+   &lt;span class="n"&gt;$&lt;/span&gt; &lt;span class="n"&gt;pipenv&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;dev&lt;/span&gt;
+
+   &lt;span class="n"&gt;Create&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;lockfile&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+   &lt;span class="n"&gt;$&lt;/span&gt; &lt;span class="n"&gt;pipenv&lt;/span&gt; &lt;span class="n"&gt;lock&lt;/span&gt;
+
+&lt;span class="n"&gt;Commands&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  &lt;span class="n"&gt;check&lt;/span&gt;      &lt;span class="n"&gt;Checks&lt;/span&gt; &lt;span class="n"&gt;PEP&lt;/span&gt; &lt;span class="mi"&gt;508&lt;/span&gt; &lt;span class="n"&gt;markers&lt;/span&gt; &lt;span class="n"&gt;provided&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;Pipfile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="n"&gt;install&lt;/span&gt;    &lt;span class="n"&gt;Installs&lt;/span&gt; &lt;span class="n"&gt;provided&lt;/span&gt; &lt;span class="n"&gt;packages&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;adds&lt;/span&gt; &lt;span class="n"&gt;them&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+  &lt;span class="n"&gt;lock&lt;/span&gt;       &lt;span class="n"&gt;Generates&lt;/span&gt; &lt;span class="n"&gt;Pipfile&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;lock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="n"&gt;run&lt;/span&gt;        &lt;span class="n"&gt;Spawns&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;command&lt;/span&gt; &lt;span class="n"&gt;installed&lt;/span&gt; &lt;span class="n"&gt;into&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+  &lt;span class="n"&gt;shell&lt;/span&gt;      &lt;span class="n"&gt;Spawns&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt; &lt;span class="n"&gt;within&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;virtualenv&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="n"&gt;uninstall&lt;/span&gt;  &lt;span class="n"&gt;Un&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;installs&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;provided&lt;/span&gt; &lt;span class="k"&gt;package&lt;/span&gt; &lt;span class="nn"&gt;and&lt;/span&gt; &lt;span class="n"&gt;removes&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+  &lt;span class="n"&gt;update&lt;/span&gt;     &lt;span class="n"&gt;Updates&lt;/span&gt; &lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;latest&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;uninstalls&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後管理的方法很簡單，只要執行 &lt;code&gt;pipenv --three&lt;/code&gt; 就會在預設資料夾底下(mac: /Users/{username}/.virtualenvs) 建立一個和這個資料夾同名稱的虛擬環境。
+接著你就可以試試透過 &lt;code&gt;pipenv install requests&lt;/code&gt; 安裝 requests 這個套件。安裝完後你可以執行&lt;code&gt;cat Pipfile&lt;/code&gt; 看內容如下，這時 &lt;code&gt;requests&lt;/code&gt; 已經被記錄在 Pipfile&amp;nbsp;了。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[[source]]&lt;/span&gt;
+&lt;span class="na"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;https://pypi.python.org/simple&amp;quot;&lt;/span&gt;
+&lt;span class="na"&gt;verify_ssl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;true&lt;/span&gt;
+
+&lt;span class="k"&gt;[packages]&lt;/span&gt;
+&lt;span class="na"&gt;requests&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;你可以看到安裝完成了，接著用 &lt;code&gt;pipenv lock&lt;/code&gt; 鎖定 dependence，&lt;code&gt;cat Pipfile.lock&lt;/code&gt; 看到內容會如下，你會看見他會產生一個 hash 值，這個值其實就是讓你這個虛擬環境下能保持 requests == 2.13&amp;nbsp;相依性。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{
+    &amp;quot;default&amp;quot;: {
+        &amp;quot;requests&amp;quot;: {
+            &amp;quot;version&amp;quot;: &amp;quot;==2.13.0&amp;quot;,
+            &amp;quot;hash&amp;quot;: &amp;quot;sha256:1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb&amp;quot;
+        }
+    },
+    &amp;quot;develop&amp;quot;: {},
+    &amp;quot;_meta&amp;quot;: {
+        &amp;quot;sources&amp;quot;: [
+            {
+                &amp;quot;url&amp;quot;: &amp;quot;https://pypi.python.org/simple&amp;quot;,
+                &amp;quot;verify_ssl&amp;quot;: true
+            }
+        ],
+        &amp;quot;requires&amp;quot;: {},
+        &amp;quot;hash&amp;quot;: {
+            &amp;quot;sha256&amp;quot;: &amp;quot;da2810af0c3b5333e0de2fce9bea2a228812e2014e5f5fe3b1c533badc6c24e4&amp;quot;
+        }
+    }
+}%
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最後如果要執行 Python shell 一樣透過 pipenv 輸入 &lt;code&gt;pipenv shell&lt;/code&gt; 就能進去。（不過筆者不知道為什麼不行&amp;nbsp;＠＠，至少上稿前還找不到原因。）&lt;/p&gt;
+&lt;p&gt;用很簡單篇幅介紹這個新的工具，如果有更多想參考可以到 &lt;a href="http://docs.pipenv.org/en/latest/"&gt;Pipenv 教學&lt;/a&gt;。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;更新在 6/19，用了一陣子 Pipenv 覺得實在太好用了。不過有一些 Pip&amp;nbsp;使用習慣轉換過來做些紀錄。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;要如何在 Pipfile 內新增從 github 下載安裝的套件？
+執行：&lt;code&gt;pipenv install git+https://github.com/django/dango.git#egg=Django&lt;/code&gt; 這邊和 pip 不同是網址後一定要加上 &lt;strong&gt;.git#egg={套件名稱}&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果有 requirements.txt 時要怎麼自動轉換過去 Pipfile?
+很簡單，只要在同一目錄底下執行: &lt;code&gt;pipenv install&lt;/code&gt; 接著會顯示：&lt;code&gt;Requirements file found, instead of Pipfile! Converting...&lt;/code&gt; 套件會花點時間將 requirements.txt 轉換成 Pipfile 格式（大約要三分鐘以上 &lt;span class="caps"&gt;QQ&lt;/span&gt;&amp;nbsp;沒有研究為什麼要這麼久）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;要怎麼在我的環境安裝 Pipfile 的套件呢？
+執行: &lt;code&gt;pipenv install --dev&lt;/code&gt; 接著輸入 &lt;code&gt;pipenv shell&lt;/code&gt; 就完成囉。記得要退出時要執行 &lt;code&gt;exit&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;pipenv shell&lt;/code&gt; 沒有反應
+感覺像是環境變數問題，&lt;a href="https://github.com/kennethreitz/pipenv/issues/415"&gt;issue#415&lt;/a&gt; 有人在聊但沒仔細看。現在是安裝完成後可以 &lt;code&gt;pipenv --venv&lt;/code&gt; 然後直接手動去吃環境變數。有點蠢。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="Pipenv"></category><category term="Python"></category></entry></feed>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/https-domain-name.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-06-29T15:33:03+08:00</updated><entry><title>Github.io 自訂網域名稱且透過 Cloudflare 申請免費 https</title><link href="https://chairco.com.tw/posts/2017/06/Github.io%20Pages%20redirect%20to%20domain%20name%20and%20add%20HTTPS.html" rel="alternate"></link><published>2017-06-29T15:33:03+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-06-29:posts/2017/06/Github.io Pages redirect to domain name and add HTTPS.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;這個部落格也快一年，雖然進化得很慢但還是有在進步。最近進步的一件事（應該不能說是進步，要說跟上）終於想把用了很久的 &lt;a href="https://chairco.github.io"&gt;blog&lt;/a&gt; 掛上網域名稱（之前是把網域名稱導過來 chairco.github.io,&amp;nbsp;喂，你搞什麼啊！！）&lt;/p&gt;
+&lt;p&gt;大概半年前在 Gandi 有申請一個 chairco.com.tw 的網域，不過當時比較麻煩問題是不知道怎麼掛上 https，查一下解法是買一個主機架設 &lt;span class="caps"&gt;DNS&lt;/span&gt;，但就有點貴了。 Gandi&amp;nbsp;似乎有提供免費？但可能我是免費一年序號，所以要花錢買，大概沒有繼續處理就這樣苟且偷生下去了。&lt;/p&gt;
+&lt;p&gt;主要是最近 &lt;strong&gt;pay.taipei&lt;/strong&gt; (&lt;a href="https://www.facebook.com/schreibmal/media_set?set=a.10212928669916690.1073741842.1388906446&amp;amp;type=3&amp;amp;pnref=story"&gt;事件緣起&lt;/a&gt;) 然後看到很多人在講這件事，結果很多部落主在批評時也被反說他的網站也沒做 &lt;span class="caps"&gt;HTTPS&lt;/span&gt;。心裡覺得要洗別人臉自己臉真的要洗乾淨所以就決定來完成它了。&lt;/p&gt;
+&lt;p&gt;架設 Blog、自訂網域名稱、設定 https&amp;nbsp;主要分成三塊服務商：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Github：靜態網頁&lt;/li&gt;
+&lt;li&gt;Gandi：網域名稱供應商&lt;/li&gt;
+&lt;li&gt;Cloudflare：提供 &lt;span class="caps"&gt;DNS&lt;/span&gt;、&lt;span class="caps"&gt;HTTPS&lt;/span&gt;&amp;nbsp;傳輸服務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Github&lt;/h2&gt;
+&lt;p&gt;大概多數靜態網頁都很容易架設，可以參考完整的&lt;a href="https://pages.github.com/"&gt;官方教學&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Gandi&lt;/h2&gt;
+&lt;p&gt;網域名稱供應商，註冊之後可以付費購買網域名稱，網域名稱購買之後要怎麼讓 github.io 轉址，就只需要在 github.io 靜態網頁下建立一個 &lt;span class="caps"&gt;CNAME&lt;/span&gt;。另外也要編輯在 Gandi 的 zone file。&lt;a href="http://spector.io/how-to-set-up-github-pages-with-a-custom-domain-on-gandi/"&gt;完整教學參考&lt;/a&gt; 接著原本的 github.io&amp;nbsp;網址就會被導到新網域。&lt;/p&gt;
+&lt;p&gt;不夠清楚可以參考這篇 &lt;a href="https://blog.dmoon.tw/github-pages-custom-domain/index.html"&gt;blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;不過這裡有個要注意的，在編輯 zone file 時一定要確認編輯完成之後 Gandi 有吃到修改的設定檔，通常有吃到之後，下圖的 &lt;strong&gt;Operations&lt;/strong&gt; 會出現運作的數量，代表正在進行 &lt;span class="caps"&gt;DNS&lt;/span&gt; 設定。如果沒有就要注意一下。設定時間大概 40~60 min&amp;nbsp;會完成。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201706/gandi_dash.png" /&gt;&lt;/p&gt;
+&lt;h2&gt;Cloudflare&lt;/h2&gt;
+&lt;p&gt;有了自訂網域名稱，而且也可以轉址但預設是 http，因此可以透過 Cloudflare 提供服務掛上&amp;nbsp;https。&lt;/p&gt;
+&lt;p&gt;先到 &lt;a href="https://www.cloudflare.com/"&gt;Cloudflare&lt;/a&gt; 註冊一個帳號，接著會收到回傳信件，只要根據回傳信件內容到網站上面設定好網址。接著再將它提供的 dns 位置到 Gandi&amp;nbsp;去替換就完成囉。&lt;/p&gt;
+&lt;p&gt;設定完成時在 &lt;strong&gt;overview&lt;/strong&gt;&amp;nbsp;畫面會顯示要你點擊測試，如果成功會顯示下面畫面：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201706/Cloudflare_overview.png" /&gt;&lt;/p&gt;
+&lt;p&gt;最後如果要成功掛上 https 需要針對瀏覽頁面設定 &lt;span class="caps"&gt;SSL&lt;/span&gt; 為 Flexible 才會顯示正確憑證，方法是在 Page rules 下增加一組 rules，以範例是指允許網域下所有頁面都透過 Flexible&amp;nbsp;認證方式：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201706/Cloudflare_pagerules.png" /&gt;&lt;/p&gt;
+&lt;p&gt;方法可以參考 &lt;a href="https://blog.dmoon.tw/github-pages-with-free-ssl/"&gt;blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;這邊要注意，前面 Gandi 的 zone settings 都設定完成再來啟用 Cloudflare，接著再回去設定 &lt;span class="caps"&gt;DNS&lt;/span&gt;，不然你先設定 Cloudflare, 會吃到 Gandi 不對的 zone file 設定，導致 Cloudflare 的 &lt;span class="caps"&gt;DNS&lt;/span&gt;&amp;nbsp;參數不正確。一般來說應該會只有三個：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201706/Cloudflare_DNS.png" /&gt;&lt;/p&gt;
+&lt;h2&gt;Disqus&amp;nbsp;留言轉換&lt;/h2&gt;
+&lt;p&gt;簡單來說 Disqus 判斷一篇留言方式是透過網址，因為我們將 url 轉換到新的網域名稱自然而然原本的留言就會失效。不過 Disqus 有出一個不錯的工具叫 &lt;strong&gt;Migration Tools&lt;/strong&gt;&amp;nbsp;可以協助作轉換。&lt;/p&gt;
+&lt;p&gt;登入 Disqus&amp;nbsp;打入以下網址：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;https://{disqus_name}.disqus.com/admin/discussions/migrate/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;會顯示下圖 &lt;strong&gt;Upload a &lt;span class="caps"&gt;URL&lt;/span&gt; map&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201706/disqus_migrations.png" /&gt;&lt;/p&gt;
+&lt;p&gt;點進去之後點選 &lt;code&gt;you can download a CSV here.&lt;/code&gt; 的按鈕，他會寄送一份 csv&amp;nbsp;檔案，接著叫照他的說明兩兩對照，舊在前新在後：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;http://example.com/old-path/old/postb.html, http://example.com/new-path/new/postb.html
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著把改好的 csv 檔案上傳，根據網頁上是說最快 24hr 會全部轉換完成。但我只有 9 則留言，一下就轉換完成了 &lt;span class="caps"&gt;XD&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;如果我寫的太簡陋看不懂，可以參考&lt;a href="http://iotchef.cc/posts/2015-10-14-disqus-url-mapper-to-correct-post-url.html"&gt;這篇&lt;/a&gt;。&lt;/p&gt;</summary><category term="https"></category><category term="gandi"></category><category term="github.io"></category></entry></feed>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/algorithm.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-07-24T18:31:26+08:00</updated><entry><title>用 Python 實作斐波那契（Fibonacci）兩三事</title><link href="https://chairco.com.tw/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html" rel="alternate"></link><published>2017-07-24T18:31:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-07-24:posts/2017/07/Let's talk about fibonacci with python.html</id><summary type="html">&lt;hr /&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fibonacci&amp;nbsp;是在資料結構上說明遞迴一個很直覺的範例，不過在演算法上也是不可或缺的指導教材。最近陸續在準備一些線上考試回來看才發現自己其實低估了這些科普教材對於自我訓練的重要性。&lt;/p&gt;
+&lt;p&gt;本篇會從一些遇到的範例，並試著從遞迴、效率的觀點來探討，同時也檢測自己對程式設計與演算法上是不是有不足之處。如果發現在觀念上有錯誤，希望讀者給予指教。&lt;/p&gt;
+&lt;p&gt;範例程式碼都會以 Python&amp;nbsp;來實作。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;遞迴(Recursion)&lt;/h2&gt;
+&lt;p&gt;計算機概論或是資料結構開始講遞迴(recursion)時都會以 Fibonacci 來講解怎麼讓函式不斷 callback&amp;nbsp;來解出最後的答案，程式碼會像是這樣&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;一般程式新手比較無法理解的就是 &lt;code&gt;return fibonacci(n-1)+fibonacci(n-2)&lt;/code&gt; 這段，簡單來說就是程式不斷 callback 自己來重複處理問題。缺點就是時間複雜度很高（ &lt;code&gt;O(f((2^n))&lt;/code&gt; ），這段程式碼如果用個人電腦 &lt;span class="caps"&gt;MAC&lt;/span&gt; &lt;span class="caps"&gt;MBPR&lt;/span&gt; 來跑大概 &lt;code&gt;fibonacci(n=30)&lt;/code&gt; 應該就會卡住了。不過大學的資料結構也就提到這邊，要再深入一點去用其他解法可能要到演算法部分。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;所以接下來我就來討論以演算法的觀點:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Top-down&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Bottom-up&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img alt="'#'" src="http://www.csie.ntnu.edu.tw/~u91029/DPRecurrence8.png" /&gt;&lt;/p&gt;
+&lt;h2&gt;Bottom-up&lt;/h2&gt;
+&lt;p&gt;訂定一個計算順序，然後由最小的問題開始計算。特色是程式碼通常只有幾個迴圈。這個實作方式的好處與壞處與前一個方式恰好互補(&lt;a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html#1"&gt;引用網站&lt;/a&gt;)。&lt;/p&gt;
+&lt;p&gt;以上面遞迴的範例來看，在 Bottom-up 就會訂定一個順序，然後把算出來的解答存起來，這樣就可以不用一直去重複，效率也快很多，時間複雜度會降到（&lt;code&gt;O(f(n))&lt;/code&gt;）：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面這段程式碼其實依賴於 Python 實作好的 &lt;code&gt;list&lt;/code&gt; 資料結構特性，透過一個順序，把計算好的答案放進 &lt;code&gt;list&lt;/code&gt; 內，下一步驟把算法的答案取出來在計算。&lt;/p&gt;
+&lt;p&gt;當然如果你想用 C&amp;nbsp;的方法來思考也可以，在堆疊上我們稱為遞迴堆疊，就是透過一個變數，預先儲存上個答案：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;
+    &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+        &lt;span class="n"&gt;temp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
+        &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
+        &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;temp&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
+
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;n={}, fin={}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;概念上大概都是一樣，就是用空間換取時間，記憶體先把答案存起來，然後需要再把它拿出來用。&lt;/p&gt;
+&lt;h2&gt;Top-down&lt;/h2&gt;
+&lt;p&gt;我就還沒遇過怎麼比較好處理 Fibonacci&amp;nbsp;的寫法暫時先放著吧。但簡單來說這個演算法概念就是不管順序，所以不必走過每一段路。&lt;/p&gt;
+&lt;h2&gt;延伸思考&lt;/h2&gt;
+&lt;p&gt;既然對於資料結構與演算法有了些概念，就有了些有趣的問題，例如我要怎麼透過 Python 將 fibonacci&amp;nbsp;計算後的所有數字再做一次三次方(pow)?&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;cube&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="c1"&gt;# complete the lambda function &lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# return a list of fibonacci numbers    &lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;fib&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+    &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;fib&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;fib&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;fib&lt;/span&gt;
+
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cube&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;概念其實就很簡單，會用到 Python 的 built-in function &lt;code&gt;map&lt;/code&gt;。在 &lt;code&gt;def fibonacci(n)&lt;/code&gt; 內會先透過 &lt;code&gt;list&lt;/code&gt; 儲存結果，接著用 &lt;code&gt;map&lt;/code&gt; 搭配 &lt;code&gt;lambda&lt;/code&gt; 將陣列內每個值都抓出來做三次方的計算。&lt;/p&gt;
+&lt;p&gt;不過上面的函式可以更精簡，不知道你有想到嗎？&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;cube&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;pow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="c1"&gt;# complete the lambda function &lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fibonacci&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# return a list of fibonacci numbers&lt;/span&gt;
+    &lt;span class="n"&gt;lis&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;lis&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lis&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;lis&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;lis&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr /&gt;
+&lt;p&gt;做一些紀錄，其實演算法是一個能夠訓練大腦的方法，接下來我會嘗試用 Dynamic&amp;nbsp;programming(動態規劃)的方法來思考與講解這些例子。&lt;/p&gt;</summary><category term="python"></category><category term="fibonacci"></category></entry><entry><title>演算法系列：Directed Acyclic Graph</title><link href="https://chairco.com.tw/posts/2017/05/algorithm%20directed%20acyclic%20graph.html" rel="alternate"></link><published>2017-05-23T10:17:07+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-05-23:posts/2017/05/algorithm directed acyclic graph.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;Directed Acyclic Graph 中文翻譯為：&lt;code&gt;有向無環圖&lt;/code&gt;。文章通篇會來解釋關於 &lt;span class="caps"&gt;DAG&lt;/span&gt; 這個演算法。
+但要談 &lt;span class="caps"&gt;DAG&lt;/span&gt;&amp;nbsp;演算法之前需要先認識幾個資料結構的知識：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;什麼是&amp;nbsp;Graph?&lt;/li&gt;
+&lt;li&gt;Graph&amp;nbsp;的種類&lt;/li&gt;
+&lt;li&gt;Graph&amp;nbsp;地表示方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;什麼是&amp;nbsp;Graph?&lt;/h3&gt;
+&lt;p&gt;Graph 稱為圖，是一種比 tree 更廣義的資料結構，當然也可以說 tree 是一種特殊的 Graph，它的組成是由點(vertex)和邊(edge)所構成。&lt;strong&gt;點&lt;/strong&gt;和&lt;strong&gt;點&lt;/strong&gt;之間透過&lt;strong&gt;邊&lt;/strong&gt;來連接，相連得兩點代表有關聯性。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Graph.png" /&gt;&lt;/p&gt;
+&lt;p&gt;從圖來看，點和邊分別是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;V(vertex):{1,2,3,4,5,6}&lt;/li&gt;
+&lt;li&gt;E(edge):{(1,4),(1,6),(2,6),(4,5),(5,6)}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Graph&amp;nbsp;種類&lt;/h3&gt;
+&lt;p&gt;接下來簡單介紹一下各種 Graph 包含我們會提到的 &lt;span class="caps"&gt;DAG&lt;/span&gt; (假設有 m 個 edges 和 n 個&amp;nbsp;vertex)。&lt;/p&gt;
+&lt;h4&gt;Undirected&amp;nbsp;graph&lt;/h4&gt;
+&lt;p&gt;無向圖，顧名思義就是邊(edge)是沒有方向性的。因此 edge(x,y) 等同於 edge(y,x)。不是成對排序，最大的邊數 =&amp;nbsp;n(n-1)/2&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Undirected-Graph.png" /&gt;&lt;/p&gt;
+&lt;p&gt;undirected, then m =&amp;nbsp;n(n-1)/2&lt;/p&gt;
+&lt;h4&gt;Directed&amp;nbsp;graph(di-graph)&lt;/h4&gt;
+&lt;p&gt;中文稱作，有向圖。有向圖指的是邊(edge) 有方向性，意思就是 edge(x,y) 定義上和 edge(y,x)&amp;nbsp;是不同的。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Directed-Graph.png" /&gt;&lt;/p&gt;
+&lt;p&gt;directed, then m =&amp;nbsp;n(n-1)&lt;/p&gt;
+&lt;h4&gt;Directed Acyclic Graph (&lt;span class="caps"&gt;DAG&lt;/span&gt;)&lt;/h4&gt;
+&lt;p&gt;有向循環圖就是有向圖但是沒有循環(cycles)&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/DAG.png" /&gt;&lt;/p&gt;
+&lt;h4&gt;Multigraph&lt;/h4&gt;
+&lt;p&gt;多圖是一個無向圖，允許多個邊&amp;nbsp;(可能有循環)。多邊意思是指兩個或以上的邊連接到兩個點，可以連結自身。&lt;/p&gt;
+&lt;h4&gt;Simple&amp;nbsp;graph&lt;/h4&gt;
+&lt;p&gt;簡單圖不是多圖，是一個無向圖，不允許多個邊和循環。在簡單圖中有 n 個點，每個點最大自由度是&amp;nbsp;n-1 &lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Simple-Graph.png" /&gt;&lt;/p&gt;
+&lt;h4&gt;Weighted and Unweighted&amp;nbsp;graph&lt;/h4&gt;
+&lt;p&gt;加權圖和沒有加權圖差異在是否賦予一個加權值給邊(edge)。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Weighted-Directed-Graph.png" /&gt;&lt;/p&gt;
+&lt;h4&gt;Complete&amp;nbsp;graph&lt;/h4&gt;
+&lt;p&gt;每個相鄰兩邊都都存在。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Complete-graph.png" /&gt;&lt;/p&gt;
+&lt;p&gt;complete, then m =&amp;nbsp;n(n-1)/2&lt;/p&gt;
+&lt;h4&gt;Connected&amp;nbsp;graph&lt;/h4&gt;
+&lt;p&gt;每個點都需要是成對的邊，意思是指沒有到不了的點。因此 &lt;strong&gt;disconnected grapn&lt;/strong&gt;&amp;nbsp;就是指都未連接。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="graph" src="/pics/201705/Connected-graph.png" /&gt;&lt;/p&gt;
+&lt;p&gt;connected, then m = n –&amp;nbsp;1&lt;/p&gt;
+&lt;h3&gt;Graph&amp;nbsp;地表示方式&lt;/h3&gt;
+&lt;p&gt;在程式裡我們可以將這些有限的點與邊放進矩陣(matrix)內表示，在電腦則用陣列(array)存放。但用陣列存放卻不容易計算，因此有了幾種方法:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;adjacency&amp;nbsp;matrix &lt;/li&gt;
+&lt;li&gt;adjacency&amp;nbsp;lists&lt;/li&gt;
+&lt;li&gt;adjacency&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="algorithm"></category></entry></feed>
