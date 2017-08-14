@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Python 佚代器: 手把手介紹</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
+
+    <!-- Code highlight color scheme -->
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+        <meta name="description" content="Understanding iterators is a milestone for any serious Pythonista. With this step-by-step tutorial you’ll understanding class-based ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="Python">
+        <meta name="tags" content="Iterators">
+
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/08/Python Iterators: A Step-By-Step Introduction.html">
+	<meta property="og:title" content="Python 佚代器: 手把手介紹">
+	<meta property="article:published_time" content="2017-08-13 22:00:52+08:00">
+            <meta property="og:description" content="Understanding iterators is a milestone for any serious Pythonista. With this step-by-step tutorial you’ll understanding class-based ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="Python 佚代器: 手把手介紹">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+        
+            <meta name="twitter:description" content="Understanding iterators is a milestone for any serious Pythonista. With this step-by-step tutorial you’ll understanding class-based ...">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Python 佚代器: 手把手介紹</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  8 13, 2017
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <p>Understanding iterators is a milestone for any serious Pythonista. With this step-by-step tutorial you’ll understanding class-based iterators in Python, completely from&nbsp;scratch.</p>
+<p><img alt="#" src="https://dbader-static-defugurjmqrkjo.netdna-ssl.com/figures/python-iterators.jpg" /></p>
+<p>I love how beautiful and clear Python’s syntax is compared to many other programming&nbsp;languages.</p>
+<p>和其他語言比較起來，我更喜歡 Python&nbsp;語法上的美麗以及簡潔。</p>
+<p>Let’s take the humble for-in loop, for example. It speaks for Python’s beauty that you can read a Pythonic loop like this as if it was an English&nbsp;sentence:</p>
+<div class="codehilite"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+
+<p><strong>But how do Python’s elegant loop constructs work behind the scenes?</strong> How does the loop fetch individual elements from the object it is looping over? And how can you support the same programming style in your own Python&nbsp;objects?</p>
+<p><strong>You’ll find the answer to these questions in Python’s iterator&nbsp;protocol:</strong></p>
+<blockquote>
+<p>Objects that support the <strong>iter</strong> and <strong>next</strong> dunder methods automatically work with for-in&nbsp;loops.</p>
+</blockquote>
+<p>But let’s take things step by step. Just like decorators, iterators and their related techniques can appear quite arcane and complicated on first glance. So we’ll ease into&nbsp;it.</p>
+<p>In this tutorial you’ll see how to write several Python classes that support the iterator protocol. They’ll serve as “non-magical” examples and test implementations you can build upon and deepen your understanding&nbsp;with.</p>
+<p>We’ll focus on the core mechanics of iterators in Python 3 first and leave out any unnecessary complications, so you can see clearly how iterators behave at the fundamental&nbsp;level.</p>
+<p>I’ll tie each example back to the for-in loop question we started out with. And at the end of this tutorial we’ll go over some differences that exist between Python 2 and 3 when it comes to&nbsp;iterators.</p>
+<p>Ready? Let’s jump right&nbsp;in!</p>
+<h2>Python Iterators That Iterate&nbsp;Forever</h2>
+<p>We’ll begin by writing a class that demonstrates the bare-bones iterator protocol in Python. The example I’m using here might look different from the examples you’ve seen in other iterator tutorials, but bear with me. I think doing it this way gives you a more applicable understanding of how iterators work in&nbsp;Python.</p>
+<p>Over the next few paragraphs we’re going to implement a class called Repeater that can be iterated over with a for-in loop, like&nbsp;so:</p>
+<div class="codehilite"><pre><span></span><span class="n">repeater</span> <span class="o">=</span> <span class="n">Repeater</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">repeater</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Like its name suggests, instances of this Repeater class will repeatedly return a single value when iterated over. So the above example code would print the string  Hello to the console&nbsp;forever.</p>
+<p>To start with the implementation we’ll define and flesh out the Repeater class&nbsp;first:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Repeater</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">RepeaterIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+
+
+<p>On first inspection, Repeater looks like a bog-standard Python class. But notice how it also includes the <strong>iter</strong> dunder&nbsp;method.</p>
+<p>What’s the RepeaterIterator object we’re creating and returning from  <strong>iter</strong>? It’s a helper class we also need to define for our for-in iteration example to&nbsp;work:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RepeaterIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+
+
+<p>Again, RepeaterIterator looks like a straightforward Python class, but you might want to take note of the following two&nbsp;things:</p>
+<ol>
+<li>
+<p>In the <strong>init</strong> method we link each RepeaterIterator instance to the  Repeater object that created it. That way we can hold on to the “source” object that’s being iterated&nbsp;over.</p>
+</li>
+<li>
+<p>In RepeaterIterator.<strong>next</strong>, we reach back into the “source” Repeater instance and return the value associated with&nbsp;it.</p>
+</li>
+</ol>
+<p>In this code example, Repeater and RepeaterIterator are working together to support Python’s iterator protocol. The two dunder methods we defined,  <strong>iter</strong> and <strong>next</strong>, are the key to making a Python object&nbsp;iterable.</p>
+<p>We’ll take a closer look at these two methods and how they work together after some hands-on experimentation with the code we’ve got so&nbsp;far.</p>
+<p>Let’s confirm that this two-class setup really made Repeater objects compatible with for-in loop iteration. To do that we’ll first create an instance of Repeater that would return the string &#8216;Hello&#8217;&nbsp;indefinitely:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">repeater</span> <span class="o">=</span> Repeater<span class="o">(</span><span class="s1">&#39;Hello&#39;</span><span class="o">)</span>
+</pre></div>
+
+
+<p>And now we’re going to try iterating over this repeater object with a for-in loop. What’s going to happen when you run the following code&nbsp;snippet?</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="k">for</span> item in repeater:
+...     print<span class="o">(</span>item<span class="o">)</span>
+</pre></div>
+
+
+<p>Right on! You’ll see &#8216;Hello&#8217; printed to the screen…a lot. Repeater keeps on returning the same string value, and so, this loop will never complete. Our little program is doomed to print &#8216;Hello&#8217; to the console&nbsp;forever:</p>
+<div class="codehilite"><pre><span></span>Hello
+Hello
+Hello
+Hello
+Hello
+...
+</pre></div>
+
+
+<p>But congratulations—you just wrote a working iterator in Python and used it with a for-in loop. The loop may not terminate yet…but so far, so&nbsp;good!</p>
+<p>Next up we’ll tease this example apart to understand how the <strong>iter</strong> and  <strong>next</strong> methods work together to make a Python object&nbsp;iterable.</p>
+<p>Pro tip: If you ran the last example inside a Python <span class="caps">REPL</span> session or from the terminal and you want to stop it, hit Ctrl + C a few times to break out of the infinite&nbsp;loop.</p>
+<h2>How do <em>for-in</em> loops work in&nbsp;Python?</h2>
+<p>At this point we’ve got our Repeater class that apparently supports the iterator protocol, and we just ran a for-in loop to prove&nbsp;it:</p>
+<div class="codehilite"><pre><span></span><span class="n">repeater</span> <span class="o">=</span> <span class="n">Repeater</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">repeater</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Now, what does this for-in loop really do behind the scenes? How does it communicate with the repeater object to fetch new elements from&nbsp;it?</p>
+<p>To dispel some of that “magic” we can expand this loop into a slightly longer code snippet that gives the same&nbsp;result:</p>
+<div class="codehilite"><pre><span></span><span class="n">repeater</span> <span class="o">=</span> <span class="n">Repeater</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">)</span>
+<span class="n">iterator</span> <span class="o">=</span> <span class="n">repeater</span><span class="o">.</span><span class="n">__iter__</span><span class="p">()</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+
+
+<p>As you can see, the for-in was just syntactic sugar for a simple while&nbsp;loop:</p>
+<ul>
+<li>
+<p>It first prepared the repeater object for iteration by calling its <strong>iter</strong> method. This returned the actual iterator&nbsp;object.</p>
+</li>
+<li>
+<p>After that, the loop repeatedly calls the iterator object’s <strong>next</strong> method to retrieve values from&nbsp;it.</p>
+</li>
+</ul>
+<p>If you’ve ever worked with database cursors, this mental model will seem familiar: We first initialize the cursor and prepare it for reading, and then we can fetch data into local variables as needed from it, one element at a&nbsp;time.</p>
+<p>Because there’s never more than one element “in flight”, this approach is highly memory-efficient. Our Repeater class provides an infinite sequence of elements and we can iterate over it just fine. Emulating the same with a Python list would be impossible—there’s no way we could create a list with an infinite number of elements in the first place. This makes iterators a very powerful&nbsp;concept.</p>
+<p>On more abstract terms, iterators provide a common interface that allows you to process every element of a container while being completely isolated from the container’s internal&nbsp;structure.</p>
+<p>Whether you’re dealing with a list of elements, a dictionary, an infinite sequence like the one provided by our Repeater class, or another sequence type—all of that is just an implementation detail. Every single one of these objects can be traversed in the same way by the power of&nbsp;iterators.</p>
+<p>And as you’ve seen, there’s nothing special about for-in loops in Python. If you peek behind the curtain, it all comes down to calling the right dunder methods at the right&nbsp;time.</p>
+<p>In fact, you can manually “emulate” how the loop used the iterator protocol in a Python interpreter&nbsp;session:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">repeater</span> <span class="o">=</span> Repeater<span class="o">(</span><span class="s1">&#39;Hello&#39;</span><span class="o">)</span>
+&gt;&gt;&gt; <span class="nv">iterator</span> <span class="o">=</span> iter<span class="o">(</span>repeater<span class="o">)</span>
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+<span class="s1">&#39;Hello&#39;</span>
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+<span class="s1">&#39;Hello&#39;</span>
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+<span class="s1">&#39;Hello&#39;</span>
+...
+</pre></div>
+
+
+<p>This gives the same result: An infinite stream of hellos. Every time you call next() the iterator hands out the same greeting&nbsp;again.</p>
+<p>By the way, I took the opportunity here to replace the calls to <strong>iter</strong> and  <strong>next</strong> with calls to Python’s built-in functions iter() and&nbsp;next().</p>
+<p>Internally these built-ins invoke the same dunder methods, but they make this code a little prettier and easier to read by providing a clean “facade” to the iterator&nbsp;protocol.</p>
+<p>Python offers these facades for other functionality as well. For example, len(x) is a shortcut for calling x.<strong>len</strong>. Similarly, calling iter(x) invokes x.<strong>iter</strong> and calling next(x) invokes x.<strong>next</strong>.</p>
+<p>Generally it’s a good idea to use the built-in facade functions rather than directly accessing the dunder methods implementing a protocol. It just makes the code a little easier to&nbsp;read.</p>
+<h2>A Simpler Iterator&nbsp;Class</h2>
+<p>Up until now our iterator example consisted of two separate classes, Repeater and RepeaterIterator. They corresponded directly to the two phases used by Python’s iterator&nbsp;protocol:</p>
+<p>First setting up and retrieving the iterator object with an iter() call, and then repeatedly fetching values from it via&nbsp;next().</p>
+<p>Many times both of these responsibilities can be shouldered by a single class. Doing this allows you to reduce the amount of code necessary to write a class-based&nbsp;iterator.</p>
+<p>I chose not to do this with the first example in this tutorial, because it mixes up the cleanliness of the mental model behind the iterator protocol. But now that you’ve seen how to write a class-based iterator the longer and more complicated way, let’s take a minute to simplify what we’ve got so&nbsp;far.</p>
+<p>Remember why we needed the RepeaterIterator class again? We needed it to host the <strong>next</strong> method for fetching new values from the iterator. But it doesn’t really matter where <strong>next</strong> is defined. In the iterator protocol, all that matters is that <strong>iter</strong> returns any object with a <strong>next</strong> method on&nbsp;it.</p>
+<p>So here’s an idea: RepeaterIterator returns the same value over and over, and it doesn’t have to keep track of any internal state. What if we added the <strong>next</strong> method directly to the Repeater class&nbsp;instead?</p>
+<p>That way we could get rid of RepeaterIterator altogether and implement an iterable object with a single Python class. Let’s try it out! Our new and simplified iterator example looks as&nbsp;follows:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Repeater</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+
+
+<p>We just went from two separate classes and 10 lines of code to to just one class and 7 lines of code. Our simplified implementation still supports the iterator protocol just&nbsp;fine:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">repeater</span> <span class="o">=</span> Repeater<span class="o">(</span><span class="s1">&#39;Hello&#39;</span><span class="o">)</span>
+&gt;&gt;&gt; <span class="k">for</span> item in repeater:
+...    print<span class="o">(</span>item<span class="o">)</span>
+
+Hello
+Hello
+Hello
+...
+</pre></div>
+
+
+<p>Streamlining a class-based iterator like that often makes sense. In fact, most Python iterator tutorials start out that way. But I always felt that explaining iterators with a single class from the get-go hides the underlying principles of the iterator protocol—and thus makes it more difficult to&nbsp;understand.</p>
+<h2>Who Wants to Iterate&nbsp;Forever</h2>
+<p>At this point you’ll have a pretty good understanding of how iterators work in Python. But so far we’ve only implemented iterators that kept on iterating&nbsp;forever.</p>
+<p>Clearly, infinite repetition isn’t the main use case for iterators in Python. In fact, when you look back all the way to the beginning of this tutorial, I used the following snippet as a motivating&nbsp;example:</p>
+<div class="codehilite"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+
+<p>You’ll rightfully expect this code to print the numbers 1, 2, and 3 and then stop. And you probably don’t expect it to go on spamming your terminal window by printing threes forever until you mash Ctrl+C a few times in a wild&nbsp;panic…</p>
+<p>And so, it’s time to find out how to write an iterator that eventually stops generating new values instead of iterating forever. Because that’s what Python objects typically do when we use them in a for-in&nbsp;loop.</p>
+<p>We’ll now write another iterator class that we’ll call BoundedRepeater. It’ll be similar to our previous Repeater example, but this time we’ll want it to stop after a predefined number of&nbsp;repetitions.</p>
+<p>Let’s think about this for a bit. How do we do this? How does an iterator signal that it’s exhausted and out of elements to iterate over? Maybe you’re thinking, “Hmm, we could just return None from the <strong>next</strong>&nbsp;method.”</p>
+<p>And that’s not a bad idea—but the trouble is, what are we going to do if we want some iterators to be able to return None as an acceptable&nbsp;value?</p>
+<p>Let’s see what other Python iterators do to solve this problem. I’m going to construct a simple container, a list with a few elements, and then I’ll iterate over it until it runs out of elements to see what&nbsp;happens:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">my_list</span> <span class="o">=</span> <span class="o">[</span>1, 2, 3<span class="o">]</span>
+&gt;&gt;&gt; <span class="nv">iterator</span> <span class="o">=</span> iter<span class="o">(</span>my_list<span class="o">)</span>
+
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+1
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+2
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+3
+</pre></div>
+
+
+<p>Careful now! We’ve consumed all of the three available elements in the list. Watch what happens if I call next on the iterator&nbsp;again:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+StopIteration
+</pre></div>
+
+
+<p>Aha! It raises a <a href="https://docs.python.org/3.6/library/exceptions.html#StopIteration">StopIteration exception</a> to signal we’ve exhausted all of the available values in the&nbsp;iterator.</p>
+<p>That’s right: Iterators use exceptions to structure control flow. To signal the end of iteration, a Python iterator simply raises the built-in StopIteration&nbsp;exception.</p>
+<p>If I keep requesting more values from the iterator it’ll keep raising StopIteration exceptions to signal that there are no more values available to iterate&nbsp;over:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+StopIteration
+&gt;&gt;&gt; next<span class="o">(</span>iterator<span class="o">)</span>
+StopIteration
+...
+</pre></div>
+
+
+<p>Python iterators normally can’t be “reset”—once they’re exhausted they’re supposed to raise StopIteration every time next() is called on them. To iterate anew you’ll need to request a fresh iterator object with the iter()&nbsp;function.</p>
+<p>Now we know everything we need to write our BoundedRepeater class that stops iterating after a set number of&nbsp;repetitions:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">BoundedRepeater</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">max_repeats</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_repeats</span> <span class="o">=</span> <span class="n">max_repeats</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_repeats</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+
+
+<p>This gives us the desired result. Iteration stops after the number of repetitions defined in the max_repeats&nbsp;parameter:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">repeater</span> <span class="o">=</span> BoundedRepeater<span class="o">(</span><span class="s1">&#39;Hello&#39;</span>, 3<span class="o">)</span>
+&gt;&gt;&gt; <span class="k">for</span> item in repeater:
+        print<span class="o">(</span>item<span class="o">)</span>
+Hello
+Hello
+Hello
+</pre></div>
+
+
+<p>If we rewrite this last for-in loop example to take away some of the syntactic sugar, we end up with the following expanded code&nbsp;snippet:</p>
+<div class="codehilite"><pre><span></span><span class="n">repeater</span> <span class="o">=</span> <span class="n">BoundedRepeater</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">repeater</span><span class="p">)</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Every time next() is called in this loop we check for a StopIteration exception and break the while loop if&nbsp;necessary.</p>
+<p>Being able to write a three-line for-in loop instead of an eight lines long while loop is quite a nice improvement. It makes the code easier to read and more maintainable. And this is another reason why iterators in Python are such a powerful&nbsp;tool.</p>
+<h2>Python 2.x Compatible&nbsp;Iterators</h2>
+<p>All the code examples I showed here were written in Python 3. There’s a small but important difference between Python 2 and 3 when it comes to implementing class-based&nbsp;iterators:</p>
+<ul>
+<li>
+<p>In Python 3, the method that retrieves the next value from an iterator is called <strong>next</strong>.</p>
+</li>
+<li>
+<p>In Python 2, the same method is called next (no&nbsp;underscores).</p>
+</li>
+</ul>
+<p>This naming difference can lead to some trouble if you’re trying to write class-based iterators that should work on both versions of Python. Luckily there’s a simple approach you can take to work around this&nbsp;difference.</p>
+<p>Here’s an updated version of the InfiniteRepeater class that will work on both Python 2 and Python&nbsp;3:</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InfiniteRepeater</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="c1"># Python 2 compatibility:</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+</pre></div>
+
+
+<p>To make this iterator class compatible with Python 2 I’ve made two small changes to&nbsp;it:</p>
+<p>First, I added a next method that simply calls the original <strong>next</strong> and forwards its return value. This essentially creates an alias for the existing <strong>next</strong> implementation so that Python 2 finds it. That way we can support both versions of Python while still keeping all of the actual implementation details in one&nbsp;place.</p>
+<p>And second, I modified the class definition to inherit from object in order to ensure we’re creating a new-style class on Python 2. This has nothing to do with iterators specifically, but it’s a good practice&nbsp;nonetheless.</p>
+<h2>Python Iterators – A Quick&nbsp;Summary</h2>
+<ul>
+<li>
+<p>Iterators provide a sequence interface to Python objects that’s memory efficient and considered Pythonic. Behold the beauty of the for-in&nbsp;loop!</p>
+</li>
+<li>
+<p>To support iteration an object needs to implement the iterator protocol by providing the <strong>iter</strong> and <strong>next</strong> dunder&nbsp;methods.</p>
+</li>
+<li>
+<p>Class-based iterators are only one way to write iterable objects in Python. Also consider generators and generator&nbsp;expressions.</p>
+</li>
+</ul>
+<hr />
+<p>Related&nbsp;Articles:</p>
+<p><a href="https://dbader.org/blog/writing-clean-python-with-namedtuples">Writing Clean Python With Namedtuples</a> – Python comes with a specialized “namedtuple” container type that doesn’t seem to get the attention it deserves. It’s one of these amazing features in Python that’s hidden in plain&nbsp;sight.</p>
+<p><a href="https://dbader.org/blog/meaning-of-underscores-in-python">The Meaning of Underscores in Python</a> – The various meanings and naming conventions around single and double underscores (“dunder”) in Python, how name mangling works and how it affects your own Python&nbsp;classes.</p>
+<p><a href="https://dbader.org/blog/records-structs-and-data-transfer-objects-in-python">Records, Structs, and Data Transfer Objects in Python</a> – How to implement records, structs, and “plain old data objects” in Python using only built-in data types and classes from the standard&nbsp;library.</p>
+<p><a href="https://dbader.org/blog/python-dict-get-default-value">Using get() to return a default value from a Python dict</a> – Python’s dictionaries have a “get” method to look up a key while providing a fallback value. This short screencast tutorial gives you a real-world example where this might come in&nbsp;handy.</p>
+<p><a href="https://dbader.org/blog/python-mystery-dict-expression">A Python Riddle: The Craziest Dict Expression in the West</a> – Let’s pry apart this slightly unintuitive Python dictionary expression to find out what’s going on in the uncharted depths of the Python&nbsp;interpreter.</p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/python.html">Python</a>, <a href="../../../tag/iterators.html">Iterators</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/08/Python Iterators: A Step-By-Step Introduction.html';
+                //var disqus_url = '../../../posts/2017/08/Python Iterators: A Step-By-Step Introduction.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+<p class="copyright text-muted">
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="創用 CC 授權條款" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本著作係採用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款</a>授權. <br />
+
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />
+    <!--
+          <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'version': '4.0', 'name': 'creative commons attribution'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'slug': 'by', 'version': '4.0', 'name': 'creative commons attribution'}/4.0/80x15.png" /></a>
+    Content
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'version': '4.0', 'name': 'creative commons attribution'}/4.0/">Creative Commons Attribution{'slug': '', 'version': '4.0', 'name': 'creative commons attribution'} 4.0 International License</a>, except where indicated otherwise.
+
+    -->
+</p>            </div>
+        </div>
+    </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- Analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
+</body>
+
+</html>
