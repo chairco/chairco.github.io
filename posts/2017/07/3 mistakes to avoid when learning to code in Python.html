@@ -123,9 +123,6 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
-        <div class="twitter">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
         <hr />
 <p>關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python&nbsp;Code，卻跑出不可預期的結果著實讓人心煩。</p>
 <blockquote>
@@ -295,6 +292,13 @@
 <p>同樣，他也只是建立一個新的 dictionary 指標到同一個條目位置，因此假如我們有兩個相同 lists，我們改變其中一個指向可變物件 dict <code>a</code>，這個 dict 物件會立刻看到 dict <code>b</code> 被更動。</p>
 <p>這些可變變數的災難在於他們非常強大。上述都不是真正問題; 而是要被謹記於心以防止出錯。在第三個項目中使用昂貴的複製操作在 99%&nbsp;時間都是非必要的。你的程式應該要可以被修改讓這些複製不是非必要的。</p>
 <p>開心的的編寫程式，並且歡迎留言提出任何問題在意見評論表中。</p>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div class="fb">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&mobile_iframe=true&appId=242673589413437&width=61&height=23" width="61" height="23" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        </div>
+        <div class="g-plus" data-action="share"></div>
     </article>
 
         <div class="tags">
@@ -392,9 +396,9 @@
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/">Creative Commons Attribution{'slug': '', 'name': 'creative commons attribution', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'slug': '', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>
@@ -452,6 +456,12 @@
         var host = "chairco.com.tw";
         if ((host == window.location.host) && (window.location.protocol != "https:"))
             window.location.protocol = "https";
+    </script>
+
+    <!-- g plus -->
+    <!-- 將這個標記放在標頭中，或放在內文結尾標記前面。 -->
+    <script src="https://apis.google.com/js/platform.js" async defer>
+      {lang: 'zh-TW'}
     </script>
 </body>
 

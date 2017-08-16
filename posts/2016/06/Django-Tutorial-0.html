@@ -124,9 +124,6 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
-        <div class="twitter">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
         <p>Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 <a href="http://flask.pocoo.org/docs/0.11/">Flask</a>, Django&nbsp;真的比較複雜和較高的進入門檻。</p>
 <p>看了不少前輩的開發教學如 <a href="https://www.gitbook.com/book/djangogirlstaipei/django-girls-taipei-tutorial/details">Django Girl</a>, TP大的 <a href="https://github.com/uranusjr/django-tutorial-for-programmers">django-tutorial-for-programmers</a> 甚至是<a href="https://docs.djangoproject.com/en/1.9/intro/tutorial01/">Django 官方</a>網站的英文教學，還是經常會忘記或是做出不好維護的設定。因為 Django&nbsp;實在是一個有點複雜但又很有彈性的架構，因此沒有做好基本功，最後的悲劇就是怎麼改怎麼怪（雖然都能順利運作）覺得這就是對潔癖人士很大的&#8230;缺點吧？</p>
 <p>因為如此決定撰寫一系列從專案開發流程的 Django 系列教學文，也許更能釐清自己思路。決定這系列文應該會發 4&nbsp;篇。</p>
@@ -138,6 +135,13 @@
 <li>第四篇 <strong>展示和一些未來的 <span class="caps">TODO</span> List 和 What&#8217;s&nbsp;Next。</strong></li>
 </ul>
 <p>那就讓我們開始 Get the ball rolling  <code>!!</code></p>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div class="fb">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&mobile_iframe=true&appId=242673589413437&width=61&height=23" width="61" height="23" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        </div>
+        <div class="g-plus" data-action="share"></div>
     </article>
 
         <div class="tags">
@@ -235,9 +239,9 @@
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/">Creative Commons Attribution{'slug': '', 'name': 'creative commons attribution', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'slug': '', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>
@@ -295,6 +299,12 @@
         var host = "chairco.com.tw";
         if ((host == window.location.host) && (window.location.protocol != "https:"))
             window.location.protocol = "https";
+    </script>
+
+    <!-- g plus -->
+    <!-- 將這個標記放在標頭中，或放在內文結尾標記前面。 -->
+    <script src="https://apis.google.com/js/platform.js" async defer>
+      {lang: 'zh-TW'}
     </script>
 </body>
 

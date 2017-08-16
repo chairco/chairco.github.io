@@ -124,9 +124,6 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
-        <div class="twitter">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
         <hr />
 <blockquote>
 <p>寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility&nbsp;線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。</p>
@@ -169,13 +166,13 @@ the value Q − P is&nbsp;maximal.</p>
     <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-        <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">))</span>
     <span class="n">pairs</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
     <span class="n">minOriginalPos</span> <span class="o">=</span> <span class="n">N</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
         <span class="n">minOriginalPos</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minOriginalPos</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span> <span class="n">idx</span><span class="o">-</span><span class="n">minOriginalPos</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">idx</span><span class="o">-</span><span class="n">minOriginalPos</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result</span>
 </pre></div>
@@ -221,6 +218,13 @@ the value Q − P is&nbsp;maximal.</p>
 
 
 <p>大概這類題型變化不出這幾種，希望如果有機會大家遇到這樣考題可以有更多不一樣思考。</p>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div class="fb">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&mobile_iframe=true&appId=242673589413437&width=61&height=23" width="61" height="23" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        </div>
+        <div class="g-plus" data-action="share"></div>
     </article>
 
         <div class="tags">
@@ -318,9 +322,9 @@ the value Q − P is&nbsp;maximal.</p>
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/">Creative Commons Attribution{'slug': '', 'name': 'creative commons attribution', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'slug': '', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>
@@ -378,6 +382,12 @@ the value Q − P is&nbsp;maximal.</p>
         var host = "chairco.com.tw";
         if ((host == window.location.host) && (window.location.protocol != "https:"))
             window.location.protocol = "https";
+    </script>
+
+    <!-- g plus -->
+    <!-- 將這個標記放在標頭中，或放在內文結尾標記前面。 -->
+    <script src="https://apis.google.com/js/platform.js" async defer>
+      {lang: 'zh-TW'}
     </script>
 </body>
 
