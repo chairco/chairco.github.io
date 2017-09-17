@@ -5,7 +5,7 @@
         <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>用 Python 來理解動態規劃 (Dynamic Programming) 待續…</title>
+    <title>用 Python 來理解動態規劃 (Dynamic Programming)</title>
     
     <!-- Bootstrap Core CSS -->
     <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
 	<meta property="og:type" content="article">
             <meta property="article:author" content="../../../author/chaircojason.html">
 	<meta property="og:url" content="../../../posts/2017/08/Understand_Dynamic_Programming_usining_Python.html">
-	<meta property="og:title" content="用 Python 來理解動態規劃 (Dynamic Programming) 待續…">
+	<meta property="og:title" content="用 Python 來理解動態規劃 (Dynamic Programming)">
 	<meta property="article:published_time" content="2017-08-27 12:53:00+08:00">
             <meta property="og:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 先回顧分治法個概念: ...">
 
@@ -61,7 +61,7 @@
     
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@ChaircoChen">
-        <meta name="twitter:title" content="用 Python 來理解動態規劃 (Dynamic Programming) 待續…">
+        <meta name="twitter:title" content="用 Python 來理解動態規劃 (Dynamic Programming)">
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>用 Python 來理解動態規劃 (Dynamic Programming) 待續…</h1>
+                        <h1>用 Python 來理解動態規劃 (Dynamic Programming)</h1>
                         <span class="meta">Posted by
                                 <a href="../../../author/chaircojason.html">chairco(Jason)</a>
                              on  8 27, 2017
@@ -130,8 +130,8 @@
 <p>把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為&nbsp;遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。</p>
 </blockquote>
 <p>動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。</p>
-<h2>動態規劃經典問題</h2>
-<p>這邊整理了一些比較常見的 <span class="caps">DP</span>&nbsp;問題。</p>
+<h2>動態規劃簡單問題</h2>
+<p>這邊整理了一些比較常見簡單的 <span class="caps">DP</span>&nbsp;經典問題。</p>
 <h3>費式數列</h3>
 <p><strong>先前文章有稍微介紹</strong>，可以<a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html">參考</a>。</p>
 <hr />
@@ -212,8 +212,38 @@
 <h3>階乘</h3>
 <p>&lt;撰寫中&gt;</p>
 <hr />
-<h3>樓梯路線</h3>
-<p>&lt;撰寫中&gt;</p>
+<h3>樓梯路線（ Staircase Walk&nbsp;）</h3>
+<p>假設一個方格棋盤大小為<code>(x, y)</code>。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。</p>
+<p>用圖來看會比較清楚(圖引用自<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html">演算法網站</a>):
+<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" />
+<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting2.png" /></p>
+<p>所以就是從上面走來和從左邊走來相加就是走法。
+數學上來表達加總走法： c(i, j) = c(i-1, j) + c(i, j-1)。這樣就可以做遞迴了。
+<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting3.png" /></p>
+<p>所以概念就是建立一個二維陣列一個個 cell 把它加起來。
+<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting4.png" /></p>
+<p>首先程式碼先建立一個 <code>x*y</code> 的二維陣列，接著把 <code>x = 0</code>, <code>y = 0</code> 的位置都設為 1（因為從這個位置出發）
+接著每往左往下到達下一個 cell 就是將上和左的 cell&nbsp;相加。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="s2">&quot;由(0,0)到({},{})共有{}種走法&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">table</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+
+
 <hr />
 <h3>背包問題</h3>
 <p>&lt;撰寫中&gt;</p>
@@ -221,6 +251,8 @@
 <h3>找錢問題</h3>
 <p>&lt;撰寫中&gt;</p>
 <hr />
+<p>Reference:
++ <a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts">動態規劃題目</a></p>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
@@ -325,9 +357,9 @@
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'slug': 'by', 'name': 'creative commons attribution'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'version': '4.0', 'slug': 'by', 'name': 'creative commons attribution'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'slug': 'by', 'name': 'creative commons attribution'}/4.0/">Creative Commons Attribution{'version': '4.0', 'slug': '', 'name': 'creative commons attribution'} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'version': '4.0', 'slug': ''} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>
