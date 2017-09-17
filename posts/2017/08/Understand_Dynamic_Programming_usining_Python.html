@@ -214,14 +214,14 @@
 <hr />
 <h3>樓梯路線（ Staircase Walk&nbsp;）</h3>
 <p>假設一個方格棋盤大小為<code>(x, y)</code>。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。</p>
-<p>用圖來看會比較清楚(圖引用自<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html">演算法網站</a>):
-<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" />
+<p>用圖來看會比較清楚(圖引用自<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html">演算法網站</a>):</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" />
 <img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting2.png" /></p>
 <p>所以就是從上面走來和從左邊走來相加就是走法。
-數學上來表達加總走法： c(i, j) = c(i-1, j) + c(i, j-1)。這樣就可以做遞迴了。
-<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting3.png" /></p>
-<p>所以概念就是建立一個二維陣列一個個 cell 把它加起來。
-<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting4.png" /></p>
+數學上來表達加總走法： c(i, j) = c(i-1, j) + c(i,&nbsp;j-1)。這樣就可以做遞迴了。</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting3.png" /></p>
+<p>所以概念就是建立一個二維陣列一個個 cell&nbsp;把它加起來。</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting4.png" /></p>
 <p>首先程式碼先建立一個 <code>x*y</code> 的二維陣列，接著把 <code>x = 0</code>, <code>y = 0</code> 的位置都設為 1（因為從這個位置出發）
 接著每往左往下到達下一個 cell 就是將上和左的 cell&nbsp;相加。</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
