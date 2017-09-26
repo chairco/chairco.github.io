@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Python inspect 實用功能與一級函式 First-class function</title>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="../../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom CSS -->
+    <link href="../../../theme/css/clean-blog.min.css" rel="stylesheet">
+    <!--<link href="../../../css/clean-blog.min.css" rel="stylesheet">-->
+
+    <!-- So Firefox can bookmark->"abo this site" -->
+
+    <!-- Custom Fonts -->
+    <!--<link href="../../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>-->
+
+    <!-- Code highlight color scheme -->
+    <link href="../../../theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+        <meta name="description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+
+        <meta name="author" content="chairco(Jason)">
+
+        <meta name="tags" content="Python">
+        <meta name="tags" content="Inspect">
+
+	    <meta property="og:locale" content="">
+    <meta property="og:site_name" content="Jason's Blog">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="../../../author/chaircojason.html">
+	<meta property="og:url" content="../../../posts/2017/09/Python useful module inspect and first class function.html">
+	<meta property="og:title" content="Python inspect 實用功能與一級函式 First-class function">
+	<meta property="article:published_time" content="2017-09-26 20:17:31+08:00">
+            <meta property="og:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+
+            <meta property="og:image" content="../../../theme/images/post-bg.jpg">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ChaircoChen">
+        <meta name="twitter:title" content="Python inspect 實用功能與一級函式 First-class function">
+
+            <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
+        
+            <meta name="twitter:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                    <!--<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>-->
+                </button>
+                <a class="navbar-brand" href="../../../">Jason's Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="/categories.html">Categories</a></li>
+                <li><a href="/tags.html">Tags</a></li>
+                <li><a href="/feeds/all.atom.xml">RSS</a></li>
+                <li><a href="../../../pages/about-me/">About&nbsp;Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('../../../theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Python inspect 實用功能與一級函式 First-class function</h1>
+                        <span class="meta">Posted by
+                                <a href="../../../author/chaircojason.html">chairco(Jason)</a>
+                             on  9 26, 2017
+                        </span>
+                            <span class="meta">Updated on  9 26, 2017</span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p><img alt="#" src="https://www.python.org/static/img/python-logo@2x.png" /></p>
+<h2>起因</h2>
+<p>因為試著使用 Python 內的 <strong>inspect module</strong>， 發現可以透過 <code>inspect.signature</code> 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 <code>int</code> 形態。</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; from functools import wraps
+&gt;&gt;&gt; def checked<span class="o">(</span>func<span class="o">)</span>:
+...     <span class="nv">ann</span> <span class="o">=</span> func.__annotations__
+...     <span class="nv">sig</span> <span class="o">=</span> inspect.signature<span class="o">(</span>func<span class="o">)</span>
+...     @wraps<span class="o">(</span>func<span class="o">)</span>
+...     def wrapper<span class="o">(</span>*args, **kwargs<span class="o">)</span>:
+...         <span class="nv">bound</span> <span class="o">=</span> sig.bind<span class="o">(</span>*args, **kwargs<span class="o">)</span>
+...         <span class="k">for</span> name, val in bound.arguments.items<span class="o">()</span>:
+...             <span class="k">if</span> name in ann:
+...                 assert isinstance<span class="o">(</span>val, ann<span class="o">[</span>name<span class="o">])</span>, <span class="se">\</span>
+...                     f<span class="s1">&#39;Expected {ann[name]}&#39;</span>
+...         <span class="k">return</span> func<span class="o">(</span>*args, **kwargs<span class="o">)</span>
+...     <span class="k">return</span> wrapper
+... 
+&gt;&gt;&gt; @checked
+... def gcd<span class="o">(</span>a: int, b: int<span class="o">)</span> -&gt; int:
+...     <span class="k">while</span> b:
+...         a, <span class="nv">b</span> <span class="o">=</span> b, a % b
+...     <span class="k">return</span> a
+... 
+&gt;&gt;&gt; gcd<span class="o">(</span>2.7, 3.6<span class="o">)</span>
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 1, in &lt;module&gt;
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 9, in wrapper
+AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
+&gt;&gt;&gt; gcd<span class="o">(</span>27, 36<span class="o">)</span>
+9
+&gt;&gt;&gt;
+</pre></div>
+
+
+<p>既然都做了這件事就順便來複習一下 Python&nbsp;一級函式的概念。</p>
+<h2>萬物皆是物件</h2>
+<p>因此在 Python 內函式也是種物件，現在我們可以嘗試建立一個函式讀取 <code>__doc__</code> 屬性，接著可以看到函式物件本身就是 function&nbsp;類別實例：</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; def factorial<span class="o">(</span>n<span class="o">)</span>:
+...     <span class="s1">&#39;&#39;&#39;return n!&#39;&#39;&#39;</span>
+...     <span class="k">return</span> <span class="m">1</span> <span class="k">if</span> n &lt; <span class="m">2</span> <span class="k">else</span> n * factorial<span class="o">(</span>n-1<span class="o">)</span>
+... 
+&gt;&gt;&gt; factorial<span class="o">(</span>10<span class="o">)</span>
+3628800
+&gt;&gt;&gt; factorial.__doc__
+<span class="s1">&#39;return n!&#39;</span>
+&gt;&gt;&gt; type<span class="o">(</span>factorial<span class="o">)</span>
+&lt;class <span class="s1">&#39;function&#39;</span>&gt;
+&gt;&gt;&gt; 
+</pre></div>
+
+
+<p>因此我們也就可以將函式做變數來指派並且用變數呼叫，也可以將函式作為引數傳遞：</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">fact</span> <span class="o">=</span> factorial
+&gt;&gt;&gt; fact
+&lt;<span class="k">function</span> factorial at 0x10d96f9d8&gt;
+&gt;&gt;&gt; map<span class="o">(</span>fact, range<span class="o">(</span>10<span class="o">))</span>
+&lt;map object at 0x10d9821d0&gt;
+&gt;&gt;&gt; list<span class="o">(</span>map<span class="o">(</span>fact, range<span class="o">(</span>10<span class="o">)))</span>
+<span class="o">[</span>1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880<span class="o">]</span>
+</pre></div>
+
+
+<p>除了可以讓使用者<strong>自訂函式</strong>外還有其他呼叫型態，像是<strong>內建函式</strong>、<strong>內建方法</strong>、<strong>方法</strong>、<strong>類別</strong>、<strong>類別實例</strong>、<strong>產生器</strong>。可以用 callable()&nbsp;來確認是否可以呼叫。</p>
+<h2>函式自我檢查</h2>
+<p>除了前面提到 <code>__doc__</code> 的屬性外還有其他:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; dir<span class="o">(</span>factorial<span class="o">)</span>
+<span class="o">[</span><span class="s1">&#39;__annotations__&#39;</span>, <span class="s1">&#39;__call__&#39;</span>, <span class="s1">&#39;__class__&#39;</span>, <span class="s1">&#39;__closure__&#39;</span>, <span class="s1">&#39;__code__&#39;</span>, <span class="s1">&#39;__defaults__&#39;</span>, <span class="s1">&#39;__delattr__&#39;</span>, <span class="s1">&#39;__dict__&#39;</span>, <span class="s1">&#39;__dir__&#39;</span>, <span class="s1">&#39;__doc__&#39;</span>, <span class="s1">&#39;__eq__&#39;</span>, <span class="s1">&#39;__format__&#39;</span>, <span class="s1">&#39;__ge__&#39;</span>, <span class="s1">&#39;__get__&#39;</span>, <span class="s1">&#39;__getattribute__&#39;</span>, <span class="s1">&#39;__globals__&#39;</span>, <span class="s1">&#39;__gt__&#39;</span>, <span class="s1">&#39;__hash__&#39;</span>, <span class="s1">&#39;__init__&#39;</span>, <span class="s1">&#39;__init_subclass__&#39;</span>, <span class="s1">&#39;__kwdefaults__&#39;</span>, <span class="s1">&#39;__le__&#39;</span>, <span class="s1">&#39;__lt__&#39;</span>, <span class="s1">&#39;__module__&#39;</span>, <span class="s1">&#39;__name__&#39;</span>, <span class="s1">&#39;__ne__&#39;</span>, <span class="s1">&#39;__new__&#39;</span>, <span class="s1">&#39;__qualname__&#39;</span>, <span class="s1">&#39;__reduce__&#39;</span>, <span class="s1">&#39;__reduce_ex__&#39;</span>, <span class="s1">&#39;__repr__&#39;</span>, <span class="s1">&#39;__setattr__&#39;</span>, <span class="s1">&#39;__sizeof__&#39;</span>, <span class="s1">&#39;__str__&#39;</span>, <span class="s1">&#39;__subclasshook__&#39;</span><span class="o">]</span>
+</pre></div>
+
+
+<p>接著看看空函式以及空類別在實例函式的差異</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; class C: pass
+... 
+&gt;&gt;&gt; <span class="nv">obj</span> <span class="o">=</span> C<span class="o">()</span>
+&gt;&gt;&gt; def func<span class="o">()</span>: pass
+... 
+&gt;&gt;&gt; sorted<span class="o">(</span>set<span class="o">(</span>dir<span class="o">(</span>func<span class="o">))</span> - set<span class="o">(</span>dir<span class="o">(</span>C<span class="o">)))</span>
+<span class="o">[</span><span class="s1">&#39;__annotations__&#39;</span>, <span class="s1">&#39;__call__&#39;</span>, <span class="s1">&#39;__closure__&#39;</span>, <span class="s1">&#39;__code__&#39;</span>, <span class="s1">&#39;__defaults__&#39;</span>, <span class="s1">&#39;__get__&#39;</span>, <span class="s1">&#39;__globals__&#39;</span>, <span class="s1">&#39;__kwdefaults__&#39;</span>, <span class="s1">&#39;__name__&#39;</span>, <span class="s1">&#39;__qualname__&#39;</span><span class="o">]</span>
+</pre></div>
+
+
+<p>這個差集就是自訂函式地屬行，這些屬性其中的也可以用來作為傳入函式引數的檢查。</p>
+<h2>使用關鍵字參數</h2>
+<p>使用 <code>*args</code> 以及 <code>**kwargs</code> 是 Python&nbsp;內傳遞參數很方便的方法。</p>
+<p>註: cls 是 Python 3 用來傳遞 class&nbsp;屬性</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">content</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generte one or more html tags&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span>
+    <span class="k">if</span> <span class="n">attrs</span><span class="p">:</span>
+        <span class="n">attr_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; </span><span class="si">%s</span><span class="s1">=&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                           <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span>
+                           <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">attr_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&lt;</span><span class="si">%s%s</span><span class="s1">&gt;</span><span class="si">%s</span><span class="s1">&lt;/</span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span>
+                        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attr_st</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">content</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s%s</span><span class="s1"> /&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attr_str</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">33</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s1">&#39;sidebar&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s1">&#39;testing&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;img&#39;</span><span class="p">))</span>
+    <span class="n">my_tag</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Sunset Boulevard&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="s1">&#39;sunset.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;cls&#39;</span><span class="p">:</span> <span class="s1">&#39;framed&#39;</span><span class="p">}</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="o">**</span><span class="n">my_tag</span><span class="p">))</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>&lt;br /&gt;
+&lt;p&gt;hello&lt;/p&gt;
+
+&lt;p&gt;hello&lt;/p&gt;
+&lt;p&gt;world&lt;/p&gt;
+
+&lt;p <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;33&quot;</span>&gt;hello&lt;/p&gt;
+
+&lt;p <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;sidebar&quot;</span>&gt;hello&lt;/p&gt;
+&lt;p <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;sidebar&quot;</span>&gt;world&lt;/p&gt;
+
+&lt;img <span class="nv">content</span><span class="o">=</span><span class="s2">&quot;testing&quot;</span> /&gt;
+
+&lt;img <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;framed&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;sunset.jpg&quot;</span> <span class="nv">title</span><span class="o">=</span><span class="s2">&quot;Sunset Boulevard&quot;</span> /&gt;
+</pre></div>
+
+
+<p>但要如何讓函式知道需要有什麼參數與是否有預設值呢？在前面我們有提到函式物件內 <code>__default__</code> 它會保存一個 tuple，裡頭有定位與關鍵字引數的預設值。關鍵字引數預設值會被存在 <code>__kwdefaults__</code>，引數的名稱則放在 <code>__code__</code> 屬性。這些屬性內可以用來讓我們判斷參數的性質。</p>
+<p>但從這些屬性內來判定實在不方便，這時開始要用到前面提到一個很棒的 Python module: <code>inspect</code>。</p>
+<p><code>inspect.signature</code> 可以將函式回傳一個 <code>inspect.Signature</code> 的物件，裡頭有個 <code>parameters</code> 屬性讓你讀取 inspect.Parameter&nbsp;物件有序名稱映射:</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; def bob<span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span>123<span class="o">)</span>:
+...     <span class="k">if</span> <span class="nv">a</span> <span class="o">==</span> <span class="s1">&#39;Hello&#39;</span>:
+...         <span class="k">return</span> b
+...     <span class="k">else</span>:
+...         <span class="k">return</span> 321
+... 
+&gt;&gt;&gt; from inspect import signature
+&gt;&gt;&gt; <span class="nv">sig</span> <span class="o">=</span> signature<span class="o">(</span>bob<span class="o">)</span>
+&gt;&gt;&gt; sig
+&lt;Signature <span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span>123<span class="o">)</span>&gt;
+&gt;&gt;&gt; <span class="k">for</span> n, p in sig.parameters.items<span class="o">()</span>:
+...     print<span class="o">(</span>p.kind, <span class="s1">&#39;:&#39;</span>, n, <span class="s1">&#39;=&#39;</span>, p.default<span class="o">)</span>
+POSITIONAL_OR_KEYWORD : <span class="nv">a</span> <span class="o">=</span> &lt;class <span class="s1">&#39;inspect._empty&#39;</span>&gt;
+POSITIONAL_OR_KEYWORD : <span class="nv">b</span> <span class="o">=</span> 123
+</pre></div>
+
+
+<p><code>inspect.Signature</code> 內有個 bind 方法用來取用任何數量的參數，並指派給簽章內參數。下面可以見到我們將 bind 方法內 <code>arguments.items()</code> 印出所有參數。</p>
+<p>另外強制移除參數後會告訴我們缺少移除的參數。</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; from tags_test import tag
+&gt;&gt;&gt; import inspect
+&gt;&gt;&gt; <span class="nv">my_tag</span> <span class="o">=</span> <span class="o">{</span><span class="s1">&#39;name&#39;</span>:<span class="s1">&#39;img&#39;</span>, <span class="s1">&#39;title&#39;</span>: <span class="s1">&#39;Sunset Boulevard&#39;</span>,
+...               <span class="s1">&#39;src&#39;</span>: <span class="s1">&#39;sunset.jpg&#39;</span>, <span class="s1">&#39;cls&#39;</span>: <span class="s1">&#39;framed&#39;</span><span class="o">}</span>
+&gt;&gt;&gt; <span class="nv">sig</span> <span class="o">=</span> inspect.signature<span class="o">(</span>tag<span class="o">)</span>
+&gt;&gt;&gt; <span class="nv">bound_args</span> <span class="o">=</span> sig.bind<span class="o">(</span>**my_tag<span class="o">)</span>
+&gt;&gt;&gt; bound_args
+&lt;BoundArguments <span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;img&#39;</span>, <span class="nv">cls</span><span class="o">=</span><span class="s1">&#39;framed&#39;</span>, <span class="nv">attrs</span><span class="o">={</span><span class="s1">&#39;title&#39;</span>: <span class="s1">&#39;Sunset Boulevard&#39;</span>, <span class="s1">&#39;src&#39;</span>: <span class="s1">&#39;sunset.jpg&#39;</span><span class="o">})</span>&gt;
+&gt;&gt;&gt; <span class="k">for</span> n, v in bound_args.arguments.items<span class="o">()</span>:
+...     print<span class="o">(</span>n, <span class="s1">&#39;=&#39;</span>, v<span class="o">)</span>
+... 
+<span class="nv">name</span> <span class="o">=</span> img
+<span class="nv">cls</span> <span class="o">=</span> framed
+<span class="nv">attrs</span> <span class="o">=</span> <span class="o">{</span><span class="s1">&#39;title&#39;</span>: <span class="s1">&#39;Sunset Boulevard&#39;</span>, <span class="s1">&#39;src&#39;</span>: <span class="s1">&#39;sunset.jpg&#39;</span><span class="o">}</span>
+&gt;&gt;&gt; del my_tag<span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span>
+&gt;&gt;&gt; <span class="nv">bound_args</span> <span class="o">=</span> sig.bind<span class="o">(</span>**my_tag<span class="o">)</span>
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 1, in &lt;module&gt;
+  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line 2934, in <span class="nb">bind</span>
+    <span class="k">return</span> args<span class="o">[</span>0<span class="o">]</span>._bind<span class="o">(</span>args<span class="o">[</span>1:<span class="o">]</span>, kwargs<span class="o">)</span>
+  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line 2849, in _bind
+    raise TypeError<span class="o">(</span>msg<span class="o">)</span> from None
+TypeError: missing a required argument: <span class="s1">&#39;name&#39;</span>
+</pre></div>
+
+
+<p>另外 <code>__annotation__</code> 也以 dict 存放參數與回傳註釋。因此在檢查參數形態就可以與 bind 方法內的 <code>arguments.items()</code>來做比較。當我們在撰寫函式時可以利用 inspect&nbsp;這個模組協助參數檢查。</p>
+<hr />
+<p>其實 Python 內的一級函式真的是有很多東西可以來提。大概就簡單從 inspect&nbsp;這個套件回顧，並且說明為什麼可以用這個套件來做參數檢查用。</p>
+        <div class="twitter">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div class="fb">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&mobile_iframe=true&appId=242673589413437&width=61&height=23" width="61" height="23" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        </div>
+        <div class="g-plus" data-action="share"></div>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="../../../tag/python.html">Python</a>, <a href="../../../tag/inspect.html">Inspect</a></p>
+        </div>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                //var disqus_identifier = 'posts/2017/09/Python useful module inspect and first class function.html';
+                //var disqus_url = '../../../posts/2017/09/Python useful module inspect and first class function.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//chairco.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/ChaircoChen">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/chairco">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://chairco.com.tw/feeds/all.atom.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:chairco@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            </ul>
+<p class="copyright text-muted">
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="創用 CC 授權條款" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本著作係採用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">創用 CC 姓名標示-相同方式分享 4.0 國際 授權條款</a>授權. <br />
+
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />
+    <!--
+          <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/80x15.png" /></a>
+    Content
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/">Creative Commons Attribution{'version': '4.0', 'name': 'creative commons attribution', 'slug': ''} 4.0 International License</a>, except where indicated otherwise.
+
+    -->
+</p>            </div>
+        </div>
+    </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="../../../theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../../theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../../../theme/js/clean-blog.min.js"></script>
+    
+    <!-- Analysis -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-79798833-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+    
+    <!-- DISQUS -->
+    <script type="text/javascript">
+        var disqus_shortname = 'chairco';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<!--
+    <section>
+        <h2>Discuss</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = 'chairco';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+    </section>
+-->    
+    <!-- Redirect HTTP to HTTPS -->
+    <script type="text/javascript">
+        var host = "chairco.com.tw";
+        if ((host == window.location.host) && (window.location.protocol != "https:"))
+            window.location.protocol = "https";
+    </script>
+
+    <!-- g plus -->
+    <!-- 將這個標記放在標頭中，或放在內文結尾標記前面。 -->
+    <script src="https://apis.google.com/js/platform.js" async defer>
+      {lang: 'zh-TW'}
+    </script>
+</body>
+
+</html>
