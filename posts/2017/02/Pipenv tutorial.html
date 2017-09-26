@@ -229,6 +229,7 @@
 感覺像是環境變數問題，<a href="https://github.com/kennethreitz/pipenv/issues/415">issue#415</a> 有人在聊但沒仔細看。現在是安裝完成後可以 <code>pipenv --venv</code> 然後直接手動去吃環境變數。有點蠢。</p>
 </li>
 </ul>
+<p>更新: 後來找到原因，因為我<a href="https://github.com/kennethreitz/pipenv/issues/237">安裝 pyenv 導致</a>。解決方法是 pipenv shell &#8212;compat 或是 set the PIPENV_SHELL_COMPAT environment variable in your&nbsp;shell。</p>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
@@ -333,9 +334,9 @@
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'version': '4.0', 'slug': 'by'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'version': '4.0', 'slug': ''} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'version': '4.0', 'name': 'creative commons attribution', 'slug': 'by'}/4.0/">Creative Commons Attribution{'version': '4.0', 'name': 'creative commons attribution', 'slug': ''} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>
