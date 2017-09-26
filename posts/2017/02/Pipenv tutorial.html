@@ -229,7 +229,15 @@
 感覺像是環境變數問題，<a href="https://github.com/kennethreitz/pipenv/issues/415">issue#415</a> 有人在聊但沒仔細看。現在是安裝完成後可以 <code>pipenv --venv</code> 然後直接手動去吃環境變數。有點蠢。</p>
 </li>
 </ul>
-<p>更新: 後來找到原因，因為我<a href="https://github.com/kennethreitz/pipenv/issues/237">安裝 pyenv 導致</a>。解決方法是 pipenv shell &#8212;compat 或是 set the PIPENV_SHELL_COMPAT environment variable in your&nbsp;shell。</p>
+<p><strong>2017-09-26 更新</strong>: 後來找到原因，因為安裝 pyenv 導致，原因在 <a href="https://github.com/kennethreitz/pipenv/issues/184">issue#184</a>。解決<a href="https://github.com/kennethreitz/pipenv/issues/237">方法</a>):</p>
+<ul>
+<li>
+<p><code>pipenv shell --compat</code>  或是</p>
+</li>
+<li>
+<p>在環境變數設定 <code>export PIPENV_SHELL_COMPAT=true</code>。</p>
+</li>
+</ul>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
