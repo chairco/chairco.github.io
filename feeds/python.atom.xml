@@ -1,5 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/python.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-08-02T22:45:02+08:00</updated><entry><title>寇汀技巧系列之 Max Distance Monotonic</title><link href="https://chairco.com.tw/posts/2017/08/serice%20of%20coding%20skill%20of%20Max%20Distance%20Monotonic.html" rel="alternate"></link><published>2017-08-02T22:45:02+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-08-02:posts/2017/08/serice of coding skill of Max Distance Monotonic.html</id><summary type="html">&lt;hr /&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/python.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-09-26T20:17:31+08:00</updated><entry><title>Python inspect 實用功能與一級函式 First-class function</title><link href="https://chairco.com.tw/posts/2017/09/Python%20useful%20module%20inspect%20and%20first%20class%20function.html" rel="alternate"></link><published>2017-09-26T20:17:31+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-09-26:posts/2017/09/Python useful module inspect and first class function.html</id><summary type="html">&lt;p&gt;&lt;img alt="#" src="https://www.python.org/static/img/python-logo@2x.png" /&gt;&lt;/p&gt;
+&lt;h2&gt;起因&lt;/h2&gt;
+&lt;p&gt;因為試著使用 Python 內的 &lt;strong&gt;inspect module&lt;/strong&gt;， 發現可以透過 &lt;code&gt;inspect.signature&lt;/code&gt; 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 &lt;code&gt;int&lt;/code&gt; 形態。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; from functools import wraps
+&amp;gt;&amp;gt;&amp;gt; def checked&lt;span class="o"&gt;(&lt;/span&gt;func&lt;span class="o"&gt;)&lt;/span&gt;:
+...     &lt;span class="nv"&gt;ann&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; func.__annotations__
+...     &lt;span class="nv"&gt;sig&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; inspect.signature&lt;span class="o"&gt;(&lt;/span&gt;func&lt;span class="o"&gt;)&lt;/span&gt;
+...     @wraps&lt;span class="o"&gt;(&lt;/span&gt;func&lt;span class="o"&gt;)&lt;/span&gt;
+...     def wrapper&lt;span class="o"&gt;(&lt;/span&gt;*args, **kwargs&lt;span class="o"&gt;)&lt;/span&gt;:
+...         &lt;span class="nv"&gt;bound&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; sig.bind&lt;span class="o"&gt;(&lt;/span&gt;*args, **kwargs&lt;span class="o"&gt;)&lt;/span&gt;
+...         &lt;span class="k"&gt;for&lt;/span&gt; name, val in bound.arguments.items&lt;span class="o"&gt;()&lt;/span&gt;:
+...             &lt;span class="k"&gt;if&lt;/span&gt; name in ann:
+...                 assert isinstance&lt;span class="o"&gt;(&lt;/span&gt;val, ann&lt;span class="o"&gt;[&lt;/span&gt;name&lt;span class="o"&gt;])&lt;/span&gt;, &lt;span class="se"&gt;\&lt;/span&gt;
+...                     f&lt;span class="s1"&gt;&amp;#39;Expected {ann[name]}&amp;#39;&lt;/span&gt;
+...         &lt;span class="k"&gt;return&lt;/span&gt; func&lt;span class="o"&gt;(&lt;/span&gt;*args, **kwargs&lt;span class="o"&gt;)&lt;/span&gt;
+...     &lt;span class="k"&gt;return&lt;/span&gt; wrapper
+... 
+&amp;gt;&amp;gt;&amp;gt; @checked
+... def gcd&lt;span class="o"&gt;(&lt;/span&gt;a: int, b: int&lt;span class="o"&gt;)&lt;/span&gt; -&amp;gt; int:
+...     &lt;span class="k"&gt;while&lt;/span&gt; b:
+...         a, &lt;span class="nv"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; b, a % b
+...     &lt;span class="k"&gt;return&lt;/span&gt; a
+... 
+&amp;gt;&amp;gt;&amp;gt; gcd&lt;span class="o"&gt;(&lt;/span&gt;2.7, 3.6&lt;span class="o"&gt;)&lt;/span&gt;
+Traceback &lt;span class="o"&gt;(&lt;/span&gt;most recent call last&lt;span class="o"&gt;)&lt;/span&gt;:
+  File &lt;span class="s2"&gt;&amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;&lt;/span&gt;, line 1, in &amp;lt;module&amp;gt;
+  File &lt;span class="s2"&gt;&amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;&lt;/span&gt;, line 9, in wrapper
+AssertionError: Expected &amp;lt;class &lt;span class="s1"&gt;&amp;#39;int&amp;#39;&lt;/span&gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; gcd&lt;span class="o"&gt;(&lt;/span&gt;27, 36&lt;span class="o"&gt;)&lt;/span&gt;
+9
+&amp;gt;&amp;gt;&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;既然都做了這件事就順便來複習一下 Python&amp;nbsp;一級函式的概念。&lt;/p&gt;
+&lt;h2&gt;萬物皆是物件&lt;/h2&gt;
+&lt;p&gt;因此在 Python 內函式也是種物件，現在我們可以嘗試建立一個函式讀取 &lt;code&gt;__doc__&lt;/code&gt; 屬性，接著可以看到函式物件本身就是 function&amp;nbsp;類別實例：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; def factorial&lt;span class="o"&gt;(&lt;/span&gt;n&lt;span class="o"&gt;)&lt;/span&gt;:
+...     &lt;span class="s1"&gt;&amp;#39;&amp;#39;&amp;#39;return n!&amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
+...     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; n &amp;lt; &lt;span class="m"&gt;2&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; n * factorial&lt;span class="o"&gt;(&lt;/span&gt;n-1&lt;span class="o"&gt;)&lt;/span&gt;
+... 
+&amp;gt;&amp;gt;&amp;gt; factorial&lt;span class="o"&gt;(&lt;/span&gt;10&lt;span class="o"&gt;)&lt;/span&gt;
+3628800
+&amp;gt;&amp;gt;&amp;gt; factorial.__doc__
+&lt;span class="s1"&gt;&amp;#39;return n!&amp;#39;&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; type&lt;span class="o"&gt;(&lt;/span&gt;factorial&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;lt;class &lt;span class="s1"&gt;&amp;#39;function&amp;#39;&lt;/span&gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;因此我們也就可以將函式做變數來指派並且用變數呼叫，也可以將函式作為引數傳遞：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;fact&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; factorial
+&amp;gt;&amp;gt;&amp;gt; fact
+&amp;lt;&lt;span class="k"&gt;function&lt;/span&gt; factorial at 0x10d96f9d8&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; map&lt;span class="o"&gt;(&lt;/span&gt;fact, range&lt;span class="o"&gt;(&lt;/span&gt;10&lt;span class="o"&gt;))&lt;/span&gt;
+&amp;lt;map object at 0x10d9821d0&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; list&lt;span class="o"&gt;(&lt;/span&gt;map&lt;span class="o"&gt;(&lt;/span&gt;fact, range&lt;span class="o"&gt;(&lt;/span&gt;10&lt;span class="o"&gt;)))&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;除了可以讓使用者&lt;strong&gt;自訂函式&lt;/strong&gt;外還有其他呼叫型態，像是&lt;strong&gt;內建函式&lt;/strong&gt;、&lt;strong&gt;內建方法&lt;/strong&gt;、&lt;strong&gt;方法&lt;/strong&gt;、&lt;strong&gt;類別&lt;/strong&gt;、&lt;strong&gt;類別實例&lt;/strong&gt;、&lt;strong&gt;產生器&lt;/strong&gt;。可以用 callable()&amp;nbsp;來確認是否可以呼叫。&lt;/p&gt;
+&lt;h2&gt;函式自我檢查&lt;/h2&gt;
+&lt;p&gt;除了前面提到 &lt;code&gt;__doc__&lt;/code&gt; 的屬性外還有其他:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; dir&lt;span class="o"&gt;(&lt;/span&gt;factorial&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;__annotations__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__call__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__class__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__closure__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__code__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__defaults__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__delattr__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__dict__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__dir__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__doc__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__eq__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__format__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__ge__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__get__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__getattribute__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__globals__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__gt__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__hash__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__init__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__init_subclass__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__kwdefaults__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__le__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__lt__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__module__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__name__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__ne__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__new__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__qualname__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__reduce__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__reduce_ex__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__repr__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__setattr__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__sizeof__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__str__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__subclasshook__&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著看看空函式以及空類別在實例函式的差異&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; class C: pass
+... 
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;obj&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; C&lt;span class="o"&gt;()&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; def func&lt;span class="o"&gt;()&lt;/span&gt;: pass
+... 
+&amp;gt;&amp;gt;&amp;gt; sorted&lt;span class="o"&gt;(&lt;/span&gt;set&lt;span class="o"&gt;(&lt;/span&gt;dir&lt;span class="o"&gt;(&lt;/span&gt;func&lt;span class="o"&gt;))&lt;/span&gt; - set&lt;span class="o"&gt;(&lt;/span&gt;dir&lt;span class="o"&gt;(&lt;/span&gt;C&lt;span class="o"&gt;)))&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;__annotations__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__call__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__closure__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__code__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__defaults__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__get__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__globals__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__kwdefaults__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__name__&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;__qualname__&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個差集就是自訂函式地屬行，這些屬性其中的也可以用來作為傳入函式引數的檢查。&lt;/p&gt;
+&lt;h2&gt;使用關鍵字參數&lt;/h2&gt;
+&lt;p&gt;使用 &lt;code&gt;*args&lt;/code&gt; 以及 &lt;code&gt;**kwargs&lt;/code&gt; 是 Python&amp;nbsp;內傳遞參數很方便的方法。&lt;/p&gt;
+&lt;p&gt;註: cls 是 Python 3 用來傳遞 class&amp;nbsp;屬性&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;attrs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Generte one or more html tags&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;cls&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;attrs&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;class&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cls&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;attrs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;attr_str&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39; &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;=&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;quot;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                           &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+                           &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;sorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;attrs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;attr_str&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;&lt;/span&gt;&lt;span class="si"&gt;%s%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;gt;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s1"&gt;&amp;gt;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;
+                        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;attr_st&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;&amp;lt;&lt;/span&gt;&lt;span class="si"&gt;%s%s&lt;/span&gt;&lt;span class="s1"&gt; /&amp;gt;&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;attr_str&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;br&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;hello&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;hello&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;world&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;hello&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;33&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;p&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;hello&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;world&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;sidebar&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;testing&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;img&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="n"&gt;my_tag&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;img&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;title&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Sunset Boulevard&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;sunset.jpg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;cls&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;framed&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;my_tag&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;br /&amp;gt;
+&amp;lt;p&amp;gt;hello&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;hello&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;world&amp;lt;/p&amp;gt;
+
+&amp;lt;p &lt;span class="nv"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;33&amp;quot;&lt;/span&gt;&amp;gt;hello&amp;lt;/p&amp;gt;
+
+&amp;lt;p &lt;span class="nv"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;sidebar&amp;quot;&lt;/span&gt;&amp;gt;hello&amp;lt;/p&amp;gt;
+&amp;lt;p &lt;span class="nv"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;sidebar&amp;quot;&lt;/span&gt;&amp;gt;world&amp;lt;/p&amp;gt;
+
+&amp;lt;img &lt;span class="nv"&gt;content&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;testing&amp;quot;&lt;/span&gt; /&amp;gt;
+
+&amp;lt;img &lt;span class="nv"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;framed&amp;quot;&lt;/span&gt; &lt;span class="nv"&gt;src&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;sunset.jpg&amp;quot;&lt;/span&gt; &lt;span class="nv"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Sunset Boulevard&amp;quot;&lt;/span&gt; /&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;但要如何讓函式知道需要有什麼參數與是否有預設值呢？在前面我們有提到函式物件內 &lt;code&gt;__default__&lt;/code&gt; 它會保存一個 tuple，裡頭有定位與關鍵字引數的預設值。關鍵字引數預設值會被存在 &lt;code&gt;__kwdefaults__&lt;/code&gt;，引數的名稱則放在 &lt;code&gt;__code__&lt;/code&gt; 屬性。這些屬性內可以用來讓我們判斷參數的性質。&lt;/p&gt;
+&lt;p&gt;但從這些屬性內來判定實在不方便，這時開始要用到前面提到一個很棒的 Python module: &lt;code&gt;inspect&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;inspect.signature&lt;/code&gt; 可以將函式回傳一個 &lt;code&gt;inspect.Signature&lt;/code&gt; 的物件，裡頭有個 &lt;code&gt;parameters&lt;/code&gt; 屬性讓你讀取 inspect.Parameter&amp;nbsp;物件有序名稱映射:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; def bob&lt;span class="o"&gt;(&lt;/span&gt;a, &lt;span class="nv"&gt;b&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;123&lt;span class="o"&gt;)&lt;/span&gt;:
+...     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nv"&gt;a&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Hello&amp;#39;&lt;/span&gt;:
+...         &lt;span class="k"&gt;return&lt;/span&gt; b
+...     &lt;span class="k"&gt;else&lt;/span&gt;:
+...         &lt;span class="k"&gt;return&lt;/span&gt; 321
+... 
+&amp;gt;&amp;gt;&amp;gt; from inspect import signature
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;sig&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; signature&lt;span class="o"&gt;(&lt;/span&gt;bob&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; sig
+&amp;lt;Signature &lt;span class="o"&gt;(&lt;/span&gt;a, &lt;span class="nv"&gt;b&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;123&lt;span class="o"&gt;)&lt;/span&gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="k"&gt;for&lt;/span&gt; n, p in sig.parameters.items&lt;span class="o"&gt;()&lt;/span&gt;:
+...     print&lt;span class="o"&gt;(&lt;/span&gt;p.kind, &lt;span class="s1"&gt;&amp;#39;:&amp;#39;&lt;/span&gt;, n, &lt;span class="s1"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;, p.default&lt;span class="o"&gt;)&lt;/span&gt;
+POSITIONAL_OR_KEYWORD : &lt;span class="nv"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &amp;lt;class &lt;span class="s1"&gt;&amp;#39;inspect._empty&amp;#39;&lt;/span&gt;&amp;gt;
+POSITIONAL_OR_KEYWORD : &lt;span class="nv"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; 123
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;inspect.Signature&lt;/code&gt; 內有個 bind 方法用來取用任何數量的參數，並指派給簽章內參數。下面可以見到我們將 bind 方法內 &lt;code&gt;arguments.items()&lt;/code&gt; 印出所有參數。&lt;/p&gt;
+&lt;p&gt;另外強制移除參數後會告訴我們缺少移除的參數。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; from tags_test import tag
+&amp;gt;&amp;gt;&amp;gt; import inspect
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;my_tag&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt;:&lt;span class="s1"&gt;&amp;#39;img&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;title&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;Sunset Boulevard&amp;#39;&lt;/span&gt;,
+...               &lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;sunset.jpg&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;cls&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;framed&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;sig&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; inspect.signature&lt;span class="o"&gt;(&lt;/span&gt;tag&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;bound_args&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; sig.bind&lt;span class="o"&gt;(&lt;/span&gt;**my_tag&lt;span class="o"&gt;)&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; bound_args
+&amp;lt;BoundArguments &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;img&amp;#39;&lt;/span&gt;, &lt;span class="nv"&gt;cls&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;framed&amp;#39;&lt;/span&gt;, &lt;span class="nv"&gt;attrs&lt;/span&gt;&lt;span class="o"&gt;={&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;title&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;Sunset Boulevard&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;sunset.jpg&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;})&lt;/span&gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="k"&gt;for&lt;/span&gt; n, v in bound_args.arguments.items&lt;span class="o"&gt;()&lt;/span&gt;:
+...     print&lt;span class="o"&gt;(&lt;/span&gt;n, &lt;span class="s1"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;, v&lt;span class="o"&gt;)&lt;/span&gt;
+... 
+&lt;span class="nv"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; img
+&lt;span class="nv"&gt;cls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; framed
+&lt;span class="nv"&gt;attrs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;title&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;Sunset Boulevard&amp;#39;&lt;/span&gt;, &lt;span class="s1"&gt;&amp;#39;src&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;sunset.jpg&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; del my_tag&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&amp;gt;&amp;gt;&amp;gt; &lt;span class="nv"&gt;bound_args&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; sig.bind&lt;span class="o"&gt;(&lt;/span&gt;**my_tag&lt;span class="o"&gt;)&lt;/span&gt;
+Traceback &lt;span class="o"&gt;(&lt;/span&gt;most recent call last&lt;span class="o"&gt;)&lt;/span&gt;:
+  File &lt;span class="s2"&gt;&amp;quot;&amp;lt;stdin&amp;gt;&amp;quot;&lt;/span&gt;, line 1, in &amp;lt;module&amp;gt;
+  File &lt;span class="s2"&gt;&amp;quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&amp;quot;&lt;/span&gt;, line 2934, in &lt;span class="nb"&gt;bind&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; args&lt;span class="o"&gt;[&lt;/span&gt;0&lt;span class="o"&gt;]&lt;/span&gt;._bind&lt;span class="o"&gt;(&lt;/span&gt;args&lt;span class="o"&gt;[&lt;/span&gt;1:&lt;span class="o"&gt;]&lt;/span&gt;, kwargs&lt;span class="o"&gt;)&lt;/span&gt;
+  File &lt;span class="s2"&gt;&amp;quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&amp;quot;&lt;/span&gt;, line 2849, in _bind
+    raise TypeError&lt;span class="o"&gt;(&lt;/span&gt;msg&lt;span class="o"&gt;)&lt;/span&gt; from None
+TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;另外 &lt;code&gt;__annotation__&lt;/code&gt; 也以 dict 存放參數與回傳註釋。因此在檢查參數形態就可以與 bind 方法內的 &lt;code&gt;arguments.items()&lt;/code&gt;來做比較。當我們在撰寫函式時可以利用 inspect&amp;nbsp;這個模組協助參數檢查。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;其實 Python 內的一級函式真的是有很多東西可以來提。大概就簡單從 inspect&amp;nbsp;這個套件回顧，並且說明為什麼可以用這個套件來做參數檢查用。&lt;/p&gt;</summary><category term="Python"></category><category term="Inspect"></category></entry><entry><title>寇汀技巧系列之 Max Distance Monotonic</title><link href="https://chairco.com.tw/posts/2017/08/serice%20of%20coding%20skill%20of%20Max%20Distance%20Monotonic.html" rel="alternate"></link><published>2017-08-02T22:45:02+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-08-02:posts/2017/08/serice of coding skill of Max Distance Monotonic.html</id><summary type="html">&lt;hr /&gt;
 &lt;blockquote&gt;
 &lt;p&gt;寇汀技巧系列應該稱我的 Codility 落敗系列筆記。因為做了一些 Codility&amp;nbsp;線上測驗發現自己看完題目沒有辦法立刻反應要考哪種技巧，再來是很久沒有認真在寫程式時注意資料結構，所以在時間複雜度的拿捏不好。&lt;/p&gt;
 &lt;p&gt;希望可以藉由自修方式把這部分補足。也可以改進自己在寫程式老喜歡硬幹的壞習慣。&lt;/p&gt;
@@ -41,13 +222,13 @@ the value Q − P is&amp;nbsp;maximal.&lt;/p&gt;
     &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
     &lt;span class="n"&gt;pairs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
     &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;N&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
-        &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
     &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sort&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
     &lt;span class="n"&gt;minOriginalPos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;N&lt;/span&gt;
     &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;pairs&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
         &lt;span class="n"&gt;minOriginalPos&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;min&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;minOriginalPos&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-        &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;minOriginalPos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;minOriginalPos&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;result&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -157,7 +338,175 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;li&gt;
 &lt;p&gt;第二篇 &lt;a href="https://blog.kuoe0.tw/posts/2013/04/19/install-formula-of-specific-version-with-homebrew/"&gt;brew&amp;nbsp;安裝特定版本套件&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</summary><category term="brew"></category></entry><entry><title>Python 上使用REGEXP(Regular Expression) 驗證 Email</title><link href="https://chairco.com.tw/posts/2017/06/Python%20email%20validate%20with%20REGEXP.html" rel="alternate"></link><published>2017-06-23T14:06:24+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-06-23:posts/2017/06/Python email validate with REGEXP.html</id><summary type="html">&lt;hr /&gt;
+&lt;/ul&gt;</summary><category term="brew"></category></entry><entry><title>學習編寫 Python 時應該避免的三種錯誤</title><link href="https://chairco.com.tw/posts/2017/07/3%20mistakes%20to%20avoid%20when%20learning%20to%20code%20in%20Python.html" rel="alternate"></link><published>2017-07-12T13:13:29+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-07-12:posts/2017/07/3 mistakes to avoid when learning to code in Python.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python&amp;nbsp;Code，卻跑出不可預期的結果著實讓人心煩。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本篇 &lt;strong&gt;&lt;span class="caps"&gt;TL&lt;/span&gt;;&lt;span class="caps"&gt;DR&lt;/span&gt;&lt;/strong&gt;，文字太多有害身體健康。所以想 3 mins 搞懂這篇文章，歡迎你移駕&lt;a href="/posts/2017/02/Mutable%20data%20types%20in%20Python.html"&gt;本篇&lt;/a&gt;)，但想深入一點暸解就歡迎參考這篇翻譯拙作。&lt;/p&gt;
+&lt;p&gt;文章為翻譯文，採對照方式寫作。歡迎給予各種指教。&lt;a href="https://opensource.com/article/17/6/3-things-i-did-wrong-learning-python"&gt;原文網址&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;img alt="#" src="/pics/201707/blocks_building.png" title="Image by : opensource.com" /&gt;&lt;/p&gt;
+&lt;p&gt;承認做錯事從來都不是容易的事，但錯誤卻是學習過程的一部份，從一個新語言開始習得就像學習如何走路，像是&amp;nbsp;Python。&lt;/p&gt;
+&lt;p&gt;這裡列出三件我學習 Python 遭遇的錯誤，提出來也避免初入 Python&amp;nbsp;的程式設計人員可以避免犯下相同問題。這些錯誤都造成更大問題以至於我必須抽出很長的時間並且花費數小時去修復它。&lt;/p&gt;
+&lt;p&gt;年輕的夥伴們，這些錯誤真的都是浪費無謂的時間。&lt;/p&gt;
+&lt;h2&gt;1.&amp;nbsp;在函式中的默認的參數使用了可變變數來定義&lt;/h2&gt;
+&lt;p&gt;合理嗎？你撰寫一個小型函式，這個函式可以搜尋當前頁面上的連結並且將它附加到另外一個 list&amp;nbsp;裡。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;search_for_links&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;page&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;add_to&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[]):&lt;/span&gt;
+    &lt;span class="n"&gt;new_links&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;search_for_links&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;add_to&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new_links&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;add_to&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;看到這邊，一切都非常的完美的，確實也可以正常的運作，但卻有些問題。假如我們期望傳遞一個 list 給 &lt;code&gt;add_to&lt;/code&gt; 這個參數，會如預期中運作。然而假如我們在程式執行時給了預設值，有趣的事情就會發生了。&lt;/p&gt;
+&lt;p&gt;試試以下的程式碼：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[]):&lt;/span&gt;
+    &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;
+
+&lt;span class="n"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;預期的輸出結果：&lt;/p&gt;
+&lt;p&gt;[3]&lt;/p&gt;
+&lt;p&gt;[4]&lt;/p&gt;
+&lt;p&gt;[5]&lt;/p&gt;
+&lt;p&gt;但我們會非常詫異的發現實際上的結果：&lt;/p&gt;
+&lt;p&gt;[3]&lt;/p&gt;
+&lt;p&gt;[3,&amp;nbsp;4]&lt;/p&gt;
+&lt;p&gt;[3, 4,&amp;nbsp;5]&lt;/p&gt;
+&lt;p&gt;為什麼？你看到在每一次不同的呼叫裡使用了同樣的一個 list。在 Python 當我們撰寫一個如範例的函式時，list 會被初始化成在函示一部份當這個函式被定義時。因此它不會在每一次函式執行時被實例化（譯者補充：這裡原作者意思是 Python 在函式被定義時所有的參數值就已經產生，因此不會每一次呼叫時又產生一次）。這意味著函式維持了並且不斷使用同樣的 list 物件，直到我提供了其他的 list&amp;nbsp;物件:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#定義了一個新的 list [4]&lt;/span&gt;
+&lt;span class="n"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;[4,&amp;nbsp;3]&lt;/p&gt;
+&lt;p&gt;如何達到預期。正確的做法要像：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;var2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+    &lt;span class="n"&gt;var2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;或是，將第一個範例改成：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;search_for_links&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;page&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;add_to&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;add_to&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;add_to&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+    &lt;span class="n"&gt;new_links&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;page&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;search_for_links&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;add_to&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;extend&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;new_links&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;add_to&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這樣就能變動&lt;code&gt;實例化&lt;/code&gt;從每一次模組被加載時，讓每次函式被執行都能發生。但注意對於不可變動的資料型態像是：&lt;code&gt;tuples&lt;/code&gt;, &lt;code&gt;strings&lt;/code&gt; 或是 &lt;code&gt;ints&lt;/code&gt; 這是非必要的。也意味著在對於非變動的資料型態這樣做是好的：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;func&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;message&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;my message&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h2&gt;2.&amp;nbsp;可變變數作為類別變數&lt;/h2&gt;
+&lt;p&gt;緊跟在後的錯誤和前個錯誤非常相似。考慮下面幾點：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;URLCatcher&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;add_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這段程式碼看起來完全正常。我們擁有一個物件，這個物件用來儲存 URLs。當我們呼叫 &lt;code&gt;add_url&lt;/code&gt; 這個方法，儲存我們給定一個新增的 &lt;span class="caps"&gt;URL&lt;/span&gt;。完美？對吧。讓我們看看問題：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;URLCatcher&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;http://www.google.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;URLCatcher&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;http://www.bbc.co.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;b.urls&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[&amp;#39;http://www.google.com&amp;#39;, &amp;#39;http://www.bbc.co.uk&amp;#39;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;a.urls&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[&amp;#39;http://www.google.com&amp;#39;, &amp;#39;http://www.bbc.co.uk&amp;#39;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;等等，到底發生什麼事!？ 沒有預期這樣的結果啊。 我們實例化兩個單獨的物件，a 和 b。 a 給了一個 &lt;span class="caps"&gt;URL&lt;/span&gt; 然後 b 給另一個。怎麼兩個物件都變成擁有兩個&amp;nbsp;URLs？&lt;/p&gt;
+&lt;p&gt;這樣的結果和前面我們舉的第一個例子是一樣的問題。 當定義的類別被建立時 URLs 的 list 就已經被&lt;code&gt;實例化&lt;/code&gt;。所有類別內的的實例都會使用同樣一個&amp;nbsp;list。現在這裡有些優秀的例子，但多數時候你不會想這樣做。你會希望不同的物件各自單獨的儲存。要做到這樣，我們必須針對程式碼做一些變動：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;URLCatcher&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;add_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;現在這些 URLs 的 list 當物件被產生時才會被&lt;code&gt;實例化&lt;/code&gt;。當我們實例化兩個單獨的物件時，他們將會個別擁有自己的&amp;nbsp;list。&lt;/p&gt;
+&lt;h2&gt;3.&amp;nbsp;可變變數的賦值錯誤&lt;/h2&gt;
+&lt;p&gt;這是困擾了我一段時間。讓我們做一些些改變，使用可變得資料型態 &lt;code&gt;dict&lt;/code&gt; &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;one&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;two&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;現在讓我們宣告並將這個 &lt;code&gt;dict&lt;/code&gt; 使用在其他區塊，並保留原區塊無缺。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+
+&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;three&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;很簡單吧，嗯？&lt;/p&gt;
+&lt;p&gt;接著看看原先的 &lt;code&gt;dict&lt;/code&gt;, a&amp;nbsp;我們並不希望他被改變：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;one&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;two&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;three&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;挖，等一會兒。那 b&amp;nbsp;看起來怎樣了？&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;one&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;two&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;three&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;等等，發生什麼事了？但&amp;#8230; 讓我們還原然後確認假如我們使用不可變數形態, &lt;code&gt;tuple&lt;/code&gt; 來做實例化：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;
+&lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;現在 c&amp;nbsp;是：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(2, 3)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著 d&amp;nbsp;是：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(4, 5)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個函式如我們所預期。所以範例到底發生什麼事了？ 當使用一個可變數型態，我們得到的一些行為很像是 C 的指標。當我說 &lt;code&gt;b = a&lt;/code&gt; 在上述程式碼，實際上我們指的是： b 現在參考 a。在 Python 的記憶體，兩著指向相同的物件（譯者：指向相同的記憶體位址）聽起來很熟悉吧？這是因為相似於先前的問題，實際上這篇可以被稱為 &lt;strong&gt;&amp;#8220;The Trouble with&amp;nbsp;Mutables.&amp;#8221;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;這樣的問題也會發生在 lists 內嗎？ 是的。所以如何解決它呢？嗯，我們必須非常小心。假如我們真的需要一個複製 list&amp;nbsp;的流程，我們可以這樣做： &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;[:]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這樣將會執行並且複製一個參考內每一個項目到 list 然後配置一個新的區塊給這個新的 list(譯者：配這一塊新的記憶體空間給新的 list)。但是必須警示：假如任何物件在這個 list 而且是可變得，我們我們將要在一次得到他們的參考，而非完全複製。(譯者：例如 a=[], b=[1,2,b], 這時 b 也是可變動，這樣的複製只是淺複製，b 還是會產生這樣問題。關於這個問題可以參考 &lt;a href="https://docs.python.org/3.6/library/copy.html"&gt;copy&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;想像有一張上有 list 的白紙。這個原創的範例，A 人類和 B 人類在看相同的一片白紙。假如 list 內有一些變動兩個人類都會看到變化。當我們複製這個參考，現在各自有自己的 list。但讓我們假設這是一個搜尋食物 list。假如 &amp;#8220;fridge(冰箱)&amp;#8221; 位於 list 第一個 point，接著複製它後，兩個項目在兩個 lists point 都會有同樣的一個冰箱。所以假如冰箱內被人類 A 改變，例如吃一掉一個奶油蛋糕，人類 B&amp;nbsp;將會發現奶油蛋糕消失了。不是容易理解，這僅僅只是讓你記住和編寫程式碼時不要造成這類問題。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Dicts&lt;/code&gt; 函式也是同樣道理，可以建立一個&lt;code&gt;昂貴&lt;/code&gt;的複製：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;同樣，他也只是建立一個新的 dictionary 指標到同一個條目位置，因此假如我們有兩個相同 lists，我們改變其中一個指向可變物件 dict &lt;code&gt;a&lt;/code&gt;，這個 dict 物件會立刻看到 dict &lt;code&gt;b&lt;/code&gt; 被更動。&lt;/p&gt;
+&lt;p&gt;這些可變變數的災難在於他們非常強大。上述都不是真正問題; 而是要被謹記於心以防止出錯。在第三個項目中使用昂貴的複製操作在 99%&amp;nbsp;時間都是非必要的。你的程式應該要可以被修改讓這些複製不是非必要的。&lt;/p&gt;
+&lt;p&gt;開心的的編寫程式，並且歡迎留言提出任何問題在意見評論表中。&lt;/p&gt;</summary><category term="翻譯"></category><category term="Python"></category><category term="Programming"></category></entry><entry><title>Python 上使用REGEXP(Regular Expression) 驗證 Email</title><link href="https://chairco.com.tw/posts/2017/06/Python%20email%20validate%20with%20REGEXP.html" rel="alternate"></link><published>2017-06-23T14:06:24+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-06-23:posts/2017/06/Python email validate with REGEXP.html</id><summary type="html">&lt;hr /&gt;
 &lt;p&gt;在 Google 下個關鍵字： &lt;strong&gt;Python, Regular Expression or &lt;span class="caps"&gt;REGEXP&lt;/span&gt;, email, validate, validation&lt;/strong&gt; 在 Google 應該不下數十篇在論壇、網誌使用正規表達式（Regular Expression）來驗證 email 格式的文章或是問題、甚至有人實作&amp;nbsp;package。&lt;/p&gt;
 &lt;p&gt;使用這個東西也一陣子，但好像從來沒認真去研究究竟細節有哪些，ctrl + c, ctrl + r&amp;nbsp;成了常態，自然踩雷無可避免。剛好最近要修一個東西，因此順便整理細節。&lt;/p&gt;
 &lt;h2&gt;瞭解套件實作方法&lt;/h2&gt;
@@ -367,7 +716,7 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;p&gt;&lt;code&gt;ADDR_SPEC = LOCAL_PART + r'@' + DOMAIN&lt;/code&gt;&lt;/p&gt;
 &lt;h2&gt;比較其他方法異同&lt;/h2&gt;
 &lt;p&gt;&lt;span class="caps"&gt;TBD&lt;/span&gt;(筆者有點偷懶，稍晚再補上。)&lt;/p&gt;
-&lt;hr /&gt;</summary><category term="Regular Expression"></category><category term="Python"></category><category term="email"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://chairco.com.tw/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2017-02-20T20:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
+&lt;hr /&gt;</summary><category term="Python"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://chairco.com.tw/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2017-02-20T20:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
 &lt;p&gt;你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 &lt;code&gt;object&lt;/code&gt;，萬物都是一個 &lt;code&gt;object&lt;/code&gt; 
 所以當你產生一個 function&amp;nbsp;這個預設的參數值就產生了。我們用底下一個範例來說明：&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -408,7 +757,7 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;</summary><category term="Python"></category><category term="Programming"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://chairco.com.tw/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://chairco.com.tw/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
 &lt;p&gt;根據開發者得說法：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。&lt;/p&gt;
@@ -512,4 +861,100 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;p&gt;&lt;code&gt;pipenv shell&lt;/code&gt; 沒有反應
 感覺像是環境變數問題，&lt;a href="https://github.com/kennethreitz/pipenv/issues/415"&gt;issue#415&lt;/a&gt; 有人在聊但沒仔細看。現在是安裝完成後可以 &lt;code&gt;pipenv --venv&lt;/code&gt; 然後直接手動去吃環境變數。有點蠢。&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</summary><category term="Pipenv"></category><category term="Python"></category></entry></feed>
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;2017-09-26 更新&lt;/strong&gt;: 後來找到原因，因為安裝 pyenv 導致，原因在 &lt;a href="https://github.com/kennethreitz/pipenv/issues/184"&gt;issue#184&lt;/a&gt;。解決&lt;a href="https://github.com/kennethreitz/pipenv/issues/237"&gt;方法&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;pipenv shell --compat&lt;/code&gt;  或是&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在環境變數設定 &lt;code&gt;export PIPENV_SHELL_COMPAT=true&lt;/code&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="Pipenv"></category><category term="Python"></category></entry><entry><title>GeoPandas and Taiwan CRS以高雄腳踏車道做簡介</title><link href="https://chairco.com.tw/posts/2016/06/GeoPandas-TWD97-CRS.html" rel="alternate"></link><published>2016-06-23T09:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-06-23:posts/2016/06/GeoPandas-TWD97-CRS.html</id><summary type="html">&lt;p&gt;PyCon &lt;span class="caps"&gt;TW&lt;/span&gt; 2016 聽了一場有趣的演講 &lt;a href="https://tw.pycon.org/2016/en-us/events/talk/69477625352945724/#speaker-content"&gt;From Pandas to GeoPandas - 地理資料處理與分析&lt;/a&gt; 講者很清楚地把目前世界與臺灣的地理座標系統做了一些簡介，還展示了一些使用 Jupyter 與 GeoPandas&amp;nbsp;方法。&lt;/p&gt;
+&lt;p&gt;恰巧不巧剛好看到朋友在&lt;a href="https://www.facebook.com/VioletVivirand/posts/10209329811942815"&gt;臉書&lt;/a&gt;上也在處理這類資料，就做了些演講心得與使用記錄。&lt;/p&gt;
+&lt;h3&gt;臺灣座標系統&lt;/h3&gt;
+&lt;p&gt;臺灣較常見的座標系統有 &lt;span class="caps"&gt;WGS84&lt;/span&gt; 的經緯度座標、與投影後的二度分代投影座標(&lt;span class="caps"&gt;TM2&lt;/span&gt;): &lt;span class="caps"&gt;TWD67&lt;/span&gt;、&lt;span class="caps"&gt;TWD97&lt;/span&gt;，經緯度座標系和 &lt;span class="caps"&gt;TM&lt;/span&gt;&amp;nbsp;二度分代投影座標系主要差異是前者是三維空間後者是二維空間。&lt;/p&gt;
+&lt;p&gt;兩類可從數字的大小立刻辨別一筆資料是屬於前後者（&lt;span class="caps"&gt;TM2&lt;/span&gt; 的值會很大），至於 &lt;span class="caps"&gt;TM2&lt;/span&gt; 的 &lt;span class="caps"&gt;TWD67&lt;/span&gt; 與 &lt;span class="caps"&gt;TWD97&lt;/span&gt; 則可以根據資料量測時間來簡單分辨，因為 1999 年發生集集 921 大地震，地理型態因此產生一些變化，很多地理位置使用 &lt;span class="caps"&gt;TWD97&lt;/span&gt;&amp;nbsp;有重新測量，這是一個簡單的判斷準則。&lt;/p&gt;
+&lt;p&gt;更多的資訊可以參考&lt;a href="http://www.sunriver.com.tw/grid_tm2.htm"&gt;大地座標系統與二度分帶座標&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;環境設定與套件安裝&lt;/h3&gt;
+&lt;p&gt;我的電腦是用 &lt;span class="caps"&gt;OS&lt;/span&gt; X + Python3，要建立一個新的資料 kbike 夾與虛擬環境&amp;nbsp;venv：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ Jason mkdir -p kbike
+$ Jason python3 -m venv env
+$ Jason &lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="nb"&gt;source&lt;/span&gt; env/bin/activate
+$ &lt;span class="o"&gt;(&lt;/span&gt;env&lt;span class="o"&gt;)&lt;/span&gt;Jason
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;建立之後就可以用 pip 開始安裝 GeoPandas 和 Jupyter 兩個套件然後進入 kbike&amp;nbsp;資料夾下載檔案：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ Jason pip install GeoPandas
+$ Jason pip install Jupyter
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;因為這次 sample 是高雄自行車道地理資訊，所以建立完之後就可以下載&lt;a href="http://data.kaohsiung.gov.tw/Opendata/DetailList.aspx?CaseNo1=AD&amp;amp;CaseNo2=2&amp;amp;Lang=C&amp;amp;FolderType=O"&gt;高雄自行車路線&lt;/a&gt;解壓縮到 kbike 資料夾內。&amp;nbsp;這次下載資料有三個，因為都是中文我改了檔案名稱：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="go"&gt;kbike0324.dbf&lt;/span&gt;
+&lt;span class="go"&gt;kbike0324.shp&lt;/span&gt;
+&lt;span class="go"&gt;kbike0324.shx&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這三個檔案會使用到 .shp&amp;nbsp;裡頭儲存著二維座標系的位置。&lt;/p&gt;
+&lt;h3&gt;處理資料&lt;/h3&gt;
+&lt;p&gt;萬事俱備只欠東風，現在就可以將前面我們安裝好的 Jupyter Notebook 打開然後 import&amp;nbsp;GeoPandas。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ Jason jupyter notebook
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;打開預設瀏覽器後會看到右上角一個 new 的按鈕，點開然後選擇 python3，這時會跑出一個 console mode，就先 import 套件然後設定產生圖的&amp;nbsp;size:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;geopandas&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;gpd&lt;/span&gt;
+&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="n"&gt;pylab&lt;/span&gt; &lt;span class="n"&gt;inline&lt;/span&gt;
+&lt;span class="n"&gt;pylab&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rcParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;figure.figsize&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;20.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;20.0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著就是把 .shp&amp;nbsp;檔案讀進來然後印出來看看檔案的樣子：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;villages_shap&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;gpd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_file&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;kbike0324.shp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;villages_shap&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這份資料主要由 1029 rows × 2 columns 組合而成，因為 GeoPandas 是依附在 Pandas&amp;nbsp;所以資料只會印出一部分：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th align="center"&gt;geometry&lt;/th&gt;
+&lt;th align="center"&gt;system&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td align="center"&gt;&lt;span class="caps"&gt;LINESTRING&lt;/span&gt; (182419.7414554919 2523932.41148585&amp;#8230;&lt;/td&gt;
+&lt;td align="center"&gt;阿公店自行車道&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td align="center"&gt;&lt;span class="caps"&gt;LINESTRING&lt;/span&gt; (183981.184590639 2522441.403167007&amp;#8230;&lt;/td&gt;
+&lt;td align="center"&gt;阿公店自行車道&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td align="center"&gt;&lt;span class="caps"&gt;LINESTRING&lt;/span&gt; (183909.7255066092 2522962.24337105&amp;#8230;&lt;/td&gt;
+&lt;td align="center"&gt;阿公店自行車道&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td align="center"&gt;&lt;span class="caps"&gt;LINESTRING&lt;/span&gt; (183963.1446304776 2523100.414426, &amp;#8230;&lt;/td&gt;
+&lt;td align="center"&gt;阿公店自行車道&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;接著我們要將這份資料的地理座標系印出，因為只是範例就簡單找了兩個腳踏車道 阿公店自行車道和博愛世運大道&amp;nbsp;來處理囉。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;broad&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;villages_shap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;villages_shap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;system&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;阿公店自行車道&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;loveroad&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;villages_shap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;villages_shap&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;system&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;博愛世運大道&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後就會把圖檔順利產生囉。
+範例就在 &lt;a href="https://github.com/chairco/Kaohsiung-bike-GeoPandas/blob/master/.ipynb_checkpoints/Untitled-checkpoint.ipynb"&gt;gihub&lt;/a&gt;&amp;nbsp;歡迎下載參考。&lt;/p&gt;</summary><category term="Coding"></category><category term="Jupyteer"></category><category term="GeoPandas"></category><category term="Pandas"></category><category term="CRS"></category></entry></feed>

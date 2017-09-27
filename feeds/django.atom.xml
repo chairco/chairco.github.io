@@ -82,4 +82,1321 @@
 &lt;/ul&gt;
 &lt;h2&gt;The&amp;nbsp;future&lt;/h2&gt;
 &lt;p&gt;我可能繼續修改 &lt;code&gt;Makefile&lt;/code&gt; 一段時間，至少我個人應用程式，如果可以解決上面的問題我會繼續下去。但如果沒有我可能就會回到 &lt;code&gt;setup.py test&lt;/code&gt;，或是探索看看其他選項（或是屈服在 &lt;code&gt;tox&lt;/code&gt; 下）&lt;/p&gt;
-&lt;p&gt;在這個期間，我對於嘗試其他方法很感興趣; 我還沒有嘗試任何科學或是偽科學上的關於 Django&amp;nbsp;流行的應用程序調查來看看是否有其他獨立的測試應用的共識。&lt;/p&gt;</summary><category term="Django"></category><category term="testing"></category></entry></feed>
+&lt;p&gt;在這個期間，我對於嘗試其他方法很感興趣; 我還沒有嘗試任何科學或是偽科學上的關於 Django&amp;nbsp;流行的應用程序調查來看看是否有其他獨立的測試應用的共識。&lt;/p&gt;</summary><category term="Django"></category><category term="testing"></category></entry><entry><title>Django教學第三篇-用CBV做程式開發(續)</title><link href="https://chairco.com.tw/posts/2016/08/Django-Tutorial-03-2.html" rel="alternate"></link><published>2016-08-12T09:48:38+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-08-12:posts/2016/08/Django-Tutorial-03-2.html</id><summary type="html">&lt;p&gt;接下來我們為系統加點功能，想想一個借用系統如果沒有權限控管就不容易追蹤使用系統的人和流程。所以我想為這個系統加上權限控管。&lt;/p&gt;
+&lt;p&gt;很棒的是 Django 本身就有權限管理功能，只要在 &lt;code&gt;borrow/urls.py&lt;/code&gt; 加上 &lt;code&gt;url(r'^accounts/', include('django.contrib.auth.urls')),&lt;/code&gt; 這個路徑就可以啟用登入的功能。所以現在 &lt;code&gt;borrow/borrow/urls.py&lt;/code&gt; 這個檔案會長這樣：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf.urls&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;settings&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;admin&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;pages.views&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;
+
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^admin/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;home&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^loan/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loans.urls&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^faship/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;faships.urls&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^accounts/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;django.contrib.auth.urls&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;有了登入的 router 後接著要建立一個 login 的 template，所以在 &lt;code&gt;borrow/templates/&lt;/code&gt; 先建立一個資料夾 &lt;code&gt;registration&lt;/code&gt; 接著再到資料夾內建立一個 &lt;code&gt;login.html&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;loging.html&lt;/code&gt; 就是 &lt;code&gt;url(r'^accounts/', include('django.contrib.auth.urls'))&lt;/code&gt; 的&amp;nbsp;template，打入這個路徑後就會顯示編輯頁面，內容像是這樣：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{% extends &amp;#39;base.html&amp;#39; %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+{{ block.super }}
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;row&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;col-lg-4 col-md-6 col-lg-offset-4 col-md-offset-3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h2&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;form-signin-heading&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Please Sign In&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h2&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+      {% csrf_token %}
+      {{ form|crispy }}
+      &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;submit&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-primary&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;登入&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+{% endblock body %}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;一樣是繼承 base.html 然後用 crispy_forms_tags 來修飾我們的 form。比較特別是建立了一個 submit 的 button 來觸發行為。接著你可以試試看鍵入 &lt;a href="http://127.0.0.1:8000/accounts/login/"&gt;http://127.0.0.1:8000/accounts/login/&lt;/a&gt;&amp;nbsp;就會顯示出類似下面的登入畫面&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch3-2-p1" src="/pics/201608/django-tutorial-ch3-2-p1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;有看到上面圖片右上角的登入畫面嗎？總是要有一個接入的端口，這時就需要在 &lt;code&gt;base.html&lt;/code&gt; 裡的 &lt;code&gt;&amp;lt;nav&amp;gt;&lt;/code&gt; 標籤裡再增加 &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; 的標籤。所以我們打開 &lt;code&gt;borrow/templates/base/base.html&lt;/code&gt; 加一些東西，就會顯示登入的按鈕，試試看能不能用你在 admin&amp;nbsp;增加的帳號登入吧。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;...
+&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;nav&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;navbar-right navbar-form&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{% url &amp;#39;logout&amp;#39; %}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% if user.is_authenticated %}
+            {% csrf_token %}
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;input&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;hidden&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;next&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{% url &amp;#39;home&amp;#39; %}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-default&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;submit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ user }} 登出&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% else %}
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-default&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{% url &amp;#39;login&amp;#39; %}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;登入&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% endif %}
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;nav&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;不過到這邊還不夠，應該還要限制某些頁面需要登入後才能瀏覽對吧？通常用 &lt;span class="caps"&gt;FBV&lt;/span&gt; 來開發會很習慣在 views.py 內針對需要管理的頁面透過 decorator&amp;nbsp;來處理，例如：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib.auth.decorators&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;login_required&lt;/span&gt;
+
+&lt;span class="nd"&gt;@login_required&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;hello_world&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;render&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;hello_world.html&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;current_time&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;不過因為用 &lt;span class="caps"&gt;CBV&lt;/span&gt; 來開發，這個方法可能就不適用。不過令人開心的是 login_required 這個 decorator 是可以透過將 &lt;span class="caps"&gt;CBV&lt;/span&gt; 的 as_view()&amp;nbsp;函式當作參數，一樣就可以實做這個功能。&lt;/p&gt;
+&lt;p&gt;那來實作一下吧，以這個範例需要登入才能動作應該是新增一個需求，所以到 &lt;code&gt;borrow/faships/urls.py&lt;/code&gt; 找到新增的 router，將 login_required 當作一個函數，將 &lt;code&gt;views.FashipCreateView.as_view()&lt;/code&gt; 傳遞進去。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib.auth.decorators&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;login_required&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;permission_required&lt;/span&gt;
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="o"&gt;...&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^add/$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;login_required&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;views&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;FashipCreateView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;as_view&lt;/span&gt;&lt;span class="p"&gt;()),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;faship_add&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="o"&gt;...&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;試試看先把帳號登出，然後點選新增功能時 Django 是不是會自動幫你導到登入畫面呢？很棒吧，所有功能幾乎都幫我們開發好了，今天實做的功能幾乎都是在寫&amp;nbsp;html。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;花了一點時間寫了這份教學，其實到這邊所學的 Django 也是進階再進階了，接下來其實就是閱讀更多的官方文件，加強 &lt;span class="caps"&gt;JS&lt;/span&gt; 和 &lt;span class="caps"&gt;CSS&lt;/span&gt; 照理說沒有做不出來的功能，當然這裡沒有教大家如何 deploy 到雲端平台，關於這個問題我想還是留給大家自我學習吧， Django girl 的官方網站是用&amp;nbsp;pythonanywhere，當然不僅僅只有這個，還有一樣棒的雲端平台，至於如何選擇就取決於你對於平台掌握度。&lt;/p&gt;
+&lt;p&gt;那這個主題就到這個段落，很歡迎大家提出問題一起討論，但我想這個只是我心裡的期待，不過還是希望當你讀過之後能幫助到你，不管是出於工作、興趣或是單純打發時間。&lt;/p&gt;
+&lt;p&gt;接著我將會寫些 python 的其他主題，也許會關於一些機器學習的部分(&lt;span class="caps"&gt;ML&lt;/span&gt;)。下回見吧。&lt;/p&gt;</summary><category term="Coding"></category><category term="Django"></category></entry><entry><title>Django教學第三篇-用CBV來做程式開發</title><link href="https://chairco.com.tw/posts/2016/07/Django-Tutorial-03.html" rel="alternate"></link><published>2016-07-06T14:59:23+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-07-06:posts/2016/07/Django-Tutorial-03.html</id><summary type="html">&lt;p&gt;有了觀念之後，在撰寫程式過程中就會有一些很直覺的想法，面對繁瑣的流程也就比較容易駕輕就熟(好像學習數學的感覺啊)&lt;/p&gt;
+&lt;p&gt;這個教學也希望用這種方法來開發，畢竟一時間要搞懂所有的觀念與技術對多數人來說都比較困難，但做中學讓自己投入，就會像堆積木一樣慢慢把不足的知識補足。&lt;/p&gt;
+&lt;p&gt;回顧前面兩篇文章，其實我們已經把整個 Django&amp;nbsp;後端都建立起來。接下來就是將前端與後端做一個橋接，前端就像是一個動作流程，後端就是邏輯執行。&lt;/p&gt;
+&lt;p&gt;所以在回顧一下流程與程式邏輯:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;1. 新增表單 -&amp;gt; [urls pattern 找到對應 view] -&amp;gt; [view 根據對應 template] -&amp;gt; [顯示 html]
+2. 填寫表單 -&amp;gt; [view 根據 form 找到 model ] -&amp;gt; [ 印出對應欄位給使用者填寫 ] -&amp;gt; [如果有多筆 device， 按下增加按鈕就會透過 js 新增一個欄位給使用者填寫]
+3. 送出表單 -&amp;gt; [view 會檢查欄位內容的型態是否正確] -&amp;gt; [正確就會存進資料庫] -&amp;gt; [網站轉址]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以我們需要的程式邏輯應該會有:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create, Add loan request:&amp;nbsp;新增表單&lt;/li&gt;
+&lt;li&gt;Edit, Update loan request:&amp;nbsp;編輯表單&lt;/li&gt;
+&lt;li&gt;Mixin both form: Loan and Device: Loan 和 Device 兩個 table 的 form&amp;nbsp;要合併在一起。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;建立 view 與 form&amp;nbsp;取得資料&lt;/h3&gt;
+&lt;p&gt;所以我們可以開始建立 view, 首先是新增表單的部分，不要忘記我們也希望使用者在新增表單同時也可以新增 Device 這時就需要透過 forms.py&amp;nbsp;來處理這個部分。&lt;/p&gt;
+&lt;p&gt;主程式會長這樣，&lt;code&gt;class LoanCreateView()&lt;/code&gt; 會繼承 &lt;code&gt;FormsetMixin&lt;/code&gt; 和 &lt;code&gt;Createview&lt;/code&gt;，前面我們有提到這個繼承自 &lt;code&gt;django.views.generic&lt;/code&gt; 的 class &lt;code&gt;Createview&lt;/code&gt; 可以協助我們透過 &lt;code&gt;get_form&lt;/code&gt; 產生 form class 再與 我們指定的 template_name 結合&amp;nbsp;response。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#  loans/views.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.views.generic&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;CreateView&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.forms&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;LoanForm&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;LoanFormSet&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanCreateView&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;FormsetMixin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;CreateView&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;template_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;loans/loan_formset.html&amp;#39;&lt;/span&gt;
+    &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;
+    &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LoanForm&lt;/span&gt;
+    &lt;span class="n"&gt;formset_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LoanFormSet&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果我們單純只是要處理某一個 table 並把裡面的 field 回傳 form 那大概到這邊就完成了，但因為我還想將 &lt;code&gt;Device&lt;/code&gt; table 內的 field&amp;nbsp;也整併一起這時我們就需要做一些處理:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;FormsetMixin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="nb"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;kwargs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;getattr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;is_update_view&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_object&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+        &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_form_class&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;form&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_form&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form_class&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;formset_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_formset_class&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;formset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_formset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formset_class&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;render_to_response&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_context_data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;post&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;kwargs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;getattr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;is_update_view&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_object&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+        &lt;span class="n"&gt;form_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_form_class&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;form&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_form&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form_class&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;formset_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_formset_class&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;formset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_formset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formset_class&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_valid&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;is_valid&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;form_valid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;form_invalid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_formset_class&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;formset_class&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_formset&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset_class&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;formset_class&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_formset_kwargs&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_formset_kwargs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;kwargs&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;instance&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;method&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;POST&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;PUT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="n"&gt;kwargs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+                &lt;span class="s1"&gt;&amp;#39;data&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;POST&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="s1"&gt;&amp;#39;files&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;FILES&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="p"&gt;})&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;kwargs&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;form_valid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;instance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;
+        &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;redirect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_absolute_url&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;form_invalid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;render_to_response&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_context_data&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;首先上面這段程式碼，是讓我們告訴 Django 有兩個 form, 一個是 Loan 的 form 一個是回傳自 &lt;code&gt;forms.py&lt;/code&gt; 透過 &lt;code&gt;from django.forms.models import inlineformset_factory&lt;/code&gt; 處理過後的 form，然後透過 &lt;code&gt;FormsetMixin&lt;/code&gt; 將兩個 form&amp;nbsp;合併之後回傳。&lt;/p&gt;
+&lt;p&gt;至於 &lt;code&gt;forms.py&lt;/code&gt; 是透過 &lt;code&gt;inlineformset_factory&lt;/code&gt; 這個函式將 Loan 和 Device 做合併，然後可以設定一開始要印出的數量，還有需要填寫的&amp;nbsp;field。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.forms.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;inlineformset_factory&lt;/span&gt;
+
+&lt;span class="n"&gt;LoanFormSet&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;inlineformset_factory&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;Loan&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Device&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;extra&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;min_num&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="n"&gt;fields&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;isn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr /&gt;
+&lt;p&gt;想不到今天有點拖太久先暫時停筆，等有時間再把內容做更詳細補完和說明吧&amp;nbsp;:)&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;好了，人有惰性，但拖稿也不能拖太久 &lt;span class="caps"&gt;XD&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;前面我們透過 &lt;code&gt;views.py&lt;/code&gt; 和 &lt;code&gt;forms.py&lt;/code&gt; 兩隻程式幫我們處理好後端整合兩個關聯性 table 的邏輯後，接著就可以透過前端撰寫 &lt;code&gt;html&lt;/code&gt; 來處理 template&amp;nbsp;展現資料的方法。&lt;/p&gt;
+&lt;h3&gt;透過 template&amp;nbsp;呈現畫面&lt;/h3&gt;
+&lt;p&gt;首先我們在 &lt;code&gt;loans/templates/&lt;/code&gt; 底下新增一個 html 檔案叫 &lt;code&gt;loan_formset.html&lt;/code&gt; 這個 html。其實眼尖的朋友應該想起來 &lt;code&gt;views.py&lt;/code&gt; 下面的 &lt;code&gt;class LoanCreateView(FormsetMixin, CreateView)&lt;/code&gt; 一開始就有設定一個 &lt;code&gt;template_name&lt;/code&gt; 就指向這個檔案位置，也就是說當我們呼叫 &lt;code&gt;class CreateView&lt;/code&gt; 下的方法函式 &lt;code&gt;as.view()&lt;/code&gt; 他自動會 response 一串 &lt;code&gt;dict&lt;/code&gt; 內容給這個 &lt;code&gt;html&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;所以我們開始編輯 &lt;code&gt;loan_formset.html&lt;/code&gt;，一樣繼承 &lt;code&gt;loans/_base.html&lt;/code&gt;。然後&amp;#8230;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{# loans/loan_formset.html #}
+{% extends &amp;#39;loans/_base.html&amp;#39; %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Loans Formset | {{ block.super }}{% endblock title %}
+
+{% block link %}{{ block.super }}
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nc"&gt;.errorlist&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nb"&gt;list-style&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#B94A48&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;margin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt; &lt;span class="m"&gt;9px&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+{% endblock link %}
+
+{% block js %}{{ block.super }}
+{% endblock js %}
+
+{% block content %}
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;breadcrumb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% block bar %}{{ block.super }}
+            {% if object.purpose %}
+                &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ object.purpose }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% else %}
+                &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loan edit&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% endif %}
+        {% endblock bar %}
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;page-header&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{% if form.instance.pk %}Edit{% else %}Add{% endif %} Loans and Device&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {{ formset.management_form }}
+        {% csrf_token %}
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loan&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Loan&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {{ form|crispy }}
+
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Device&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;loans form-inline&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% for form in formset %}
+                {{ form|crispy }}
+            {% endfor %}
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;form-actions&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;submit&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-primary&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Save&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+{% endblock content %}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;等等啊，這裡出現一個疑問了。還記得我們在 &lt;code&gt;forms.py&lt;/code&gt; 內設定 &lt;code&gt;LoanFomrset&lt;/code&gt; 預設的值是 1 啊，那要怎樣讓使用者新增一個新的 field&amp;nbsp;來填寫呢？&lt;/p&gt;
+&lt;p&gt;沒錯，聰明的你應該已經想到了，就是 Javascript。不要忘記很多前端互動介面還是要仰賴 Javascript&amp;nbsp;來協助我們處理呢。&lt;/p&gt;
+&lt;p&gt;所以這段 js code&amp;nbsp;就會長成這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;script&lt;/span&gt; &lt;span class="nx"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;text/html&amp;quot;&lt;/span&gt; &lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;loan-template&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;div&lt;/span&gt; &lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;loan-__prefix__&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nx"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;empty_form&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nx"&gt;crispy&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="err"&gt;/div&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="err"&gt;/script&amp;gt;&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;script&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.add-loan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ev&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+        &lt;span class="nx"&gt;ev&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;preventDefault&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;parseInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#id_menu_items-TOTAL_FORMS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;tmplMarkup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#loan-template&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;html&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;compiledTmpl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;tmplMarkup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/__prefix__/g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;compiledTmpl&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;div.loans&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;compiledTmpl&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#id_menu_items-TOTAL_FORMS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="err"&gt;/script&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;程式邏輯就是設定一個變數 &lt;code&gt;count&lt;/code&gt; 然後當使用者觸發新增按鈕時，就會把 &lt;code&gt;count + 1&lt;/code&gt; 然後根據這個 id 去新增一組&amp;nbsp;field。&lt;/p&gt;
+&lt;p&gt;同時我們也要新增一個按鈕讓使用者可以新增。所以這段程式碼的整合後樣子就會是這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{# loans/loan_formset.html #}
+{% extends &amp;#39;loans/_base.html&amp;#39; %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Loans Formset | {{ block.super }}{% endblock title %}
+
+{% block link %}{{ block.super }}
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nc"&gt;.errorlist&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nb"&gt;list-style&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;none&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;color&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;#B94A48&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;margin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt; &lt;span class="m"&gt;9px&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="nb"&gt;padding&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="m"&gt;0px&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;style&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+{% endblock link %}
+
+{% block js %}{{ block.super }}
+    {# js 位置 #}
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/html&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;loan-template&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;div&lt;/span&gt; &lt;span class="nx"&gt;id&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;loan-__prefix__&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nx"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;empty_form&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="nx"&gt;crispy&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="err"&gt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;.add-loan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;ev&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+            &lt;span class="nx"&gt;ev&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;preventDefault&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;parseInt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#id_menu_items-TOTAL_FORMS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;tmplMarkup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#loan-template&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;html&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;compiledTmpl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;tmplMarkup&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/__prefix__/g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;compiledTmpl&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;div.loans&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;compiledTmpl&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;#id_menu_items-TOTAL_FORMS&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;attr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;count&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;script&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+{% endblock js %}
+
+{% block content %}
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;breadcrumb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% block bar %}{{ block.super }}
+            {% if object.purpose %}
+                &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ object.purpose }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% else %}
+                &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loan edit&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% endif %}
+        {% endblock bar %}
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;page-header&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{% if form.instance.pk %}Edit{% else %}Add{% endif %} Loans and Device&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt; &lt;span class="na"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;method&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;post&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {{ formset.management_form }}
+        {% csrf_token %}
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Loan&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Loan&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {{ form|crispy }}
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Device&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;legend&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        {# 按鈕位置 #}
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;pull-right&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;#&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-primary add-loan&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;i&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;icon-plus icon-white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;i&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Add Device&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;loans form-inline&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            {% for form in formset %}
+                {{ form|crispy }}
+            {% endfor %}
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;form-actions&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt; &lt;span class="na"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;submit&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-primary&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Save&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;button&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;hr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;form&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+{% endblock content %}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後 template 就完成囉，那接下來就是告訴 Django 的 &lt;span class="caps"&gt;WSGI&lt;/span&gt;&amp;nbsp;他要怎麼連到這個頁面。&lt;/p&gt;
+&lt;h3&gt;urls pattern&amp;nbsp;連接對應的頁面&lt;/h3&gt;
+&lt;p&gt;這邊就簡單了，想像就像一個程式已經完成，你只是透過一個方法作為程式的進入點。所以我們就打開 &lt;code&gt;loans/urls.py&lt;/code&gt;，輸入 &lt;code&gt;url(r'^add/$', views.LoanCreateView.as_view(), name='loan_add'),&lt;/code&gt; 到&amp;nbsp;urlpatterns:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# loans/urls.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf.urls&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;
+
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoanList&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;as_view&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_list&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^(?P&amp;lt;pk&amp;gt;\d+)/$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoanDetail&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;as_view&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_detail&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^add/$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoanCreateView&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;as_view&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_add&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;不過這邊你一定有個疑問 &lt;code&gt;url(r'^(?P&amp;lt;pk&amp;gt;\d+)/$', views.LoanDetail.as_view(), name='loan_detail'),&lt;/code&gt; 這段是幹什麼的啊？&lt;/p&gt;
+&lt;p&gt;因為我們希望當使用者輸入完成並也送出之後可以看到完成的畫面，有的會寫一個 html 只顯示已完成，但以我們這個範例是跳轉的完成表單的內容，所以回顧一下在 &lt;code&gt;views.py&lt;/code&gt; 是哪一段程式碼幫我們處理？&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;form_valid&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;        
+    &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;instance&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;
+    &lt;span class="n"&gt;formset&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;redirect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_absolute_url&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;可以發現 &lt;code&gt;form_valid&lt;/code&gt; 會幫我們確認 &lt;code&gt;field&lt;/code&gt; 內容是否有符合規範，然後和建立一個 loan 和 device 的 &lt;code&gt;formset instance&lt;/code&gt; 接著儲存。儲存之後會回傳 &lt;code&gt;get_absolute_url()&lt;/code&gt; 這個函式，使用者的頁面就會轉換過去。但 &lt;code&gt;get_absolute_url()&lt;/code&gt; 是？？？&lt;/p&gt;
+&lt;p&gt;因為 Django 是一個 &lt;span class="caps"&gt;MTV&lt;/span&gt; 架構，因此一些固定邏輯我們會希望在 Model 處理，所以我們打開 &lt;code&gt;models.py&lt;/code&gt; 回顧一下當時我偷偷加的函式&lt;/p&gt;
+&lt;p&gt;找到 &lt;code&gt;class Loan&lt;/code&gt; 的最下面就看到這個函式，我們透過 decorator &lt;code&gt;@models.permarlink&lt;/code&gt; 可以直接呼叫 get_absolute_url()，不過別忘記提供 pk 參數，這樣才知道要取得哪一筆資料。
+&lt;em&gt;寫這篇同時發現 2013 後 Django 不建議用 permalink 這個 decorator&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nd"&gt;@models.permalink&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_absolute_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;#return reverse(&amp;#39;loan_detail&amp;#39;, kwargs={&amp;#39;pk&amp;#39;: self.pk})&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_detail&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pk&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後再重複一遍開發流程 views -&amp;gt; template。所以在 views.py 建立一個 &lt;code&gt;class LoanDetail(DetailView)&lt;/code&gt; 用來取得資料。嘿嘿，有發現用 &lt;span class="caps"&gt;CBV&lt;/span&gt;&amp;nbsp;好處了嗎？ &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanDetail&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;DetailView&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後再建立 &lt;code&gt;loans/loan_detail.html&lt;/code&gt; 的&amp;nbsp;template。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;這邊有人會問說可是在程式碼裡面都沒有告訴 &lt;code&gt;class LoanDetail(DetailView)&lt;/code&gt; template 是在哪邊呀？ 這就是 &lt;code&gt;DetailView&lt;/code&gt; 聰明的地方，在 class 內有一個 &lt;code&gt;get_context_data&lt;/code&gt; 的方法函式預設的 template 內就是 &lt;strong&gt;model 名稱轉小寫 + _detail.html&lt;/strong&gt; 當然你也可以用 &lt;code&gt;template_name&lt;/code&gt; 來指定囉。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;{# loans/loan_detail.html #}
+{% extends &amp;#39;loans/_base.html&amp;#39; %}
+
+{% block title %}Loans Detail | {{ block.super }}{% endblock title %}
+
+{% block content %}
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;breadcrumb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% block bar %}{{ block.super }}
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;active&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ object.purpose }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;li&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% endblock bar %}
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;ul&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;page-header&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;btn btn-primary pull-right&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;{% url &amp;#39;loan_edit&amp;#39; pk=object.pk %}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;i&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;icon-edit icon-white&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;i&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;Edit&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;a&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ object.purpose }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;h1&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;div&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;table&lt;/span&gt; &lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;table table-striped&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;tr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;isn&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;config&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;unit no.&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;th&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;tr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% for item in object.menu_items.all %}
+        &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;tr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ item.isn }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ item.config }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;{{ item.unit_no }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;td&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;tr&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+        {% endfor %}
+    &lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;table&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;By {{ object.owner }}&lt;span class="p"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="nt"&gt;p&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt;
+
+{% endblock content %}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最後我們打開瀏覽器輸入 &lt;code&gt;http://localhost:8000/loan/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;頁面就會像下面這樣:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch3-p1" src="/pics/201607/django-tutorial-ch3-p1.png" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;新增頁面:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch3-p2" src="/pics/201607/django-tutorial-ch3-p2.png" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;新增多筆&amp;nbsp;Device:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch3-p3" src="/pics/201607/django-tutorial-ch3-p3.png" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;寫到這邊不知不覺已經完成了所有功能，有沒有很興奮呢。
+我想要在短短幾篇裡面講完所有重點真的是有點困難，不過好在現在用 &lt;strong&gt;google&lt;/strong&gt;&amp;nbsp;大神很容易，當你發現問題或是錯誤訊息時，嘗試尋找一下關鍵字，也許有人也犯過一樣錯誤而且解決了呢。&lt;/p&gt;
+&lt;p&gt;總之，內容肯定不夠完美，如果有不清楚地方再請包涵囉，那下一篇我們再來加點新功能吧！&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;目前建議是用 &lt;code&gt;from django.core.urlresolvers import reverse&lt;/code&gt; 然後 回傳 reverse() 來取代 permalink &lt;a href="http://stackoverflow.com/questions/13503645/what-is-permalink-and-get-absolute-url-in-django"&gt;what-is-permalink-and-get-absolute-url-in-django&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</summary><category term="Coding"></category><category term="Django"></category></entry><entry><title>Django教學第二篇-建立第一個APP(續)</title><link href="https://chairco.com.tw/posts/2016/07/Django-Tutorial-02-2.html" rel="alternate"></link><published>2016-07-04T10:46:15+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-07-04:posts/2016/07/Django-Tutorial-02-2.html</id><summary type="html">&lt;p&gt;兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 &lt;span class="caps"&gt;APP&lt;/span&gt;。&lt;/p&gt;
+&lt;p&gt;在開始動手寫程式之前要先瞭解一下 Django 這個 &lt;a href="http://mropengate.blogspot.tw/2015/08/mvcdjangomtv.html" title="MTV(Model-Template-View)"&gt;&lt;span class="caps"&gt;MTV&lt;/span&gt;&lt;/a&gt; 架構(Model-Template-View)。簡單來說在 Django 是使用 View 去取得哪一筆資料並透過 Template&amp;nbsp;決定怎麼呈現。&lt;/p&gt;
+&lt;h3&gt;第一個頁面&lt;/h3&gt;
+&lt;p&gt;首先先來設計一個 &lt;code&gt;base.html&lt;/code&gt; 的 template。 因為我們希望每個 pages 儘量精簡，因此在 project 最外層資料夾建立一個 &lt;code&gt;templates/base/base.html&lt;/code&gt; 讓所有頁面可以繼承它。然後同時也建立一個 &lt;code&gt;static/base/...&lt;/code&gt; 來放一些 css、js&amp;nbsp;檔案&lt;/p&gt;
+&lt;p&gt;直接看結構吧:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;borrow
+├── borrow
+│   ├── __init__.py
+│   └── 略...
+├── loans
+│   ├── __init__.py
+│   ├── 略...
+│   └── templates
+│       └── loans
+│           ├── _base.html
+│           └── home.html
+├── static
+│   └── base
+│       ├── css
+│       │   └── 略...
+│       └── js
+│           └── 略...
+└── templates
+    └── base
+        └── base.html
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;做完之後很重要一點是要修改 &lt;code&gt;settings/base.py&lt;/code&gt; 裡 &lt;code&gt;TEMPLATES&lt;/code&gt; 變數告訴 Django 新的 templates&amp;nbsp;位置:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;TEMPLATES = [
+    {
+        &amp;#39;BACKEND&amp;#39;: &amp;#39;django.template.backends.django.DjangoTemplates&amp;#39;,
+        &amp;#39;DIRS&amp;#39;: [
+                    os.path.join(BASE_DIR, &amp;#39;templates&amp;#39;).replace(&amp;#39;\\&amp;#39;, &amp;#39;/&amp;#39;),
+                    os.path.join(BASE_DIR, &amp;#39;templates/base&amp;#39;).replace(&amp;#39;\\&amp;#39;, &amp;#39;/&amp;#39;),
+        ],
+略...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後也新增 &lt;code&gt;STATICFILES_DIRS&lt;/code&gt; 變數讓 Django 知道 static 位置(這個 folder 用來放 css, js 的&amp;nbsp;檔案):&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, &amp;quot;static&amp;quot;),
+)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;前面我們有提到在 Django View 是用來取得資料並且用 Template 來呈現資料樣貌，所以接下來我們可以開發第一個 view 了，打開 loans/views.py，然後鍵入下面的 code，這段 code 就是建立 function home 然後印出 &lt;code&gt;home.html&lt;/code&gt; 這個頁面:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;home&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;render&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;loans/home.html&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著要讓 Django 透過 &lt;span class="caps"&gt;WSGI&lt;/span&gt; 來拜訪這個頁面，因次我們打開 &lt;code&gt;borrow/urls.py&lt;/code&gt; 來設定 routing&amp;nbsp;的位置:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;loans.views&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;home&lt;/span&gt;
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^admin/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Django 是用正規表達式( Regular Expression )來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home&amp;nbsp;的位置就可以了囉。&lt;/p&gt;
+&lt;p&gt;但突然想起一件事，還沒有建立 template&amp;nbsp;呀！對，這才要回應前面第一段目的，在這邊我們的繼承關係會是這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; templates/base/base.html
+         ＾
+         ｜       
+ loans/templates/loans/_base.html 
+         ＾
+         ｜ 
+ loans/templates/loans/home.html 
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;有點繁瑣，講一下概念:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;templates/base/base.html&lt;/code&gt;: 所有 app 網頁的 base，像 nav&amp;nbsp;等物件都放在這邊。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;loans/templates/loans/_base.html&lt;/code&gt;: 這是每一個 app 的 base，這邊可以設定 &lt;code&gt;&amp;lt;body&amp;gt;&amp;lt;/body&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;loans/templates/loans/home.html&lt;/code&gt;: 實際處理內容的&amp;nbsp;template&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以 template 的 code&amp;nbsp;會長成這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;{# base/base.html #}&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;load&lt;/span&gt; &lt;span class="nv"&gt;staticfiles&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+
+&lt;span class="cp"&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;title&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;title&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;物品借用系統&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;title&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;link&lt;/span&gt; &lt;span class="na"&gt;rel=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;stylesheet&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;href=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+
+&lt;span class="nt"&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;body&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;nav&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;navbar navbar-default navbar-static-top&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;role=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;navigation&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;navbar-header&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class="nt"&gt;&amp;lt;a&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;navbar-brand&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;href=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;url&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;home&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;物品借用系統&lt;span class="nt"&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/nav&amp;gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;body&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+
+&lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;//code.jquery.com/jquery-2.1.1.min.js&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;script&lt;/span&gt; &lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;base/js/base.js&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;js&lt;/span&gt; &lt;span class="cp"&gt;%}{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;js&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+
+&lt;span class="nt"&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;{# loans/_base.html #}&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;extends&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;base.html&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;body&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+&lt;span class="cp"&gt;{{&lt;/span&gt; &lt;span class="nb"&gt;block&lt;/span&gt;&lt;span class="nv"&gt;.super&lt;/span&gt; &lt;span class="cp"&gt;}}&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;content&lt;/span&gt; &lt;span class="cp"&gt;%}{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;content&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;body&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;{# loans/home.html #}&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;extends&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;loans/_base.html&amp;#39;&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;block&lt;/span&gt; &lt;span class="nv"&gt;content&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;span class="cp"&gt;{%&lt;/span&gt; &lt;span class="k"&gt;endblock&lt;/span&gt; &lt;span class="nv"&gt;content&lt;/span&gt; &lt;span class="cp"&gt;%}&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;輸入 &lt;code&gt;http://localhost:8000/&lt;/code&gt; 看看是不是跑出畫面了呢？&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-2-p1" src="/pics/201607/django-tutorial-ch2-2-p1.png" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;有一點成就感了嗎？ 其實 Django&amp;nbsp;架構真的很複雜，第一次總會遇到些問題打擊信心，但一步步慢慢來總是可以學會。然後隨著架構愈趨複雜你會發現這些前置步驟的重要性。&lt;/p&gt;
+&lt;p&gt;先喘一下，我們會加快腳步用最快速度把第一個系統建立起來囉。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;進入開發第一步&lt;/h3&gt;
+&lt;p&gt;打鐵要趁熱，接下來我們要建立一個借用系統表單流程，這個流程的使用者情境 (user story)&amp;nbsp;應該會是這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;新增表單 -&amp;gt; 填寫表單 -&amp;gt; 送出表單
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;但對於系統開發流程大體來說會是這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;1. 新增表單 -&amp;gt; [urls pattern 找到對應 view] -&amp;gt; [view 根據對應 template] -&amp;gt; [顯示 html]
+2. 填寫表單 -&amp;gt; [view 根據 form 找到 model ] -&amp;gt; [ 印出對應欄位給使用者填寫 ] -&amp;gt; [如果有多筆 device， 按下增加按鈕就會透過 js 新增一個欄位給使用者填寫]
+3. 送出表單 -&amp;gt; [view 會檢查欄位內容的型態是否正確] -&amp;gt; [正確就會存進資料庫] -&amp;gt; [網站轉址]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以我們在開發順序的思維就會是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建立 view (當需要輸入資料庫就需要編輯&amp;nbsp;form)&lt;/li&gt;
+&lt;li&gt;透過 template&amp;nbsp;呈現畫面&lt;/li&gt;
+&lt;li&gt;urls pattern 告訴 django&amp;nbsp;連接對應的頁面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;還記得一開始時我們在 admin module 建立了幾筆資料嗎？ 那就先從印出資料畫面著手吧，首先打開 &lt;code&gt;loans/views.py&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;這邊會捨棄 &lt;span class="caps"&gt;FBV&lt;/span&gt;(Function-Based-View) 直接用 &lt;span class="caps"&gt;CBV&lt;/span&gt;(Class-Based-View) 來做開發&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;，程式碼會長這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#  loans/views.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.views.generic&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ListView&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanList&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ListView&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;你沒看錯，就短短的幾行這就是 &lt;span class="caps"&gt;CBV&lt;/span&gt; 威力。我們透過繼承 &lt;code&gt;ListView&lt;/code&gt; 這個 class，然後呼叫 as_view() 這個 function 印出 model 內所有值&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;接著就是撰寫 template 來呈現資料樣貌，所以我們在 &lt;code&gt;loans/templates/loans/&lt;/code&gt; 底下新增一個 &lt;code&gt;loan_list.html&lt;/code&gt; 然後裡面的程式碼如下:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="c1"&gt;# loans/loan_list.html #}&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;extends&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;loans/_base.html&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;block&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="n"&gt;Loans&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt; &lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="n"&gt;block&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;super&lt;/span&gt; &lt;span class="p"&gt;}}{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;endblock&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;block&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;div&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;page-header&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;btn btn-primary pull-right&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{&lt;/span&gt;&lt;span class="si"&gt;% u&lt;/span&gt;&lt;span class="s2"&gt;rl &amp;#39;loan_add&amp;#39; %}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;Add&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt; &lt;span class="n"&gt;Request&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;Loan&lt;/span&gt; &lt;span class="n"&gt;List&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;h1&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;div&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;table&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;table table-striped&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="c1"&gt;#&amp;lt;/th&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;purpose&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;owner&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;created_at&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="nb"&gt;object&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;object_list&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;{{ object.get_absolute_url }}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;purpose&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;href&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;#&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;owner&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;{{&lt;/span&gt; &lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;created_at&lt;/span&gt; &lt;span class="p"&gt;}}&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;td&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;tr&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;endfor&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;&amp;lt;/&lt;/span&gt;&lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="n"&gt;endblock&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;首先不要忘記繼承 &lt;code&gt;loans/_base.html&lt;/code&gt; 這個 template，然後在 &lt;code&gt;{% block content %}{% endblock content %}&lt;/code&gt; 的內容之間撰寫 &lt;span class="caps"&gt;HTML&lt;/span&gt;&amp;nbsp;的程式碼。&lt;/p&gt;
+&lt;p&gt;這個頁面我希望用表格方式顯示，所以用 for 迴圈把從 &lt;code&gt;views.py&lt;/code&gt; 內取得的回傳得值 &lt;code&gt;object_list&lt;/code&gt; 資料印出來。&lt;/p&gt;
+&lt;p&gt;其中一行程式碼 &lt;code&gt;{% url 'loan_add' %}&lt;/code&gt; 要先改成 &lt;code&gt;#&lt;/code&gt; 因為 &lt;code&gt;loan_add&lt;/code&gt; 是我們在 urls pattern 可用來代換的名稱，因為當我們有一天修改 urls pattern 裡對應 &lt;code&gt;views.py&lt;/code&gt; 的函式時，就不需要再去修改 template&amp;nbsp;內的超連結網址囉。&lt;/p&gt;
+&lt;p&gt;但是目前在 urls pattern 內還沒有這個名稱，所以我們就先用 &lt;code&gt;#&lt;/code&gt; 來代替，不然網頁執行就會因為找不到名稱而出錯。&lt;/p&gt;
+&lt;p&gt;最後只要在 urls.py 建立 pattern。先跳出來說明，Django 專案建立時會在專案名稱目錄下產生一個 &lt;code&gt;urls.py&lt;/code&gt; 以這個範例來看就是位於環境變數的資料夾底下 &lt;code&gt;borrow/urls.py&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但你要想想，一個專案可能有很多 &lt;span class="caps"&gt;APP&lt;/span&gt;，而這些 &lt;span class="caps"&gt;APP&lt;/span&gt; 可能有一些類似功能，我們總不希望把所有 pattern 扁平化吧？還是希望分層，如果根據 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;名稱會是不錯的方法。因此一個網站的分類就會如下:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8000&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8000&lt;/span&gt;&lt;span class="sr"&gt;/aaa/&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;
+&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;8000&lt;/span&gt;&lt;span class="sr"&gt;/bbb/&lt;/span&gt;&lt;span class="n"&gt;list&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以有這個觀念後就在 &lt;code&gt;loans/&lt;/code&gt; 路徑底下建立一個 &lt;code&gt;urls.py&lt;/code&gt;，所以你看到的結構會是這樣&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;borrow
+├── borrow
+│   ├── __init__.py
+│   ├── 略...
+│   ├── urls.py
+│   └── wsgi.py
+└── loans
+    ├── __init__.py
+    ├── 略...
+    ├── urls.py
+    └── views.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以我們要在 &lt;code&gt;borrow/urls.py&lt;/code&gt; 告訴他 &lt;span class="caps"&gt;APP&lt;/span&gt; loans 的位置，然後再到 &lt;code&gt;loans/urls.py&lt;/code&gt; 設定 &lt;code&gt;loan_list&lt;/code&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# borrow/urls.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf.urls&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;admin&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;loans.views&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;home&lt;/span&gt;
+
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^admin/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urls&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^loan/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loans.urls&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;home&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# loans/urls.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf.urls&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;url&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;
+
+
+&lt;span class="n"&gt;urlpatterns&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;r&amp;#39;^$&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;views&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoanList&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;as_view&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_list&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;設定完之後，我們打開瀏覽器打入網址 &lt;code&gt;http://localhost:8000/loan/&lt;/code&gt; 看看是不是輸入的資料都跑出來了呢？&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-2-p2" src="/pics/201607/django-tutorial-ch2-2-p2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;哇，有沒有發現其實開發網頁並沒有想像中的困難嘛，接下來我們就照著這樣的開發思維接著進入下一個流程，建立一個頁面讓使用者可以填單囉。(再複習一次):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建立 view (當需要輸入資料庫就需要編輯&amp;nbsp;form)&lt;/li&gt;
+&lt;li&gt;透過 template&amp;nbsp;呈現畫面&lt;/li&gt;
+&lt;li&gt;urls pattern 告訴 django&amp;nbsp;連接對應的頁面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;教學還是有點冗長，但已經陳述了一個基本的開發流程。
+接下來我們要正式進入第三篇 &lt;em&gt;建立 &lt;span class="caps"&gt;MODEL&lt;/span&gt; 和用 &lt;span class="caps"&gt;CBV&lt;/span&gt; 來做程式開發&lt;/em&gt; 把我們的第一個 Django&amp;nbsp;網站建立起來！&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;使用過 Class 類別都知道在開發程式碼時有時我們會儘量避免重複的程式碼一直出現，在 python 裡有一個格言是 there should be one—and preferably only one—obvious way to do it&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; 中文翻譯 &amp;#8220;用一種方法，最好是只有一種方法來做一件事&amp;#8221;。 &lt;span class="caps"&gt;CBV&lt;/span&gt; 就是用繼承方式避免重複的程式碼不斷發生，可參考 &lt;span class="caps"&gt;TP&lt;/span&gt; 這一篇 &lt;a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/19-class-based-view.md"&gt;class-based-view&lt;/a&gt;。&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Peters, Tim (19 August 2004). &lt;a href="https://www.python.org/dev/peps/pep-0020/"&gt;&lt;span class="caps"&gt;PEP&lt;/span&gt; 20 – The Zen of Python&lt;/a&gt;. Python Enhancement Proposals. Python Software Foundation. Retrieved 24 November 2008.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;關於詳細的實作可以參考 &lt;a href="http://ccbv.co.uk/projects/Django/1.9/django.views.generic.list/ListView/"&gt;ccbv ListView&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</summary><category term="Coding"></category><category term="Django"></category></entry><entry><title>Django教學第二篇-建立第一個APP</title><link href="https://chairco.com.tw/posts/2016/07/Django-Tutorial-02-1.html" rel="alternate"></link><published>2016-07-01T13:51:07+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-07-01:posts/2016/07/Django-Tutorial-02-1.html</id><summary type="html">&lt;p&gt;&lt;span class="caps"&gt;GITHUB&lt;/span&gt;: &lt;a href="https://github.com/chairco/django-tutorial-borrow"&gt;https://github.com/chairco/django-tutorial-borrow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;延續前一篇 &lt;a href="https://chairco.github.io/posts/2016/06/Django-Tutorial-01.html#Django-Tutorial-01"&gt;Django 教學第一篇-專案與環境設定&lt;/a&gt; 一鼓作氣接著來開始建立第一個 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;吧。&lt;/p&gt;
+&lt;p&gt;首先我們要先想像一下這個 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。&lt;/p&gt;
+&lt;p&gt;一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 &lt;span class="caps"&gt;APP&lt;/span&gt;，然後只有單一依賴性，原因是 Django 重視每個 &lt;span class="caps"&gt;APP&lt;/span&gt; 的獨立性，儘管你可以讓 a 這個 &lt;span class="caps"&gt;APP&lt;/span&gt; 去依賴 b (a depend on b, 有點像是在說以前的集合論，天雨地濕，地濕天不一定雨，胡扯一下)&amp;nbsp;但不要做出相互依賴關係。&lt;/p&gt;
+&lt;p&gt;所以我們會規劃三個 &lt;span class="caps"&gt;APP&lt;/span&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用者認證&lt;/li&gt;
+&lt;li&gt;申請借用單&lt;/li&gt;
+&lt;li&gt;自動傳送通知信件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;建立 &lt;span class="caps"&gt;APP&lt;/span&gt;&lt;/h3&gt;
+&lt;p&gt;開始動手的 &lt;span class="caps"&gt;APP&lt;/span&gt; 會先針對第二個申請借用單做開發，所以進入到 borrow 專案內用 &lt;code&gt;manage.py&lt;/code&gt; 來建立一個新的 &lt;span class="caps"&gt;APP&lt;/span&gt; loans(名稱會用複數名, 原因是這個 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;會管理很多借用需求單):&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;env&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;startapp&lt;/span&gt; &lt;span class="n"&gt;loans&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;增加一個新的 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;後這個專案的結構就會長成這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;borrow
+├── borrow
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-35.pyc
+│   │   ├── urls.cpython-35.pyc
+│   │   └── wsgi.cpython-35.pyc
+│   ├── settings
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-35.pyc
+│   │   │   ├── base.cpython-35.pyc
+│   │   │   └── local.cpython-35.pyc
+│   │   ├── base.py
+│   │   ├── local.py
+│   │   └── production.py
+│   ├── urls.py
+│   └── wsgi.py
+├── loans
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+└── manage.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著我們到 &lt;code&gt;settings/base.py&lt;/code&gt; 下將這個 &lt;span class="caps"&gt;APP&lt;/span&gt; 加入到 &lt;code&gt;INSTALLED_APPS&lt;/code&gt; 內告訴 Django 已經被加入。 &lt;span class="caps"&gt;APP&lt;/span&gt; 順序沒有一定，但因為 Django 的相依性是由上到下，所以習慣由上加下來&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;INSTALLED_APPS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;loans&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.admin&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.auth&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.contenttypes&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.sessions&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.messages&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;django.contrib.staticfiles&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;現在我們已經可以開始來規劃 loan&amp;#8217;s model 了。概念是希望使用者登入到系統並通過認證後可以填寫借用需求單，因此借用需求單應該會有兩個 table 一個 table 會儲存需求單( loan ), 另一張 table 會儲存機器( device )。因為一張 &lt;code&gt;loan&lt;/code&gt; 可能會對應一到多台 &lt;code&gt;device&lt;/code&gt;，因此這兩張 table 會是一個 1 對&amp;nbsp;多的關係:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;|  loan    |           |  device  |
+|----------|           |----------|
+|  owner   |           |  ISN     |
+|  purpose | 1 &amp;lt;---- n |  unit    |
+|  menu    |           |  config  |
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;loan 的&amp;nbsp;table:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;兩個欄位和一個 Inlineform : &lt;code&gt;owner&lt;/code&gt;, &lt;code&gt;purpose&lt;/code&gt;, &lt;code&gt;menu&lt;/code&gt; 有一個欄位指向 &lt;code&gt;device&lt;/code&gt; 的 foreign key &lt;code&gt;ISN&lt;/code&gt;，接著我們就可以開始撰寫 &lt;code&gt;models.py&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# loans/models.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.conf&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;settings&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.db&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.utils.translation&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ugettext_lazy&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Loan&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;owner&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;purpose&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;created_at&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DateTimeField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;auto_now_add&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;editable&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;ordering&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-created_at&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;verbose_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Loan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;verbose_name_plural&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Loans&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__str__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;purpose&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@models.permalink&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_absolute_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;reverse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan_detail&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;kwargs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;pk&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pk&lt;/span&gt;&lt;span class="p"&gt;})&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Device&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+
+    &lt;span class="n"&gt;loan&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ForeignKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;Loan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;related_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;menu_items&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; 
+        &lt;span class="n"&gt;verbose_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;loan&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;blank&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;unit_no&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;blank&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;isn&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;blank&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;verbose_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ISN&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="n"&gt;created_at&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DateTimeField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;auto_now_add&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="n"&gt;editable&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;ordering&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-created_at&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="n"&gt;verbose_name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Device&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;verbose_name_plural&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Devices&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__str__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isn&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@models.permalink&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_absolute_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;device_detail&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pk&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這段 code 有點長。&amp;nbsp;照順序來說明:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Loan table 的兩個 fields: &lt;code&gt;owner&lt;/code&gt; 和 &lt;code&gt;purpose&lt;/code&gt;，都是 &lt;code&gt;CharField&lt;/code&gt; 資料庫會以 &lt;code&gt;VARCHAR&lt;/code&gt; 型別表示。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;created_at&lt;/code&gt; 這個 fields&amp;nbsp;是自動產生，是希望這個表單能記錄建立的時間。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;def __str__(self):&lt;/code&gt; 這是 python 轉換成字串的 hook。注意的點是 python 3.x 因為處理掉 Unicode 問題，在 python 2.x 要改成 &lt;code&gt;def __unicode__(self):&lt;/code&gt;，不過我建議用 python 3.x&amp;nbsp;吧&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;def get_absolute_url(self):&lt;/code&gt; 和 @models.permalink&amp;nbsp;之後用到再說。&lt;/li&gt;
+&lt;li&gt;Device table&amp;nbsp;大同小異就不重複說了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;接著我們用 &lt;code&gt;makemigrations&lt;/code&gt; 這個指令更新 &lt;code&gt;loans&lt;/code&gt; 的 &lt;code&gt;models&lt;/code&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;env&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;makemigrations&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Migrations for &amp;#39;loans&amp;#39;:
+  0001_initial.py:
+    - Create model Device
+    - Create model Loan
+    - Add field loan to device
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;看到上面畫面就代表已經將新增 Loan 與 Device 間的關聯訊息存並且放到 &lt;code&gt;migrations\0001_initial.py&lt;/code&gt;。然後我們再執行寫入到 loans project&amp;nbsp;指令讓正式寫入資料庫內。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;env&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;migrate&lt;/span&gt; &lt;span class="n"&gt;loans&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;當你看到這個畫面代表已經成功在資料庫建立 &lt;code&gt;Loan&lt;/code&gt; 和 &lt;code&gt;Device&lt;/code&gt; 兩個&amp;nbsp;table。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Operations to perform:
+  Apply all migrations: loans
+Running migrations:
+  Rendering model states... DONE
+  Applying loans.0001_initial... OK
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Django&amp;nbsp;Admin&lt;/h3&gt;
+&lt;p&gt;不過到現在為止我們還是很抽象的建立資料庫欄位，不過好在 Django 幫我們建立 Admin module，因此我們可以快速用 Admin 介面確認剛剛建立的資料庫欄位。首先要先建立一個 superuser 來做登入動作(帳號密碼都可以自訂，Email 可以按 return&amp;nbsp;鍵跳過):&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;env&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;createsuperuser&lt;/span&gt;
+&lt;span class="n"&gt;Username&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;leave&lt;/span&gt; &lt;span class="n"&gt;blank&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;use&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;chairco&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="n"&gt;admin&lt;/span&gt;
+&lt;span class="n"&gt;Email&lt;/span&gt; &lt;span class="n"&gt;address&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="n"&gt;Password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="n"&gt;Password&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;again&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="n"&gt;Superuser&lt;/span&gt; &lt;span class="n"&gt;created&lt;/span&gt; &lt;span class="n"&gt;successfully&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著在瀏覽器網址列鍵入 &lt;code&gt;http://127.0.0.1:8000/admin/&lt;/code&gt; 輸入帳號與密碼就可以看到漂亮的 Admin&amp;nbsp;畫面，但似乎還缺少了什麼呢？？&lt;/p&gt;
+&lt;p&gt;原來剛剛建立的 &lt;code&gt;Loan&lt;/code&gt; 和 &lt;code&gt;Device&lt;/code&gt; 表格都沒有顯示在畫面裡。原來還需要透過 &lt;code&gt;admin.py&lt;/code&gt; 告訴 Admin module 要顯示哪些&amp;nbsp;table。&lt;/p&gt;
+&lt;p&gt;所以我們打開 Admin.py 輸入一些內容然後重新整理，剛剛的網頁就會看到兩個剛剛註冊的&amp;nbsp;table:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# loans/admin.py&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.contrib&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;admin&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.models&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;Loan&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Device&lt;/span&gt;
+
+&lt;span class="c1"&gt;#admin.site.register(Loan)&lt;/span&gt;
+&lt;span class="c1"&gt;#admin.site.register(Device)&lt;/span&gt;
+
+&lt;span class="nd"&gt;@admin.register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Loan&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanAdmin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ModelAdmin&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;list_display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;owner&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;purpose&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;created_at&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+
+&lt;span class="nd"&gt;@admin.register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Device&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanAdmin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ModelAdmin&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;list_display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;isn&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;unit_no&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;config&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面這段 code 你會發現我註解掉兩行註冊 table 的程式碼，取代是兩個用 decorator 註冊的類別，因為如果只留下註解的兩行程式碼， admin 畫面只會顯示 model 內 &lt;code&gt;def __str__(self)&lt;/code&gt; 所定義的回傳值，為了讓畫面豐富與彈性，這不過是是自行定義顯示畫面的一些技巧罷了。&lt;/p&gt;
+&lt;p&gt;看看例子就更清楚，上下兩張圖差異:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-1-p1" src="/pics/201607/django-tutorial-ch2-1-p1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-1-p2" src="/pics/201607/django-tutorial-ch2-1-p2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;然後點選 &lt;span class="caps"&gt;ADD&lt;/span&gt; &lt;span class="caps"&gt;LOAN&lt;/span&gt;+&amp;nbsp;開始嘗試增加一些資料玩玩看吧！&lt;/p&gt;
+&lt;p&gt;誒，有點怪！馬上就發現一個問題，這個需求一開始不是希望再開需求單時就能夠填寫機器的序號嗎？可是現在變成要到各自的表格去新增資料？ 沒關係這就是 Django Admin&amp;nbsp;強大的地方。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-1-p3" src="/pics/201607/django-tutorial-ch2-1-p3.png" /&gt;&lt;/p&gt;
+&lt;p&gt;說到這順便分享一下今年 PyCon &lt;span class="caps"&gt;TW&lt;/span&gt; 2016 有一個講題是&lt;a href="https://tw.pycon.org/2016/en-us/events/talk/69827266518974528/#speaker-content"&gt;那些年，我用 Django Admin 接的案子&lt;/a&gt;講者當年就是靠 Django Admin&amp;nbsp;這個模組就能做出接案網站，所以不要小看這個不起眼的小模組呢。&lt;/p&gt;
+&lt;p&gt;不過話題扯遠了，接下來我們將用模組內的 &lt;code&gt;inline admin&lt;/code&gt; 將 &lt;code&gt;Device&lt;/code&gt; 的 table 嵌入到 &lt;code&gt;Loan&lt;/code&gt; 的&amp;nbsp;table。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DeviceInline&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;TabularInline&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;model&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Device&lt;/span&gt;
+    &lt;span class="n"&gt;extra&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+
+&lt;span class="nd"&gt;@admin.register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Loan&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoanAdmin&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;admin&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ModelAdmin&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;list_display&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;owner&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;purpose&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;created_at&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;inlines&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;DeviceInline&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面我們新增一個類別叫做 &lt;code&gt;DeviceInline&lt;/code&gt; 然後添加一個 inlines 的變數並且 assign 成為 &lt;code&gt;list&lt;/code&gt; 且 &lt;code&gt;list&lt;/code&gt; 內存放 &lt;code&gt;DeviceInline&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;接著我們重新整理下網頁，嘗試再一次新增一筆 Loan 資料。 這時 Device 已經會自動顯示在下方了。Jack&amp;nbsp;這真是太神了啦！&lt;/p&gt;
+&lt;p&gt;&lt;img alt="django-tutorial-ch2-1-p4" src="/pics/201607/django-tutorial-ch2-1-p4.png" /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;那今天我們就先到這邊，下回待續囉。&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;關於這個觀點是 &lt;span class="caps"&gt;TP&lt;/span&gt; 大大提出，可以參考這篇內容 &lt;a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/05-django-apps.md"&gt;django-apps&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</summary><category term="Coding"></category><category term="Django"></category></entry><entry><title>Django教學第一篇-專案與環境設定</title><link href="https://chairco.com.tw/posts/2016/06/Django-Tutorial-01.html" rel="alternate"></link><published>2016-06-30T13:37:22+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-06-30:posts/2016/06/Django-Tutorial-01.html</id><summary type="html">&lt;p&gt;&lt;span class="caps"&gt;GITHUB&lt;/span&gt;: &lt;a href="https://github.com/chairco/django-tutorial-borrow"&gt;https://github.com/chairco/django-tutorial-borrow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;開始我們第一篇教學吧。一開始還是要感謝 &lt;span class="caps"&gt;TP&lt;/span&gt; 大大的教學文件，覺得一個好的文件遠比看了一堆東抄西抄的文件來的受用，那為什麼要重新寫一次，原因是記得以前讀過一本 羅傑斯(&lt;span class="caps"&gt;E.M.&lt;/span&gt;Rogers)所寫的管理書籍叫做 &lt;strong&gt;創新的擴散&lt;/strong&gt;，大意是創新分了幾個階段，對於我而言接觸 Django&amp;nbsp;這樣的處理方法也想象成是一種創新，經過評估、試驗與採納。最後希望能夠把這樣一個好方法提供給大家。&lt;/p&gt;
+&lt;h3&gt;環境說明&lt;/h3&gt;
+&lt;p&gt;Django&amp;nbsp;要開啟一個新的專案主要有幾個步驟：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建立虛擬環境&lt;/li&gt;
+&lt;li&gt;建立 Django&amp;nbsp;專案&lt;/li&gt;
+&lt;li&gt;建立 settings&amp;nbsp;資料夾與設定環境變數&lt;/li&gt;
+&lt;li&gt;建立一個新的 &lt;span class="caps"&gt;APP&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;開始開發程式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通常許多教學內容比較少談論到怎麼處理 Django 的環境變數與設定專案資料夾內的 &lt;code&gt;setting.py&lt;/code&gt;，因為 Django 是透過專案內的 &lt;code&gt;wsgi.py&lt;/code&gt; 這隻檔案把專案變成 &lt;span class="caps"&gt;WSGI&lt;/span&gt; 應用程式&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;，打開 &lt;code&gt;wsgi.py&lt;/code&gt; 的內容會發現它可以設定 &lt;code&gt;setting.py&lt;/code&gt; 位置，並透過 &lt;code&gt;setting.py&lt;/code&gt; 來處理專案的環境變數&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;，因為這個方式，可以據此來切換不同模式例如 共同設定、開發模式與部署正式機設定&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h3&gt;專案說明&lt;/h3&gt;
+&lt;p&gt;這次想做一個專案是類似借東西系統，因為有參與產品研發，在研發初期會有很多不同 Function Team&amp;nbsp;要借用產品進行驗證與測試，希望可以透過一個平台根據序號與目的填寫借用表單。&lt;/p&gt;
+&lt;p&gt;因為一個借用單可能一次包含很多產品需求，因此要能夠一張表單對應多個產品序號。&lt;/p&gt;
+&lt;h3&gt;建立虛擬環境與設定 Django&amp;nbsp;環境變數&lt;/h3&gt;
+&lt;p&gt;因為 Python 3.x 已經很成熟了，而且改正了很多 Python 2.x 煩人 &lt;a href="http://uranusjr.logdown.com/posts/2013/12/20/write-python-3-codes-that-run-on-the-python-2-interpreter"&gt;Unicode 問題&lt;/a&gt;，過去第三方套件也逐漸支援，實在沒有不用的理由。最重要的是 Python 3.x&amp;nbsp;已經內建虛擬環境套件，可以更方便與本機端的套件庫做區隔。&lt;/p&gt;
+&lt;p&gt;在開發這個專案我們總會需要安裝不同套件，再來 Django 版本也不斷演進，為了不干擾其他專案建立一個虛擬環境 env&amp;nbsp;然後啟動它:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python3 -m venv env
+source env/bin/activate
+(env) 
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個指令會幫你建立一個 env 的虛擬環境變數（你可以命名為其它的名稱），這等於是建立一個全新的 python 3 環境，可以試試在終端機鍵入 &lt;code&gt;pip list&lt;/code&gt; 指令，會發現原本機端套件都消失了。不過我習慣在這之前先 update 一下 pip 這個套件然後再進行 Django 的安裝。這個教學撰寫時 Django 已經演進到 1.9.7 版本，如果你還是習慣 1.8.x 版本記得安裝時指定一下 &lt;code&gt;pip install "django&amp;lt;1.9"&lt;/code&gt;，但我喜歡 1.9.x 之後 admin&amp;nbsp;畫面所以就安裝最新版:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(env)pip install --upgrade pip
+(env)pip install django
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;現在已經可以先建立一個 Django 專案，專案名稱我們就取名叫&amp;nbsp;borrow:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(env)django-admin startproject borrow
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個專案的結構會長這樣, borrow 專案內所產生的 borrow&amp;nbsp;資料夾放的就是專案的環境變數:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;borrow
+├── borrow
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如之前所說，因為開發 Web 時會先在本機端開發，然後再把程式部署到正式機，需要處理環境變數。首先在這邊我會做簡單整理與歸納目前我看 3個教學分出的 2&amp;nbsp;種方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;官方: 全部放在預設&amp;nbsp;setting.py&lt;/li&gt;
+&lt;li&gt;&lt;span class="caps"&gt;TP&lt;/span&gt;: 建立 settings/&amp;nbsp;再區分&lt;/li&gt;
+&lt;li&gt;Django Girl: 全部放在預設&amp;nbsp;setting.py&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其實就是建立一個 &lt;code&gt;settings&lt;/code&gt; 資料夾再歸納不同的環境變數 &lt;code&gt;.py&lt;/code&gt;。
+所以接下來將 &lt;code&gt;settings.py&lt;/code&gt; 移到 &lt;code&gt;settings&lt;/code&gt; 資料夾並改名為 &lt;code&gt;base.py&lt;/code&gt;。然後在 settings 目錄裡建立三個空白檔案：&lt;code&gt;__init__.py&lt;/code&gt;、&lt;code&gt;local.py&lt;/code&gt;、&lt;code&gt;production.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(env)cd cd borrow/borrow
+(env)mv settings.py ./settings/base.py
+(env)touch __init__.py local.py production.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最後專案結構就會像下面一樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;borrow
+├── borrow
+│   ├── __init__.py
+│   ├── settings
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   ├── local.py
+│   │   └── production.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接下來照 &lt;span class="caps"&gt;TP&lt;/span&gt;&amp;nbsp;的解釋這三個新設定作用會是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;base.py&lt;/code&gt;：用來存放所有設定中共通的部分。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;local.py&lt;/code&gt;：本機（開發機）用的設定。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;production.py&lt;/code&gt;：正式部署到 production server&amp;nbsp;時用的設定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;新增內容到這 &lt;code&gt;local.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.base&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+
+&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;某個產生的 secret key 值，請自行代換&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;修改 &lt;code&gt;base.py&lt;/code&gt; 內容 mark &lt;code&gt;#SECRET_KEY&lt;/code&gt; 和 &lt;code&gt;#DEBUG = True&lt;/code&gt;, 並修改 &lt;code&gt;BASE_DIR&lt;/code&gt; 如下:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;BASE_DIR&lt;/code&gt; 這個內容是要傳回當前執行檔的所在路徑，因為多了一個 &lt;code&gt;settings&lt;/code&gt; 資料夾，因此要再多一層 &lt;code&gt;os.path.dirname()&lt;/code&gt; 這個很直覺。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))&lt;/span&gt;
+&lt;span class="n"&gt;BASE_DIR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abspath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__file__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;)))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# SECURITY WARNING: keep the secret key used in production secret!&lt;/span&gt;
+&lt;span class="c1"&gt;#SECRET_KEY = &amp;#39;某個長串亂數值&amp;#39;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# SECURITY WARNING: don&amp;#39;t run with debug turned on in production!&lt;/span&gt;
+&lt;span class="c1"&gt;#DEBUG = True&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;寫到這邊，覺得前面那個 &lt;code&gt;os.path.dirname()&lt;/code&gt; 說明得太含糊，順便解釋一下好了 &lt;code&gt;os.path.dirname()&lt;/code&gt; 這個函式其實就是回傳 &lt;code&gt;os.path.split()&lt;/code&gt; 的第一個元素。乾脆在 &lt;code&gt;settings&lt;/code&gt; 底下建立一個 &lt;code&gt;test.py&lt;/code&gt; 來驗證:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;print(os.path.abspath(__file__))
+/Users/chairco/OneDrive/SourceCode/django/allo/borrow/borrow/settings/test.py
+
+print(os.path.split(os.path.abspath(__file__)))
+(&amp;#39;/Users/chairco/OneDrive/SourceCode/django/allo/borrow/borrow/settings&amp;#39;, &amp;#39;test.py&amp;#39;)
+
+print(os.path.dirname(os.path.abspath(__file__)))
+/Users/chairco/OneDrive/SourceCode/django/allo/borrow/borrow/settings
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;第一個範例可以看到因為變數代入是 &lt;code&gt;__file__&lt;/code&gt; 所以印出了 &lt;code&gt;test.py&lt;/code&gt; 所在位置&lt;/li&gt;
+&lt;li&gt;第二個範例只是要告訴你 &lt;code&gt;os.path.split()&lt;/code&gt; 就是把檔案位置和檔案名稱回傳一個 &lt;code&gt;iterator&lt;/code&gt;,&amp;nbsp;第一個元素傳位置，第二個元素傳名稱&lt;/li&gt;
+&lt;li&gt;第三個範例就是告訴你多加一個 &lt;code&gt;os.path.dirname()&lt;/code&gt; 就把檔案位置在上提一層，所以當多加一層目錄就要多一個 &lt;code&gt;os.path.dirname()&lt;/code&gt; 來往上移動囉。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以應該明白這一串長長的程式碼意思，夠直覺了吧。&lt;/p&gt;
+&lt;p&gt;最後來到比較重要部分，因為設定三個 &lt;code&gt;.py&lt;/code&gt; 目的就是為了要區分本機開發環境與部署的環境，最前面我們有提到 Django 是透過一個 &lt;code&gt;wsgi.py&lt;/code&gt; 來設定環境變數，打開的內容是長這樣滴:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
+
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;django.core.wsgi&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;get_wsgi_application&lt;/span&gt;
+
+&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;environ&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setdefault&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;DJANGO_SETTINGS_MODULE&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;borrow.settings&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;application&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;get_wsgi_application&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以只要在目前的虛擬環境告訴 Django 目前開發端要使用的環境變數為 &lt;code&gt;local.py&lt;/code&gt;, 接著到部署機器的環境將變數設定成 &lt;code&gt;production.py&lt;/code&gt; 就完成我們想要區分本機端與部屬端的環境變數囉。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;export DJANGO_SETTINGS_MODULE=borrow.settings.local
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;為了方便切換到這個虛擬環境，可以將上面設定環境變數寫入到我們虛擬環境的 &lt;code&gt;env/bin/activate&lt;/code&gt; 但要記得切換到 env&amp;nbsp;目錄上一層在執行如下指令:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;(env)echo export DJANGO_SETTINGS_MODULE=borrow.settings.local &amp;gt;&amp;gt; env/bin/activate
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr /&gt;
+&lt;p&gt;走到這邊大概 Django 的環境也設定差不多了，接下來我們處理一下資料庫的環境變數，就可以進入到第二篇的 &lt;span class="caps"&gt;APP&lt;/span&gt;&amp;nbsp;開發囉。&lt;/p&gt;
+&lt;p&gt;因為 Django 是一個 &lt;span class="caps"&gt;MVC&lt;/span&gt; 架構(正確來說是 &lt;span class="caps"&gt;MTV&lt;/span&gt;) 因此資料庫對 Django 來說是一個很重要的賣點，在 Django 稱資料庫這塊為 Model 因此我們會透過撰寫 app 內的 &lt;code&gt;models.py&lt;/code&gt; 程式碼來與資料庫進行溝通。&lt;/p&gt;
+&lt;p&gt;Django 預設的資料庫為 SQLite 3，當然如果你喜歡 NoSQL 的 MongoDB，或是在 python 底下一直都很高使用率的 PostgreSQL 與關聯式資料庫的 MySQL 官方都有支援套件。所以如果你要用其他資料庫記得要用 &lt;code&gt;pip&lt;/code&gt; 安裝合適的套件。&lt;/p&gt;
+&lt;p&gt;如同之前所說本機端和部署端可能用不同資料庫因此我們要將 &lt;code&gt;base.py&lt;/code&gt; 內的資料庫設定移轉到 &lt;code&gt;local.py&lt;/code&gt; 和 &lt;code&gt;production.py&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;Mark &lt;code&gt;base.py&lt;/code&gt; 的這段設定:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;#DATABASES = {
+#    &amp;#39;default&amp;#39;: {
+#        &amp;#39;ENGINE&amp;#39;: &amp;#39;django.db.backends.sqlite3&amp;#39;,
+#        &amp;#39;NAME&amp;#39;: os.path.join(BASE_DIR, &amp;#39;db.sqlite3&amp;#39;),
+#    }
+#}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後將上面那段程式碼加入到 &lt;code&gt;local.py&lt;/code&gt;(記得註解要拿掉)，接著我們做了幾個修改:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;修改資料庫位置: &lt;code&gt;os.path.join(os.path.dirname(BASE_DIR)&lt;/code&gt;。這邊要做說明為什麼要把資料庫再往外移出一層原因是，這樣在做 source control 如 git&amp;nbsp;時就可以不用特別排除本機端機料庫檔案。&lt;/li&gt;
+&lt;li&gt;修改資料庫名稱: &lt;code&gt;'borrow_db.sqlite3'&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最後修改後的 &lt;code&gt;local.py&lt;/code&gt; 會長成這樣:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;.base&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+
+&lt;span class="n"&gt;SECRET_KEY&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;自行加入 secret key&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;DEBUG&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+
+&lt;span class="n"&gt;DATABASES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;ENGINE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;django.db.backends.sqlite3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;NAME&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BASE_DIR&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;borrow_db.sqlite3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;設定完成之後就可以做 migrate 來初始化資料庫了，所以我們切換路徑到 &lt;code&gt;manage.py&lt;/code&gt; 底下然後執行:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;migrate&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果出現類似像這樣錯誤畫面，確認一下你有沒有正確 export Django settings 的環境變數。可以再重複執行一下 &lt;code&gt;export DJANGO_SETTINGS_MODULE=borrow.settings.local&lt;/code&gt; &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Traceback (most recent call last):
+  File &amp;quot;manage.py&amp;quot;, line 10, in &amp;lt;module&amp;gt;
+    execute_from_command_line(sys.argv)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&amp;quot;, line 353, in execute_from_command_line
+    utility.execute()
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&amp;quot;, line 345, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&amp;quot;, line 195, in fetch_command
+    klass = load_command_class(app_name, subcommand)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/__init__.py&amp;quot;, line 39, in load_command_class
+    module = import_module(&amp;#39;%s.management.commands.%s&amp;#39; % (app_name, name))
+  File &amp;quot;/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/importlib/__init__.py&amp;quot;, line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap&amp;gt;&amp;quot;, line 986, in _gcd_import
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap&amp;gt;&amp;quot;, line 969, in _find_and_load
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap&amp;gt;&amp;quot;, line 958, in _find_and_load_unlocked
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap&amp;gt;&amp;quot;, line 673, in _load_unlocked
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap_external&amp;gt;&amp;quot;, line 662, in exec_module
+  File &amp;quot;&amp;lt;frozen importlib._bootstrap&amp;gt;&amp;quot;, line 222, in _call_with_frames_removed
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/core/management/commands/migrate.py&amp;quot;, line 16, in &amp;lt;module&amp;gt;
+    from django.db.migrations.autodetector import MigrationAutodetector
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/autodetector.py&amp;quot;, line 14, in &amp;lt;module&amp;gt;
+    from django.db.migrations.questioner import MigrationQuestioner
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/questioner.py&amp;quot;, line 12, in &amp;lt;module&amp;gt;
+    from .loader import MigrationLoader
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/loader.py&amp;quot;, line 10, in &amp;lt;module&amp;gt;
+    from django.db.migrations.recorder import MigrationRecorder
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&amp;quot;, line 12, in &amp;lt;module&amp;gt;
+    class MigrationRecorder(object):
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&amp;quot;, line 26, in MigrationRecorder
+    class Migration(models.Model):
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/migrations/recorder.py&amp;quot;, line 27, in Migration
+    app = models.CharField(max_length=255)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/models/fields/__init__.py&amp;quot;, line 1072, in __init__
+    super(CharField, self).__init__(*args, **kwargs)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/db/models/fields/__init__.py&amp;quot;, line 166, in __init__
+    self.db_tablespace = db_tablespace or settings.DEFAULT_INDEX_TABLESPACE
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&amp;quot;, line 55, in __getattr__
+    self._setup(name)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&amp;quot;, line 43, in _setup
+    self._wrapped = Settings(settings_module)
+  File &amp;quot;/Users/chairco/OneDrive/SourceCode/django/allo/env/lib/python3.5/site-packages/django/conf/__init__.py&amp;quot;, line 120, in __init__
+    raise ImproperlyConfigured(&amp;quot;The SECRET_KEY setting must not be empty.&amp;quot;)
+django.core.exceptions.ImproperlyConfigured: The SECRET_KEY setting must not be empty.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果看到這個畫面恭喜你已經成功了（淚奔啊，怎麼一個設定要搞這麼久）&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Operations to perform:
+  Apply all migrations: sessions, auth, admin, contenttypes
+Running migrations:
+  Rendering model states... DONE
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying sessions.0001_initial... OK
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著我可以開始執行指令啟動網站，確認一下是不是真的成功了&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;manage&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;runserver&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;看到以下畫面:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Performing system checks...
+
+System check identified no issues (0 silenced).
+July 01, 2016 - 02:39:05
+Django version 1.9.7, using settings &amp;#39;borrow.settings.local&amp;#39;
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;然後打開你的瀏覽器在網址列鍵入 &lt;code&gt;localhost:8000&lt;/code&gt; 或是 &lt;code&gt;127.0.0.1:8000&lt;/code&gt; 看到瀏覽器出現下面這個標題代表你已經成功啟動 Django，接下來我們將開始撰寫第一個 &lt;span class="caps"&gt;APP&lt;/span&gt; 來感受一下 Django&amp;nbsp;的魅力吧。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;It worked!
+Congratulations on your first Django-powered page.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個專案目前已經放在 &lt;span class="caps"&gt;GITHUB&lt;/span&gt; &lt;a href="https://github.com/chairco/django-tutorial-borrow"&gt;https://github.com/chairco/django-tutorial-borrow&lt;/a&gt; 歡迎 clone&amp;nbsp;下來。&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;WSGI的全寫是 Web Server Gateway Interface，它的發音有點像是 whiskey，它是Python定義網頁程式和伺服器溝通的介面。可以參考這一篇文章有很詳細說明&lt;a href="http://blog.ez2learn.com/2010/01/27/introduction-to-wsgi/"&gt;化整為零的次世代網頁開發標準: &lt;span class="caps"&gt;WSGI&lt;/span&gt;&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/02-how-does-django-work.md"&gt;how-does-django-work&lt;/a&gt; 很清楚說明 Django 的 wsgi.py 的關係。&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;網頁開發比較麻煩就是在本機端測試完成後部署到正式機需要不同的環境設定變數，身為開發者當然希望有更聰明與簡單的方式避免出錯，因此針對不同的需求區分環境變數是需要的。可以見此篇 &lt;a href="https://github.com/uranusjr/django-tutorial-for-programmers/blob/master/04-run-your-project.md"&gt;run-your-project&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</summary><category term="Coding"></category><category term="Django"></category></entry><entry><title>Django Tutorial教學目錄</title><link href="https://chairco.com.tw/posts/2016/06/Django-Tutorial-0.html" rel="alternate"></link><published>2016-06-30T11:20:46+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2016-06-30:posts/2016/06/Django-Tutorial-0.html</id><summary type="html">&lt;p&gt;Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 &lt;a href="http://flask.pocoo.org/docs/0.11/"&gt;Flask&lt;/a&gt;, Django&amp;nbsp;真的比較複雜和較高的進入門檻。&lt;/p&gt;
+&lt;p&gt;看了不少前輩的開發教學如 &lt;a href="https://www.gitbook.com/book/djangogirlstaipei/django-girls-taipei-tutorial/details"&gt;Django Girl&lt;/a&gt;, TP大的 &lt;a href="https://github.com/uranusjr/django-tutorial-for-programmers"&gt;django-tutorial-for-programmers&lt;/a&gt; 甚至是&lt;a href="https://docs.djangoproject.com/en/1.9/intro/tutorial01/"&gt;Django 官方&lt;/a&gt;網站的英文教學，還是經常會忘記或是做出不好維護的設定。因為 Django&amp;nbsp;實在是一個有點複雜但又很有彈性的架構，因此沒有做好基本功，最後的悲劇就是怎麼改怎麼怪（雖然都能順利運作）覺得這就是對潔癖人士很大的&amp;#8230;缺點吧？&lt;/p&gt;
+&lt;p&gt;因為如此決定撰寫一系列從專案開發流程的 Django 系列教學文，也許更能釐清自己思路。決定這系列文應該會發 4&amp;nbsp;篇。&lt;/p&gt;
+&lt;h3&gt;目錄&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;第一篇 &lt;strong&gt;簡單說明想要開發的專案和環境設定。&lt;/strong&gt;  &lt;/li&gt;
+&lt;li&gt;第二篇 &lt;strong&gt;分享個人參考前輩的文章，如何架構和設定一個以 Django&amp;nbsp;開發的專案。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;第三篇 &lt;strong&gt;用 &lt;span class="caps"&gt;CBV&lt;/span&gt;&amp;nbsp;來做程式開發。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;第四篇 &lt;strong&gt;展示和一些未來的 &lt;span class="caps"&gt;TODO&lt;/span&gt; List 和 What&amp;#8217;s&amp;nbsp;Next。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;那就讓我們開始 Get the ball rolling  &lt;code&gt;!!&lt;/code&gt;&lt;/p&gt;</summary><category term="Coding"></category><category term="Django"></category></entry></feed>
