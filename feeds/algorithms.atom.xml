@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.com.tw/" rel="alternate"></link><link href="https://chairco.com.tw/feeds/algorithms.atom.xml" rel="self"></link><id>https://chairco.com.tw/</id><updated>2017-08-27T12:53:00+08:00</updated><entry><title>用 Python 來理解動態規劃 (Dynamic Programming)</title><link href="https://chairco.com.tw/posts/2017/08/Understand_Dynamic_Programming_usining_Python.html" rel="alternate"></link><published>2017-08-27T12:53:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-08-27:posts/2017/08/Understand_Dynamic_Programming_usining_Python.html</id><summary type="html">&lt;p&gt;動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法)&amp;nbsp;把問題細分成子問題然後做記憶。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://chairco.me/" rel="alternate"></link><link href="https://chairco.me/feeds/algorithms.atom.xml" rel="self"></link><id>https://chairco.me/</id><updated>2017-08-27T12:53:00+08:00</updated><entry><title>用 Python 來理解動態規劃 (Dynamic Programming)</title><link href="https://chairco.me/posts/2017/08/Understand_Dynamic_Programming_usining_Python.html" rel="alternate"></link><published>2017-08-27T12:53:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.me,2017-08-27:posts/2017/08/Understand_Dynamic_Programming_usining_Python.html</id><summary type="html">&lt;p&gt;動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法)&amp;nbsp;把問題細分成子問題然後做記憶。&lt;/p&gt;
 &lt;p&gt;先回顧分治法個概念:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為&amp;nbsp;遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。&lt;/p&gt;
@@ -127,7 +127,7 @@
 &lt;p&gt;&amp;lt;撰寫中&amp;gt;&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;Reference:
-+ &lt;a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts"&gt;動態規劃題目&lt;/a&gt;&lt;/p&gt;</summary><category term="Dynamic Programming"></category><category term="Python"></category></entry><entry><title>用 Python 實作斐波那契（Fibonacci）兩三事</title><link href="https://chairco.com.tw/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html" rel="alternate"></link><published>2017-07-24T18:31:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-07-24:posts/2017/07/Let's talk about fibonacci with python.html</id><summary type="html">&lt;hr /&gt;
++ &lt;a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts"&gt;動態規劃題目&lt;/a&gt;&lt;/p&gt;</summary><category term="Dynamic Programming"></category><category term="Python"></category></entry><entry><title>用 Python 實作斐波那契（Fibonacci）兩三事</title><link href="https://chairco.me/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html" rel="alternate"></link><published>2017-07-24T18:31:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.me,2017-07-24:posts/2017/07/Let's talk about fibonacci with python.html</id><summary type="html">&lt;hr /&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Fibonacci&amp;nbsp;是在資料結構上說明遞迴一個很直覺的範例，不過在演算法上也是不可或缺的指導教材。最近陸續在準備一些線上考試回來看才發現自己其實低估了這些科普教材對於自我訓練的重要性。&lt;/p&gt;
 &lt;p&gt;本篇會從一些遇到的範例，並試著從遞迴、效率的觀點來探討，同時也檢測自己對程式設計與演算法上是不是有不足之處。如果發現在觀念上有錯誤，希望讀者給予指教。&lt;/p&gt;
@@ -250,7 +250,7 @@
 
 
 &lt;hr /&gt;
-&lt;p&gt;做一些紀錄，其實演算法是一個能夠訓練大腦的方法，接下來我會嘗試用 Dynamic&amp;nbsp;programming(動態規劃)的方法來思考與講解這些例子。&lt;/p&gt;</summary><category term="python"></category><category term="fibonacci"></category></entry><entry><title>演算法系列：Directed Acyclic Graph</title><link href="https://chairco.com.tw/posts/2017/05/algorithm%20directed%20acyclic%20graph.html" rel="alternate"></link><published>2017-05-23T10:17:07+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.com.tw,2017-05-23:posts/2017/05/algorithm directed acyclic graph.html</id><summary type="html">&lt;hr /&gt;
+&lt;p&gt;做一些紀錄，其實演算法是一個能夠訓練大腦的方法，接下來我會嘗試用 Dynamic&amp;nbsp;programming(動態規劃)的方法來思考與講解這些例子。&lt;/p&gt;</summary><category term="python"></category><category term="fibonacci"></category></entry><entry><title>演算法系列：Directed Acyclic Graph</title><link href="https://chairco.me/posts/2017/05/algorithm%20directed%20acyclic%20graph.html" rel="alternate"></link><published>2017-05-23T10:17:07+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.me,2017-05-23:posts/2017/05/algorithm directed acyclic graph.html</id><summary type="html">&lt;hr /&gt;
 &lt;p&gt;Directed Acyclic Graph 中文翻譯為：&lt;code&gt;有向無環圖&lt;/code&gt;。文章通篇會來解釋關於 &lt;span class="caps"&gt;DAG&lt;/span&gt; 這個演算法。
 但要談 &lt;span class="caps"&gt;DAG&lt;/span&gt;&amp;nbsp;演算法之前需要先認識幾個資料結構的知識：&lt;/p&gt;
 &lt;ul&gt;
