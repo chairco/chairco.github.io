@@ -5,7 +5,7 @@
         <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Django教學第二篇-建立第一個APP</title>
+    <title>Django教學第二篇-建立第一個APP(上)</title>
         <link href="https://chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
         <link href="https://chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
         <link href="https://chairco.me/feeds/django.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
@@ -45,7 +45,7 @@
 
 
 
-        <meta name="description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
+        <meta name="description" content="延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -58,19 +58,19 @@
 	<meta property="og:type" content="article">
             <meta property="article:author" content="../../../author/chaircojason.html">
 	<meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-02-1.html">
-	<meta property="og:title" content="Django教學第二篇-建立第一個APP">
+	<meta property="og:title" content="Django教學第二篇-建立第一個APP(上)">
 	<meta property="article:published_time" content="2016-07-01 13:51:07+08:00">
-            <meta property="og:description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
+            <meta property="og:description" content="延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@ChaircoChen">
-        <meta name="twitter:title" content="Django教學第二篇-建立第一個APP">
+        <meta name="twitter:title" content="Django教學第二篇-建立第一個APP(上)">
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="GITHUB: https://github.com/chairco/django-tutorial-borrow 延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
+            <meta name="twitter:description" content="延續前一篇 Django 教學第一篇-專案與環境設定 一鼓作氣接著來開始建立第一個 APP 吧。 首先我們要先想像一下這個 ...">
     
 </head>
 
@@ -111,7 +111,7 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>Django教學第二篇-建立第一個APP</h1>
+                        <h1>Django教學第二篇-建立第一個APP(上)</h1>
                         <span class="meta">Posted by
                                 <a href="../../../author/chaircojason.html">chairco(Jason)</a>
                              on  7 01, 2016
@@ -129,8 +129,7 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
-        <p><span class="caps">GITHUB</span>: <a href="https://github.com/chairco/django-tutorial-borrow">https://github.com/chairco/django-tutorial-borrow</a></p>
-<p>延續前一篇 <a href="https://chairco.github.io/posts/2016/06/Django-Tutorial-01.html#Django-Tutorial-01">Django 教學第一篇-專案與環境設定</a> 一鼓作氣接著來開始建立第一個 <span class="caps">APP</span>&nbsp;吧。</p>
+        <p>延續前一篇 <a href="/posts/2016/06/Django-Tutorial-01.html#Django-Tutorial-01">Django 教學第一篇-專案與環境設定</a> 一鼓作氣接著來開始建立第一個 <span class="caps">APP</span>&nbsp;吧。</p>
 <p>首先我們要先想像一下這個 <span class="caps">APP</span>&nbsp;會包含哪些功能，然後我們會根據這些功能建立相對應的元件，接著根據這個架構規劃資料庫。我覺得一開始不要設計太複雜功能，先將主要框架給規劃出來，然後再根據這個架構疊床架屋慢慢開發。</p>
 <p>一個借用系統應該會有幾個大功能，這每一個功能我們都希望是獨立的 <span class="caps">APP</span>，然後只有單一依賴性，原因是 Django 重視每個 <span class="caps">APP</span> 的獨立性，儘管你可以讓 a 這個 <span class="caps">APP</span> 去依賴 b (a depend on b, 有點像是在說以前的集合論，天雨地濕，地濕天不一定雨，胡扯一下)&nbsp;但不要做出相互依賴關係。</p>
 <p>所以我們會規劃三個 <span class="caps">APP</span>:</p>
@@ -486,9 +485,9 @@ Running migrations:
     Blog powered by <a href="http://getpelican.com">Pelican</a>,
     which takes great advantage of <a href="http://python.org">Python</a>. <br />
     <!--
-          <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/80x15.png" /></a>
+          <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/80x15.png" /></a>
     Content
-  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'slug': 'by', 'name': 'creative commons attribution', 'version': '4.0'}/4.0/">Creative Commons Attribution{'slug': '', 'name': 'creative commons attribution', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
+  licensed under a <a rel="license" href="https://creativecommons.org/licenses/{'name': 'creative commons attribution', 'slug': 'by', 'version': '4.0'}/4.0/">Creative Commons Attribution{'name': 'creative commons attribution', 'slug': '', 'version': '4.0'} 4.0 International License</a>, except where indicated otherwise.
 
     -->
 </p>            </div>

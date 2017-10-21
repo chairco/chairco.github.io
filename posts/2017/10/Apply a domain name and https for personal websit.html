@@ -5,10 +5,10 @@
         <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Django Tutorial教學目錄</title>
+    <title>個人網站申請一個網域名與掛上免費 https</title>
         <link href="https://chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
         <link href="https://chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
-        <link href="https://chairco.me/feeds/django.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <link href="https://chairco.me/feeds/web.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
     
     <!-- Bootstrap Core CSS -->
     <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
@@ -45,32 +45,33 @@
 
 
 
-        <meta name="description" content="Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 Flask, Django 真的比較複雜和較高的進入門檻。 看了不少前輩的開發教學如 Django Girl, TP大的 ...">
+        <meta name="description" content="前不久有寫過一篇文章 Github.io 自訂網域名稱且透過 Cloudflare 申請免費 https 分享如何用免費的 Cloudflare 替網站掛上 HTTPS。 時隔一陣，我原始的網域名 chairco.com.tw ...">
 
         <meta name="author" content="chairco(Jason)">
 
-        <meta name="tags" content="Coding">
-        <meta name="tags" content="Django">
+        <meta name="tags" content="Web">
+        <meta name="tags" content="Gandi">
+        <meta name="tags" content="Cloudflare">
 
 	    <meta property="og:locale" content="">
     <meta property="og:site_name" content="Jason's Blog">
 
 	<meta property="og:type" content="article">
             <meta property="article:author" content="../../../author/chaircojason.html">
-	<meta property="og:url" content="../../../posts/2016/06/Django-Tutorial-0.html">
-	<meta property="og:title" content="Django Tutorial教學目錄">
-	<meta property="article:published_time" content="2016-06-30 11:20:46+08:00">
-            <meta property="og:description" content="Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 Flask, Django 真的比較複雜和較高的進入門檻。 看了不少前輩的開發教學如 Django Girl, TP大的 ...">
+	<meta property="og:url" content="../../../posts/2017/10/Apply a domain name and https for personal websit.html">
+	<meta property="og:title" content="個人網站申請一個網域名與掛上免費 https">
+	<meta property="article:published_time" content="2017-10-21 14:20:38+08:00">
+            <meta property="og:description" content="前不久有寫過一篇文章 Github.io 自訂網域名稱且透過 Cloudflare 申請免費 https 分享如何用免費的 Cloudflare 替網站掛上 HTTPS。 時隔一陣，我原始的網域名 chairco.com.tw ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@ChaircoChen">
-        <meta name="twitter:title" content="Django Tutorial教學目錄">
+        <meta name="twitter:title" content="個人網站申請一個網域名與掛上免費 https">
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 Flask, Django 真的比較複雜和較高的進入門檻。 看了不少前輩的開發教學如 Django Girl, TP大的 ...">
+            <meta name="twitter:description" content="前不久有寫過一篇文章 Github.io 自訂網域名稱且透過 Cloudflare 申請免費 https 分享如何用免費的 Cloudflare 替網站掛上 HTTPS。 時隔一陣，我原始的網域名 chairco.com.tw ...">
     
 </head>
 
@@ -111,11 +112,12 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="post-heading">
-                        <h1>Django Tutorial教學目錄</h1>
+                        <h1>個人網站申請一個網域名與掛上免費 https</h1>
                         <span class="meta">Posted by
                                 <a href="../../../author/chaircojason.html">chairco(Jason)</a>
-                             on  6 30, 2016
+                             on 10 21, 2017
                         </span>
+                            <span class="meta">Updated on 10 21, 2017</span>
                         
                     </div>
                 </div>
@@ -129,17 +131,87 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
     <!-- Post Content -->
     <article>
-        <p>Django 是一個用 Python 開發的 Web Framework. 過去一年用它開發了些網站，必須要承認，比起輕量級的 <a href="http://flask.pocoo.org/docs/0.11/">Flask</a>, Django&nbsp;真的比較複雜和較高的進入門檻。</p>
-<p>看了不少前輩的開發教學如 <a href="https://www.gitbook.com/book/djangogirlstaipei/django-girls-taipei-tutorial/details">Django Girl</a>, TP大的 <a href="https://github.com/uranusjr/django-tutorial-for-programmers">django-tutorial-for-programmers</a> 甚至是<a href="https://docs.djangoproject.com/en/1.9/intro/tutorial01/">Django 官方</a>網站的英文教學，還是經常會忘記或是做出不好維護的設定。因為 Django&nbsp;實在是一個有點複雜但又很有彈性的架構，因此沒有做好基本功，最後的悲劇就是怎麼改怎麼怪（雖然都能順利運作）覺得這就是對潔癖人士很大的&#8230;缺點吧？</p>
-<p>因為如此決定撰寫一系列從專案開發流程的 Django 系列教學文，也許更能釐清自己思路。決定這系列文應該會發 4&nbsp;篇。</p>
-<h3>目錄</h3>
+        <p>前不久有寫過一篇文章 <a href="/posts/2017/06/Github.io%20Pages%20redirect%20to%20domain%20name%20and%20add%20HTTPS.html">Github.io 自訂網域名稱且透過 Cloudflare 申請免費 https</a> 分享如何用免費的 Cloudflare 替網站掛上 <span class="caps">HTTPS</span>。</p>
+<p>時隔一陣，我原始的網域名 <strong>chairco.com.tw</strong> 也到期了。掙扎很久再想到底要不要續約，但一直覺得 <code>com.tw</code> 網域名稱很怪，但 <code>com</code> 又被買走，<code>tw</code> 有點狹隘感覺。既然網站是個人的知識與經驗分享，那就找個比較個人 style 的吧。所以 <code>me</code> 就成了我的選擇了。</p>
+<p>不過重新購買過程出現小插曲，<code>Gandi</code>(網域名稱服務商) 似乎這一陣子改版了他們系統，原先是在一個稱為 <a href="https://v4.gandi.net/news/en/2012-10-23/798-gandi_v4_is_live/?lang=zh-hant">v4</a> 網站上註冊與購買，但我透過他寄來提醒信連結到是 <a href="https://v5.gandi.net/zh-hant">v5</a> 之前可能原本帳號無法通用在兩個系統，另外申請了一組帳號結果一時不察在 v5&nbsp;系統上用了後來新申請帳號購買，只好將錯就錯了。</p>
+<p>新的網頁系統可能為了更人性化所以在流程與 <span class="caps">UI</span> 有調整，和舊的差距不小。因此再次記錄透過 Gandi 購買網域名稱和申請免費 https&nbsp;的過程。</p>
+<h2>購買網域名</h2>
+<p>進到 Gandi v5 的新網頁如下，可以打你想要的網域名稱進行購買與註冊，範例我用 <code>g0v.tw</code> 來舉例。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/6THSbpw.png" /></p>
+<p>因為 <code>g0v.tw</code> 已經被註冊了，所以推薦了幾個尚未註冊的網域名稱。不知道如何定價，但我猜應該就是根據市場上的熱度，比較有趣是 <code>cn</code> 網域似乎需要申請文件。</p>
+<p>假設你選定了某個網域，就點選之後再按右上角購物車結帳。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/WoE5j8f.png" /></p>
+<p>接著會進到購物車畫面。在這邊如果你有參加一些研討會例如：<a href="https://tw.pycon.org/2017/zh-hant/">PyCon <span class="caps">TW</span></a> 有 Gandi&nbsp;贊助可能會得到一些第一年免費的序號，可以拿來用，但天下沒有白吃午餐，第二年開始通常就是恢復原價。如果有想要長期經營就選好選滿不要和我一樣。</p>
+<p>確定好一些加值稅等就可以按下結帳。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/i4Biyo0.png" /></p>
+<p>因為目前為止都尚未登入，所以可以登入你申請帳號或是重新申請一個新的。然後 v4 無法和 v5 共用帳號（無法理解原因？是因為當初申請的帳號比較特殊嗎？是 Gandi-&nbsp;開頭的）</p>
+<p><img alt="Imgur" src="https://i.imgur.com/pJgE8em.png" /></p>
+<p>接著會請你輸入一些發票必要資訊（當然要輸入假的也行）我也不知道為什麼一定需要？不過我是輸入真實的，反正網站上遠本就透露這些訊息。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/wMvlC61.png" /></p>
+<p>然後如果想試試 Gandi 的 Hosting&nbsp;可以免費試用十天，個人是取消省得麻煩。接著就結帳付錢吧。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/UKRPPV1.png" /></p>
+<p>完成之後可以進入管理介面，到左邊<code>域名</code>點選主畫面你剛剛購買的網域名稱來做設定吧。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/wpB0jtZ.png" /></p>
+<h2>轉址到網域名稱</h2>
+<p>因為我們的網頁是掛在 github.io 上，希望瀏覽器打入 <code>chairco.github.io</code> 時可以轉址到我們的網域名。這個步驟會許要做兩件事：</p>
+<ol>
+<li>
+<p>設定 Gandi <code>區域設定檔</code></p>
+</li>
+<li>
+<p>增加 <span class="caps">CNAME</span> 在主機上: 建立 <span class="caps">CNAME</span> 檔案在 github.io 的 repo&nbsp;內。</p>
+</li>
+</ol>
+<h3>設定區域設定檔</h3>
+<p>在<code>管理介面</code>點選<code>網域名稱</code>會看到如下面的圖。把原先的區域黨紀錄都刪除，增加三個。接著確認沒有打錯就儲存。</p>
 <ul>
-<li>第一篇 <strong>簡單說明想要開發的專案和環境設定。</strong>  </li>
-<li>第二篇 <strong>分享個人參考前輩的文章，如何架構和設定一個以 Django&nbsp;開發的專案。</strong></li>
-<li>第三篇 <strong>用 <span class="caps">CBV</span>&nbsp;來做程式開發。</strong></li>
-<li>第四篇 <strong>展示和一些未來的 <span class="caps">TODO</span> List 和 What&#8217;s&nbsp;Next。</strong></li>
+<li>名稱: a, ipv4:&nbsp;192.30.252.153</li>
+<li>名稱: a, ipv4:&nbsp;192.30.252.154</li>
+<li>名稱: <span class="caps">CNAME</span>, 主機名稱: {github&nbsp;帳號}.github.io.</li>
 </ul>
-<p>那就讓我們開始 Get the ball rolling  <code>!!</code></p>
+<p><img alt="Imgur" src="https://i.imgur.com/1Vb91tA.png" /></p>
+<h3>主機上增加 <span class="caps">CNAME</span>&nbsp;檔案</h3>
+<p>在 github.io 的 repo 內新增一個 <span class="caps">CNAME</span> 檔案，裡面就寫你的網域名稱，例如&nbsp;chairco.me</p>
+<p><img alt="Imgur" src="https://i.imgur.com/3aEe3CB.png" /></p>
+<p>接著等一會兒吧（大概最快一分鐘），你在瀏覽器鍵入原本 <code>github.io</code> 網址就會成功轉址到你購買的新網域名稱上。恭喜你踏出第一步囉。接著開始設定&nbsp;https。</p>
+<h2>掛載免費 <span class="caps">HTTPS</span></h2>
+<p>不講太多 https 是什麼，google 一下 wiki 可能更清楚也不會偏誤。因為如果是自己的主機其實還挺容易的，但因為我們是掛載在 github&nbsp;的主機，所以需要一些第三方服務，簡單說第三方服務的關係應該是：</p>
+<p>[ Github.io ] &lt;&#8212;&gt; [ Gandi] &lt;&#8212;&gt;&nbsp;[Cloudflare]</p>
+<p>所以概念上就不需要針對 Github.io 上的 repo 做任何事，只要讓 Cloudflare 能夠收到 Gandi&nbsp;傳過來的封包，要做到這件事情就是要：</p>
+<ol>
+<li>
+<p>設定 Cloudflare 上 <span class="caps">DNS</span> 和 Gandi&nbsp;的區域設定檔案內容相同。</p>
+</li>
+<li>
+<p>設定 Gandi 的 <span class="caps">DNS</span> 是 Cloudflare&nbsp;提供的位置。</p>
+</li>
+</ol>
+<p>假設你已經註冊了一個帳號，登入主畫面點選右上 <code>+Add site</code> 會看到下面畫面，就輸入網域名稱先讓 Cloudflare 幫你偵測一些參數，偵測完成之後案 <code>setup continue</code>。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/9Si5Mlc.png" /></p>
+<p>通常可能會抓到錯誤的 Gandi&nbsp;區域設定檔(要和前面我在設定一樣才對)，沒關係就等完成後再來修正。接著會問你要不要使用付費，點選免費後下一步。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/0SgJJZk.png" /></p>
+<p>接著會偵測你目前的 <span class="caps">DNS</span> 並請你將網域名稱服務商提供的 <span class="caps">DNS</span> 改成 Cloudflare&nbsp;以下兩個。</p>
+<ul>
+<li>
+<p>mario.ns.cloudflare.com</p>
+</li>
+<li>
+<p>mira.ns.cloudflare.com</p>
+</li>
+</ul>
+<p>![<a href="https://i.imgur.com/svNyeP2.png">Imgur</a>]</p>
+<p>所以我們要回到 Gandi 的網站修改。點選<code>管理介面</code>內的網域名稱將原本的 <span class="caps">DNS</span>&nbsp;修改，接著儲存後離開。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/qJWTjCH.png" /></p>
+<p>接著完成所有程序，可以點選 <code>Recheckserver</code>(畫面裡被 google 翻譯的圖示擋住)。旁邊的描述有提到，最慢 <span class="caps">SSL</span> 的憑證可能會 24 hr&nbsp;後生效。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/Jb7coVG.png" /></p>
+<p>如果 Gandi 上的 <span class="caps">DNS</span>&nbsp;有正確設定，那就會顯示如下面正確的圖示。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/PzZdHq0.png" /></p>
+<p>最後一個步驟要設定 <code>page rules</code> 才允許網頁通過。如果沒有做這個設定那 Cloudflare 就不知道從 chairco.me 過來的網頁哪些要做 <span class="caps">SSL</span>&nbsp;加密。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/BfvjPpo.png" /> </p>
+<p>點選 Cloudflare 上 Page rules，接著輸入 <code>{網域名稱}/*</code>，因為全部通過所以用星號表示。</p>
+<p><img alt="Imgur" src="https://i.imgur.com/Oc4Wbvq.png" /></p>
+<p>就完成所有的程序了。以我的經驗應該頂多 30 mins 網站就會掛上&nbsp;https。接著打開瀏覽器就開心地看到網頁上有憑證啦！</p>
+<p><img alt="Imgur" src="https://i.imgur.com/fDUFM88.png" /> </p>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
@@ -150,7 +222,7 @@
     </article>
 
         <div class="tags">
-            <p>tags: <a href="../../../tag/coding.html">Coding</a>, <a href="../../../tag/django.html">Django</a></p>
+            <p>tags: <a href="../../../tag/web.html">Web</a>, <a href="../../../tag/gandi.html">Gandi</a>, <a href="../../../tag/cloudflare.html">Cloudflare</a></p>
         </div>
 
     <hr>
@@ -160,8 +232,8 @@
             <div id="disqus_thread"></div>
             <script type="text/javascript">
                 var disqus_shortname = 'chairco';
-                //var disqus_identifier = 'posts/2016/06/Django-Tutorial-0.html';
-                //var disqus_url = '../../../posts/2016/06/Django-Tutorial-0.html';
+                //var disqus_identifier = 'posts/2017/10/Apply a domain name and https for personal websit.html';
+                //var disqus_url = '../../../posts/2017/10/Apply a domain name and https for personal websit.html';
                 (function() {
                     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                     dsq.src = '//chairco.disqus.com/embed.js';
