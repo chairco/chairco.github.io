@@ -70,7 +70,7 @@
 &lt;p&gt;mira.ns.cloudflare.com&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;![&lt;a href="https://i.imgur.com/svNyeP2.png"&gt;Imgur&lt;/a&gt;]&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/svNyeP2.png" /&gt;&lt;/p&gt;
 &lt;p&gt;所以我們要回到 Gandi 的網站修改。點選&lt;code&gt;管理介面&lt;/code&gt;內的網域名稱將原本的 &lt;span class="caps"&gt;DNS&lt;/span&gt;&amp;nbsp;修改，接著儲存後離開。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/qJWTjCH.png" /&gt;&lt;/p&gt;
 &lt;p&gt;接著完成所有程序，可以點選 &lt;code&gt;Recheckserver&lt;/code&gt;(畫面裡被 google 翻譯的圖示擋住)。旁邊的描述有提到，最慢 &lt;span class="caps"&gt;SSL&lt;/span&gt; 的憑證可能會 24 hr&amp;nbsp;後生效。&lt;/p&gt;
