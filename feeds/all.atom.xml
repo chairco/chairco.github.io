@@ -21,13 +21,13 @@
 &lt;p&gt;完成之後可以進入管理介面，到左邊&lt;code&gt;域名&lt;/code&gt;點選主畫面你剛剛購買的網域名稱來做設定吧。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/wpB0jtZ.png" /&gt;&lt;/p&gt;
 &lt;h2&gt;轉址到網域名稱&lt;/h2&gt;
-&lt;p&gt;因為我們的網頁是掛在 github.io 上，希望瀏覽器打入 &lt;code&gt;chairco.github.io&lt;/code&gt; 時可以轉址到我們的網域名。這個步驟會許要做兩件事：&lt;/p&gt;
+&lt;p&gt;因為我們的網頁是掛在 &lt;code&gt;github.io&lt;/code&gt; 上，希望瀏覽器打入 &lt;code&gt;chairco.github.io&lt;/code&gt; 時可以轉址到我們的網域名。這個步驟會許要做兩件事：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;設定 Gandi &lt;code&gt;區域設定檔&lt;/code&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;增加 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 在主機上: 建立 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 檔案在 github.io 的 repo&amp;nbsp;內。&lt;/p&gt;
+&lt;p&gt;增加 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 在主機上: 建立 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 檔案在 &lt;code&gt;github.io&lt;/code&gt; 的 &lt;code&gt;repo&lt;/code&gt; 內。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3&gt;設定區域設定檔&lt;/h3&gt;
@@ -39,13 +39,16 @@
 &lt;/ul&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/1Vb91tA.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;主機上增加 &lt;span class="caps"&gt;CNAME&lt;/span&gt;&amp;nbsp;檔案&lt;/h3&gt;
-&lt;p&gt;在 github.io 的 repo 內新增一個 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 檔案，裡面就寫你的網域名稱，例如&amp;nbsp;chairco.me&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;github.io&lt;/code&gt; 的 repo 內新增一個 &lt;span class="caps"&gt;CNAME&lt;/span&gt; 檔案，裡面就寫你的網域名稱，例如 &lt;code&gt;chairco.me&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/3aEe3CB.png" /&gt;&lt;/p&gt;
 &lt;p&gt;接著等一會兒吧（大概最快一分鐘），你在瀏覽器鍵入原本 &lt;code&gt;github.io&lt;/code&gt; 網址就會成功轉址到你購買的新網域名稱上。恭喜你踏出第一步囉。接著開始設定&amp;nbsp;https。&lt;/p&gt;
 &lt;h2&gt;掛載免費 &lt;span class="caps"&gt;HTTPS&lt;/span&gt;&lt;/h2&gt;
-&lt;p&gt;不講太多 https 是什麼，google 一下 wiki 可能更清楚也不會偏誤。因為如果是自己的主機其實還挺容易的，但因為我們是掛載在 github&amp;nbsp;的主機，所以需要一些第三方服務，簡單說第三方服務的關係應該是：&lt;/p&gt;
-&lt;p&gt;[ Github.io ] &amp;lt;&amp;#8212;&amp;gt; [ Gandi] &amp;lt;&amp;#8212;&amp;gt;&amp;nbsp;[Cloudflare]&lt;/p&gt;
-&lt;p&gt;所以概念上就不需要針對 Github.io 上的 repo 做任何事，只要讓 Cloudflare 能夠收到 Gandi&amp;nbsp;傳過來的封包，要做到這件事情就是要：&lt;/p&gt;
+&lt;p&gt;不講太多 https 是什麼，google 一下 wiki 可能更清楚也不會偏誤。因為如果是自己的主機其實還挺容易的，但因為我們是掛載在 &lt;code&gt;github&lt;/code&gt; 的主機，所以需要一些第三方服務，簡單說第三方服務的關係應該是：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;【 Github.io 】&amp;lt;--&amp;gt;【 Gandi 】 &amp;lt;--&amp;gt;【 Cloudflare 】
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;所以概念上就不需要針對 &lt;code&gt;Github.io&lt;/code&gt; 上的 repo 做任何事，只要讓 Cloudflare 能夠收到 Gandi&amp;nbsp;傳過來的封包，要做到這件事情就是要：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;設定 Cloudflare 上 &lt;span class="caps"&gt;DNS&lt;/span&gt; 和 Gandi&amp;nbsp;的區域設定檔案內容相同。&lt;/p&gt;
@@ -74,7 +77,7 @@
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/Jb7coVG.png" /&gt;&lt;/p&gt;
 &lt;p&gt;如果 Gandi 上的 &lt;span class="caps"&gt;DNS&lt;/span&gt;&amp;nbsp;有正確設定，那就會顯示如下面正確的圖示。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/PzZdHq0.png" /&gt;&lt;/p&gt;
-&lt;p&gt;最後一個步驟要設定 &lt;code&gt;page rules&lt;/code&gt; 才允許網頁通過。如果沒有做這個設定那 Cloudflare 就不知道從 chairco.me 過來的網頁哪些要做 &lt;span class="caps"&gt;SSL&lt;/span&gt;&amp;nbsp;加密。&lt;/p&gt;
+&lt;p&gt;最後一個步驟要設定 &lt;code&gt;page rules&lt;/code&gt; 才允許網頁通過。如果沒有做這個設定那 Cloudflare 就不知道從 &lt;code&gt;chairco.me&lt;/code&gt; 過來的網頁哪些要做 &lt;span class="caps"&gt;SSL&lt;/span&gt;&amp;nbsp;加密。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/BfvjPpo.png" /&gt; &lt;/p&gt;
 &lt;p&gt;點選 Cloudflare 上 Page rules，接著輸入 &lt;code&gt;{網域名稱}/*&lt;/code&gt;，因為全部通過所以用星號表示。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Imgur" src="https://i.imgur.com/Oc4Wbvq.png" /&gt;&lt;/p&gt;

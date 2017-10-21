@@ -153,13 +153,13 @@
 <p>完成之後可以進入管理介面，到左邊<code>域名</code>點選主畫面你剛剛購買的網域名稱來做設定吧。</p>
 <p><img alt="Imgur" src="https://i.imgur.com/wpB0jtZ.png" /></p>
 <h2>轉址到網域名稱</h2>
-<p>因為我們的網頁是掛在 github.io 上，希望瀏覽器打入 <code>chairco.github.io</code> 時可以轉址到我們的網域名。這個步驟會許要做兩件事：</p>
+<p>因為我們的網頁是掛在 <code>github.io</code> 上，希望瀏覽器打入 <code>chairco.github.io</code> 時可以轉址到我們的網域名。這個步驟會許要做兩件事：</p>
 <ol>
 <li>
 <p>設定 Gandi <code>區域設定檔</code></p>
 </li>
 <li>
-<p>增加 <span class="caps">CNAME</span> 在主機上: 建立 <span class="caps">CNAME</span> 檔案在 github.io 的 repo&nbsp;內。</p>
+<p>增加 <span class="caps">CNAME</span> 在主機上: 建立 <span class="caps">CNAME</span> 檔案在 <code>github.io</code> 的 <code>repo</code> 內。</p>
 </li>
 </ol>
 <h3>設定區域設定檔</h3>
@@ -171,13 +171,16 @@
 </ul>
 <p><img alt="Imgur" src="https://i.imgur.com/1Vb91tA.png" /></p>
 <h3>主機上增加 <span class="caps">CNAME</span>&nbsp;檔案</h3>
-<p>在 github.io 的 repo 內新增一個 <span class="caps">CNAME</span> 檔案，裡面就寫你的網域名稱，例如&nbsp;chairco.me</p>
+<p>在 <code>github.io</code> 的 repo 內新增一個 <span class="caps">CNAME</span> 檔案，裡面就寫你的網域名稱，例如 <code>chairco.me</code></p>
 <p><img alt="Imgur" src="https://i.imgur.com/3aEe3CB.png" /></p>
 <p>接著等一會兒吧（大概最快一分鐘），你在瀏覽器鍵入原本 <code>github.io</code> 網址就會成功轉址到你購買的新網域名稱上。恭喜你踏出第一步囉。接著開始設定&nbsp;https。</p>
 <h2>掛載免費 <span class="caps">HTTPS</span></h2>
-<p>不講太多 https 是什麼，google 一下 wiki 可能更清楚也不會偏誤。因為如果是自己的主機其實還挺容易的，但因為我們是掛載在 github&nbsp;的主機，所以需要一些第三方服務，簡單說第三方服務的關係應該是：</p>
-<p>[ Github.io ] &lt;&#8212;&gt; [ Gandi] &lt;&#8212;&gt;&nbsp;[Cloudflare]</p>
-<p>所以概念上就不需要針對 Github.io 上的 repo 做任何事，只要讓 Cloudflare 能夠收到 Gandi&nbsp;傳過來的封包，要做到這件事情就是要：</p>
+<p>不講太多 https 是什麼，google 一下 wiki 可能更清楚也不會偏誤。因為如果是自己的主機其實還挺容易的，但因為我們是掛載在 <code>github</code> 的主機，所以需要一些第三方服務，簡單說第三方服務的關係應該是：</p>
+<div class="codehilite"><pre><span></span>【 Github.io 】&lt;--&gt;【 Gandi 】 &lt;--&gt;【 Cloudflare 】
+</pre></div>
+
+
+<p>所以概念上就不需要針對 <code>Github.io</code> 上的 repo 做任何事，只要讓 Cloudflare 能夠收到 Gandi&nbsp;傳過來的封包，要做到這件事情就是要：</p>
 <ol>
 <li>
 <p>設定 Cloudflare 上 <span class="caps">DNS</span> 和 Gandi&nbsp;的區域設定檔案內容相同。</p>
@@ -206,7 +209,7 @@
 <p><img alt="Imgur" src="https://i.imgur.com/Jb7coVG.png" /></p>
 <p>如果 Gandi 上的 <span class="caps">DNS</span>&nbsp;有正確設定，那就會顯示如下面正確的圖示。</p>
 <p><img alt="Imgur" src="https://i.imgur.com/PzZdHq0.png" /></p>
-<p>最後一個步驟要設定 <code>page rules</code> 才允許網頁通過。如果沒有做這個設定那 Cloudflare 就不知道從 chairco.me 過來的網頁哪些要做 <span class="caps">SSL</span>&nbsp;加密。</p>
+<p>最後一個步驟要設定 <code>page rules</code> 才允許網頁通過。如果沒有做這個設定那 Cloudflare 就不知道從 <code>chairco.me</code> 過來的網頁哪些要做 <span class="caps">SSL</span>&nbsp;加密。</p>
 <p><img alt="Imgur" src="https://i.imgur.com/BfvjPpo.png" /> </p>
 <p>點選 Cloudflare 上 Page rules，接著輸入 <code>{網域名稱}/*</code>，因為全部通過所以用星號表示。</p>
 <p><img alt="Imgur" src="https://i.imgur.com/Oc4Wbvq.png" /></p>
