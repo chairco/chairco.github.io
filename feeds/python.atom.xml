@@ -78,7 +78,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;為何需要額外為了資料模型而增訂這個 &lt;span class="caps"&gt;PEP&lt;/span&gt;?&amp;nbsp;因為已經有很多例子可以去做定義：&lt;/p&gt;
+&lt;p&gt;為何需要額外為了資料模型而增訂這個 &lt;span class="caps"&gt;PEP&lt;/span&gt;?&amp;nbsp;已經有很多例子可以去做定義：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;標準庫的&amp;nbsp;collection.namedtuple &lt;/li&gt;
 &lt;li&gt;標準庫的&amp;nbsp;typing.NamedTuple&lt;/li&gt;
@@ -87,9 +87,11 @@
 &lt;/ul&gt;
 &lt;p&gt;在 &lt;span class="caps"&gt;PEP&lt;/span&gt; 526 已經有一個簡潔方式去定義 class 的成員，而這個 &lt;span class="caps"&gt;PEP&lt;/span&gt; 在這個基礎之下提供一個簡單且不會太突兀的方式來定義資料模型，除了沒有指定屬性類型的設置。&lt;code&gt;dataclass&lt;/code&gt; 是一個真正的類別，所以也不用擔心在繼承過程中影響其他的類別等副作用。&lt;/p&gt;
 &lt;p&gt;資料模型的建置目地是能有一個靜態的類別型態檢查器，在 &lt;span class="caps"&gt;PEP&lt;/span&gt; 526 的使用就是一例，這裡設計 &lt;code&gt;fields()&lt;/code&gt; 函式與 &lt;code&gt;@dataclass&lt;/code&gt; 裝飾器， 由於動態的本質，上面所提到的一些 library&amp;nbsp;會很難與檢查器一起使用。&lt;/p&gt;
-&lt;p&gt;哪裡不適合呢？
-1. &lt;span class="caps"&gt;API&lt;/span&gt; 需要兼容 tuple 或 dict
-2. 除了 &lt;span class="caps"&gt;PEP&lt;/span&gt; 484 和 526 提供的 type 驗證之外，還需要進行 value&amp;nbsp;validation，或者需要進行值驗證或轉換。&lt;/p&gt;
+&lt;p&gt;哪裡不適合呢？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class="caps"&gt;API&lt;/span&gt; 需要兼容 tuple 或&amp;nbsp;dict&lt;/li&gt;
+&lt;li&gt;除了 &lt;span class="caps"&gt;PEP&lt;/span&gt; 484 和 526 提供的 type 驗證之外，還需要進行 value&amp;nbsp;validation，或者需要進行值驗證或轉換。&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;以上，開始擁抱 Python 新的 Data Classes&amp;nbsp;吧！&lt;/p&gt;</summary><category term="PEP"></category><category term="Data Classes"></category></entry><entry><title>Python inspect 實用功能與一級函式 First-class function</title><link href="https://chairco.me/posts/2017/09/Python%20useful%20module%20inspect%20and%20first%20class%20function.html" rel="alternate"></link><published>2017-09-26T20:17:31+08:00</published><author><name>chairco(Jason)</name></author><id>tag:chairco.me,2017-09-26:posts/2017/09/Python useful module inspect and first class function.html</id><summary type="html">&lt;p&gt;&lt;img alt="#" src="https://www.python.org/static/img/python-logo@2x.png" /&gt;&lt;/p&gt;
 &lt;h2&gt;起因&lt;/h2&gt;
 &lt;p&gt;因為試著使用 Python 內的 &lt;strong&gt;inspect module&lt;/strong&gt;， 發現可以透過 &lt;code&gt;inspect.signature&lt;/code&gt; 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 &lt;code&gt;int&lt;/code&gt; 形態。&lt;/p&gt;

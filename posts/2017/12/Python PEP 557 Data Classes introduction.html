@@ -91,7 +91,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                 <li><a href="/pages/about-me/">About</a></li>
-                <li><a href="Resume">/cv</a></li>
+                <li><a href="/cv">Resume</a></li>
                 <li><a href="/archives.html">Archives</a></li>
                 <li><a href="/categories.html">Categories</a></li>
                 <li><a href="/tags.html">Tags</a></li>
@@ -207,7 +207,7 @@
 </pre></div>
 
 
-<p>為何需要額外為了資料模型而增訂這個 <span class="caps">PEP</span>?&nbsp;因為已經有很多例子可以去做定義：</p>
+<p>為何需要額外為了資料模型而增訂這個 <span class="caps">PEP</span>?&nbsp;已經有很多例子可以去做定義：</p>
 <ul>
 <li>標準庫的&nbsp;collection.namedtuple </li>
 <li>標準庫的&nbsp;typing.NamedTuple</li>
@@ -216,9 +216,11 @@
 </ul>
 <p>在 <span class="caps">PEP</span> 526 已經有一個簡潔方式去定義 class 的成員，而這個 <span class="caps">PEP</span> 在這個基礎之下提供一個簡單且不會太突兀的方式來定義資料模型，除了沒有指定屬性類型的設置。<code>dataclass</code> 是一個真正的類別，所以也不用擔心在繼承過程中影響其他的類別等副作用。</p>
 <p>資料模型的建置目地是能有一個靜態的類別型態檢查器，在 <span class="caps">PEP</span> 526 的使用就是一例，這裡設計 <code>fields()</code> 函式與 <code>@dataclass</code> 裝飾器， 由於動態的本質，上面所提到的一些 library&nbsp;會很難與檢查器一起使用。</p>
-<p>哪裡不適合呢？
-1. <span class="caps">API</span> 需要兼容 tuple 或 dict
-2. 除了 <span class="caps">PEP</span> 484 和 526 提供的 type 驗證之外，還需要進行 value&nbsp;validation，或者需要進行值驗證或轉換。</p>
+<p>哪裡不適合呢？</p>
+<ul>
+<li><span class="caps">API</span> 需要兼容 tuple 或&nbsp;dict</li>
+<li>除了 <span class="caps">PEP</span> 484 和 526 提供的 type 驗證之外，還需要進行 value&nbsp;validation，或者需要進行值驗證或轉換。</li>
+</ul>
 <p>以上，開始擁抱 Python 新的 Data Classes&nbsp;吧！</p>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
