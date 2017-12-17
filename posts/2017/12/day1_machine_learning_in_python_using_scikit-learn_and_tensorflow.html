@@ -249,7 +249,7 @@ array([ True], dtype=bool)
 <tbody>
 <tr>
 <td>實際下</td>
-<td><span class="caps">TF</span>（type I）</td>
+<td><span class="caps">TF</span>(type I)</td>
 <td><span class="caps">TT</span></td>
 </tr>
 <tr>
@@ -284,13 +284,13 @@ array([ True], dtype=bool)
 <tbody>
 <tr>
 <td>實際非5</td>
-<td><em>53,954</em>(tn)</td>
-<td>625(fp)</td>
+<td><em>53,954</em>(<span class="caps">TN</span>)</td>
+<td>625(<span class="caps">FP</span>)</td>
 </tr>
 <tr>
 <td>實際是5</td>
-<td>1,216(fn)</td>
-<td><em>4,205</em>(tp)</td>
+<td>1,216(<span class="caps">FN</span>)</td>
+<td><em>4,205</em>(<span class="caps">TP</span>)</td>
 </tr>
 </tbody>
 </table>
@@ -303,9 +303,9 @@ array([ True], dtype=bool)
 
 
 <p>混淆矩陣提供我們一個判斷，透過矩陣讓我們可以計算出所謂精確度(precision):
-true positive(tp)/true positive(tp)+false&nbsp;positive(fp)</p>
-<p>但是精確度可能會零一種狀況是萬一發生 1/1 = 100% 會無法有效地去避免只有一個正確的數字情況，因此通常會和 recall 來做使用，稱為 sensitivity or true positive rate(<span class="caps">TPR</span>)&nbsp;稱為靈敏度或是真正率。</p>
-<p>recall = true positive(tp)/true positive(tp)+false&nbsp;negative(fn)</p>
+<code>true positive(tp)/true positive(TP) + false positive(FP)</code></p>
+<p>但是精確度可能會零一種狀況是萬一發生 1/1 = 100% 會無法有效地去避免只有一個正確的數字情況，因此通常會和 recall 來做使用，稱為 sensitivity or true positive rate(<span class="caps">TPR</span>) 稱為靈敏度或是真正率:
+<code>recall = true positive(tp)/true positive(tp)+false negative(fn)</code></p>
 <p>在 sickit-learning 有兩個函式可以協助 precision_score,&nbsp;recall_score</p>
 <div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
@@ -315,7 +315,7 @@ true positive(tp)/true positive(tp)+false&nbsp;positive(fp)</p>
 </pre></div>
 
 
-<p>這代表意思是你有 87% 可以準確的判斷出預測為 5 實際也是5, 只能檢測到實際是 5 的機率&nbsp;77%。看起來和之前使用交叉驗證得到的分數有些差距。</p>
+<p>這代表意思是你有 87% 可以準確的判斷出預測為 5 實際也是 5，只能檢測到實際是 5 的機率&nbsp;77%。看起來和之前使用交叉驗證得到的分數有些差距。</p>
 <p>從 precsion 和 recall 我們還可以推導出一個 <a href="https://baike.baidu.com/item/f-measure">Piotroski F-Score</a>，他是 precsion 和 recall&nbsp;的加權調和平均數。可以用來判斷模型好壞，所以我們用它來判斷分類器。</p>
 <p>f1&nbsp;公式與推導:</p>
 <div class="codehilite"><pre><span></span>2 * PR / P + R = TP / TP + (FN + FP / 2)
