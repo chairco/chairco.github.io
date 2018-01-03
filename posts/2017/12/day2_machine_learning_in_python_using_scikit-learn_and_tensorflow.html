@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Day2 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title>
-        <link href="https://chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
-        <link href="https://chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
-        <link href="https://chairco.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
+        <link href="https://blog.chairco.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
     
     <!-- Bootstrap Core CSS -->
     <link href="../../../theme/css/bootstrap.min.css" rel="stylesheet">
@@ -239,7 +239,7 @@
 <p><img alt="#" src="https://i.imgur.com/th0ZFtg.png" /></p>
 <p>這張圖 row（行）是指實際的值，column（列）是指預測得值。從圖上的顏色可以發現 column 上的 8, 9 兩個數字底色接近白色的數量遠多於其他數字，代表很多數字被錯誤分類到 8, 9 相反的像是數字 1 的底色多數為黑，這代表多數情況下 1 都可以被正確分類（雖然部分與 8&nbsp;混淆）。注意是錯誤不一定都是對稱的。</p>
 <p>分析混淆矩陣有助於你了解與改善分類器，以這個例子為例，你就可以花費較多的心力來改善對於數字 8, 9 的改善。或是撰寫演算法來計算 closed loop 的數量，或是使用 scikit-image, Pillow, OpenCV&nbsp;來改善。</p>
-<p>雖然分析這些個別的錯誤可以有助了解分類器錯誤原因，但卻是好時的。我們嘗試畫 3, 5&nbsp;兩個數字來看看：</p>
+<p>雖然分析這些個別的錯誤可以有助了解分類器錯誤原因，但卻是耗時的。我們嘗試畫 3, 5&nbsp;兩個數字來看看：</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">plot_digits</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="n">images_per_row</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mi">28</span>
     <span class="n">images_per_row</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">),</span> <span class="n">images_per_row</span><span class="p">)</span>
