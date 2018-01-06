@@ -185,11 +185,17 @@
     <span class="n">f</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<span class="o">&gt;&gt;&gt;</span> <span class="o">&lt;</span><span class="n">foo</span> <span class="p">[</span><span class="mi">5566</span><span class="p">]</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">&lt;</span><span class="n">Bar</span> <span class="p">[]</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">&lt;</span><span class="n">foo</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span>
 </pre></div>
 
 
-<p><strong>Cheers&nbsp;！！</strong></p>
-<h3>Update&nbsp;2018/1/6</h3>
+<p><strong>Cheers&nbsp;！！!</strong></p>
+<h4>Update&nbsp;2018/1/6</h4>
 <p>這邊在當初寫的時候有了一些錯誤，不過竟然隔了這麼久才發現 <span class="caps">QQ</span>，解釋一下 class Foo mutable 錯誤地方&nbsp;原本是這樣寫的：</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="n">Foo:</span>
     <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">l</span>=<span class="n">None</span>):
