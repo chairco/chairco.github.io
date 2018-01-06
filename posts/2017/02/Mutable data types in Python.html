@@ -113,6 +113,7 @@
                                 <a href="../../../author/chaircojason.html">chairco(Jason)</a>
                              on  2 20, 2017
                         </span>
+                            <span class="meta">Updated on  1 06, 2018</span>
                         
                     </div>
                 </div>
@@ -153,7 +154,14 @@
         <span class="k">if</span> <span class="n">l</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="c1"># copy this list, not self.l = l, it will cause assign l to self.l also mutable</span>
+
+    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;&lt;foo {self.l}&gt;&#39;</span>
+
 
 <span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -168,6 +176,39 @@
 
 
 <p><strong>Cheers&nbsp;！！</strong></p>
+<h3>Update&nbsp;2018/1/6</h3>
+<p>這邊在當初寫的時候有了一些錯誤，不過竟然隔了這麼久才發現 <span class="caps">QQ</span>，解釋一下 class Foo mutable 錯誤地方&nbsp;原本是這樣寫的：</p>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="n">Foo:</span>
+    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">l</span>=<span class="n">None</span>):
+        <span class="k">if</span> <span class="n">l</span> <span class="k">is</span> <span class="n">None:</span>
+            <span class="k">self</span>.<span class="n">l</span> = []  &lt;-- <span class="n">這邊是正確</span>
+        <span class="n">else:</span>
+            <span class="k">self</span>.<span class="n">l</span> = <span class="n">l</span>  &lt;-- <span class="n">這邊會有</span> <span class="n">mutable</span> <span class="n">的錯誤</span>
+</pre></div>
+
+
+<p>剛開始為了解釋不同 class 之間繼承，如果可變參數沒有在初始化時 assign None 會造成錯誤，卻沒注意到如果有預設值時的問題。
+<code>self.l = l</code> 的錯誤就在於，也指向了原本可變參數 l 的位置，因此我加了兩個 method <code>remove</code>, <code>__repr__</code> 作為示範，讓大家知道如果這樣做會造成錯誤：</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; l = [1,2,3,4] # 建立一個 list = [1,2,3,4]
+&gt;&gt;&gt; f = Foo(l=l) # 建立 Foo 的物件為 f 且預設參數是 l
+&gt;&gt;&gt; f.remove(4) # 移除物件 f 內的 l 裡 4 這個值
+&gt;&gt;&gt; print(l) # 印出類別外的 l
+&gt;&gt;&gt; [1, 2, 3] # 錯誤了，原本了 l 不應該被移除
+</pre></div>
+
+
+<p>應該理解了吧，如果在一開始預設值沒有做可變參數複製，就會造成這樣錯誤。所以要改寫成 <code>self.l = list(l)</code> 接著來測試</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; l = [1,2,3,4]
+&gt;&gt;&gt; f = Foo(l=l)
+&gt;&gt;&gt; f.remove(4)
+&gt;&gt;&gt; l
+[1, 2, 3, 4]
+&gt;&gt;&gt; f
+&lt;foo [1, 2, 3]&gt;
+</pre></div>
+
+
+<p>bingo&nbsp;解掉問題了。不過發現這個錯誤是在面試時板書解題發現的，我也忘記為什麼那時候沒有注意。這真的是一個很低級的錯誤。希望大家可以吸取這個經驗。</p>
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>

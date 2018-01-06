@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/all.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2017-12-19T09:25:26+08:00</updated><entry><title>Day2 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title><link href="https://blog.chairco.me/posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html" rel="alternate"></link><published>2017-12-19T09:25:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-19:posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html</id><summary type="html">&lt;p&gt;前一天我們提到二元分類器、並且透過交叉驗證 (cross-validation) 得到準確度並使用 precision/recall tradeoff 調整配適，最後透過 &lt;span class="caps"&gt;ROC&lt;/span&gt; curves, &lt;span class="caps"&gt;ROC&lt;/span&gt; &lt;span class="caps"&gt;AUC&lt;/span&gt;&amp;nbsp;分數來評估模型。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/all.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2018-01-06T15:11:00+08:00</updated><entry><title>Day2 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title><link href="https://blog.chairco.me/posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html" rel="alternate"></link><published>2017-12-19T09:25:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-19:posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html</id><summary type="html">&lt;p&gt;前一天我們提到二元分類器、並且透過交叉驗證 (cross-validation) 得到準確度並使用 precision/recall tradeoff 調整配適，最後透過 &lt;span class="caps"&gt;ROC&lt;/span&gt; curves, &lt;span class="caps"&gt;ROC&lt;/span&gt; &lt;span class="caps"&gt;AUC&lt;/span&gt;&amp;nbsp;分數來評估模型。&lt;/p&gt;
 &lt;p&gt;但如果前面的例子，我們想拓展成能夠分類 0~9&amp;nbsp;的任一數字呢？接下來就來討論有哪些作法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Randon Forest classifier&lt;/code&gt;(隨機森林)或是 &lt;code&gt;navie Bayes&lt;/code&gt; classifiers&amp;nbsp;可以直接處理多元分類&lt;/li&gt;
@@ -2316,7 +2316,7 @@ python-picamera
 &lt;p&gt;&lt;a href="https://docs.google.com/presentation/d/1Yw5BfhfQp0mxPvvXyJ2HC4Z80dkTg-pLXasLVdo8wGs/edit#slide=id.g21bd18b122_25_0"&gt;類神經網路介紹&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:4" rev="footnote" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;</summary><category term="Reinforcement Learning"></category><category term="Machine Learning"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://blog.chairco.me/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2017-02-20T20:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
+&lt;/div&gt;</summary><category term="Reinforcement Learning"></category><category term="Machine Learning"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://blog.chairco.me/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2018-01-06T15:11:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
 &lt;p&gt;你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 &lt;code&gt;object&lt;/code&gt;，萬物都是一個 &lt;code&gt;object&lt;/code&gt; 
 所以當你產生一個 function&amp;nbsp;這個預設的參數值就產生了。我們用底下一個範例來說明：&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -2343,7 +2343,14 @@ python-picamera
         &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
         &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# copy this list, not self.l = l, it will cause assign l to self.l also mutable&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__repr__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;foo {self.l}&amp;gt;&amp;#39;&lt;/span&gt;
+
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -2357,7 +2364,40 @@ python-picamera
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://blog.chairco.me/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Update&amp;nbsp;2018/1/6&lt;/h3&gt;
+&lt;p&gt;這邊在當初寫的時候有了一些錯誤，不過竟然隔了這麼久才發現 &lt;span class="caps"&gt;QQ&lt;/span&gt;，解釋一下 class Foo mutable 錯誤地方&amp;nbsp;原本是這樣寫的：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Foo:&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;l&lt;/span&gt;=&lt;span class="n"&gt;None&lt;/span&gt;):
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;None:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;l&lt;/span&gt; = []  &amp;lt;-- &lt;span class="n"&gt;這邊是正確&lt;/span&gt;
+        &lt;span class="n"&gt;else:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;l&lt;/span&gt; = &lt;span class="n"&gt;l&lt;/span&gt;  &amp;lt;-- &lt;span class="n"&gt;這邊會有&lt;/span&gt; &lt;span class="n"&gt;mutable&lt;/span&gt; &lt;span class="n"&gt;的錯誤&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;剛開始為了解釋不同 class 之間繼承，如果可變參數沒有在初始化時 assign None 會造成錯誤，卻沒注意到如果有預設值時的問題。
+&lt;code&gt;self.l = l&lt;/code&gt; 的錯誤就在於，也指向了原本可變參數 l 的位置，因此我加了兩個 method &lt;code&gt;remove&lt;/code&gt;, &lt;code&gt;__repr__&lt;/code&gt; 作為示範，讓大家知道如果這樣做會造成錯誤：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; l = [1,2,3,4] # 建立一個 list = [1,2,3,4]
+&amp;gt;&amp;gt;&amp;gt; f = Foo(l=l) # 建立 Foo 的物件為 f 且預設參數是 l
+&amp;gt;&amp;gt;&amp;gt; f.remove(4) # 移除物件 f 內的 l 裡 4 這個值
+&amp;gt;&amp;gt;&amp;gt; print(l) # 印出類別外的 l
+&amp;gt;&amp;gt;&amp;gt; [1, 2, 3] # 錯誤了，原本了 l 不應該被移除
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;應該理解了吧，如果在一開始預設值沒有做可變參數複製，就會造成這樣錯誤。所以要改寫成 &lt;code&gt;self.l = list(l)&lt;/code&gt; 接著來測試&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; l = [1,2,3,4]
+&amp;gt;&amp;gt;&amp;gt; f = Foo(l=l)
+&amp;gt;&amp;gt;&amp;gt; f.remove(4)
+&amp;gt;&amp;gt;&amp;gt; l
+[1, 2, 3, 4]
+&amp;gt;&amp;gt;&amp;gt; f
+&amp;lt;foo [1, 2, 3]&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;bingo&amp;nbsp;解掉問題了。不過發現這個錯誤是在面試時板書解題發現的，我也忘記為什麼那時候沒有注意。這真的是一個很低級的錯誤。希望大家可以吸取這個經驗。&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://blog.chairco.me/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
 &lt;p&gt;根據開發者得說法：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。&lt;/p&gt;

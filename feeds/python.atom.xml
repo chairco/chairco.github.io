@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/python.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2017-12-05T23:49:05+08:00</updated><entry><title>PEP 557 — Data Classes 擁抱更友善的資料模型</title><link href="https://blog.chairco.me/posts/2017/12/Python%20PEP%20557%20Data%20Classes%20introduction.html" rel="alternate"></link><published>2017-12-05T23:49:05+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-05:posts/2017/12/Python PEP 557 Data Classes introduction.html</id><summary type="html">&lt;p&gt;Python 的 Class 裡我們透過 &lt;code&gt;__init__&lt;/code&gt; 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 &lt;code&gt;__repr__&lt;/code&gt;, &lt;code&gt;__eq__&lt;/code&gt; 來定義資料模型。有沒有更好的方法呢？&lt;a href="https://www.python.org/dev/peps/pep-0557/"&gt;&lt;span class="caps"&gt;PEP&lt;/span&gt; 557&lt;/a&gt; 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(&lt;span class="caps"&gt;PEP&lt;/span&gt; 526)，雖都知道變數型態的宣告在 Python 是經常被忽視，不過在 &lt;span class="caps"&gt;PEP&lt;/span&gt; 557&amp;nbsp;倒是有了很大的用處。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/python.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2018-01-06T15:11:00+08:00</updated><entry><title>PEP 557 — Data Classes 擁抱更友善的資料模型</title><link href="https://blog.chairco.me/posts/2017/12/Python%20PEP%20557%20Data%20Classes%20introduction.html" rel="alternate"></link><published>2017-12-05T23:49:05+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-05:posts/2017/12/Python PEP 557 Data Classes introduction.html</id><summary type="html">&lt;p&gt;Python 的 Class 裡我們透過 &lt;code&gt;__init__&lt;/code&gt; 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 &lt;code&gt;__repr__&lt;/code&gt;, &lt;code&gt;__eq__&lt;/code&gt; 來定義資料模型。有沒有更好的方法呢？&lt;a href="https://www.python.org/dev/peps/pep-0557/"&gt;&lt;span class="caps"&gt;PEP&lt;/span&gt; 557&lt;/a&gt; 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(&lt;span class="caps"&gt;PEP&lt;/span&gt; 526)，雖都知道變數型態的宣告在 Python 是經常被忽視，不過在 &lt;span class="caps"&gt;PEP&lt;/span&gt; 557&amp;nbsp;倒是有了很大的用處。&lt;/p&gt;
 &lt;p&gt;首先我們採用文件範例先用過去我們認知的寫法重新表示一次，再來比較新的方式：&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;InventoryItem&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
 
@@ -809,7 +809,7 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;p&gt;&lt;code&gt;ADDR_SPEC = LOCAL_PART + r'@' + DOMAIN&lt;/code&gt;&lt;/p&gt;
 &lt;h2&gt;比較其他方法異同&lt;/h2&gt;
 &lt;p&gt;&lt;span class="caps"&gt;TBD&lt;/span&gt;(筆者有點偷懶，稍晚再補上。)&lt;/p&gt;
-&lt;hr /&gt;</summary><category term="Python"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://blog.chairco.me/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2017-02-20T20:00:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
+&lt;hr /&gt;</summary><category term="Python"></category></entry><entry><title>Python 物件為可變參數時的使用</title><link href="https://blog.chairco.me/posts/2017/02/Mutable%20data%20types%20in%20Python.html" rel="alternate"></link><published>2018-01-06T15:11:00+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-20:posts/2017/02/Mutable data types in Python.html</id><summary type="html">&lt;hr /&gt;
 &lt;p&gt;你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 &lt;code&gt;object&lt;/code&gt;，萬物都是一個 &lt;code&gt;object&lt;/code&gt; 
 所以當你產生一個 function&amp;nbsp;這個預設的參數值就產生了。我們用底下一個範例來說明：&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -836,7 +836,14 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
         &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
             &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[]&lt;/span&gt;
         &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
-            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# copy this list, not self.l = l, it will cause assign l to self.l also mutable&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__repr__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;foo {self.l}&amp;gt;&amp;#39;&lt;/span&gt;
+
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -850,7 +857,40 @@ Date:   Mon Jul 17 08:40:36 2017 -0700
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://blog.chairco.me/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cheers&amp;nbsp;！！&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Update&amp;nbsp;2018/1/6&lt;/h3&gt;
+&lt;p&gt;這邊在當初寫的時候有了一些錯誤，不過竟然隔了這麼久才發現 &lt;span class="caps"&gt;QQ&lt;/span&gt;，解釋一下 class Foo mutable 錯誤地方&amp;nbsp;原本是這樣寫的：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="n"&gt;Foo:&lt;/span&gt;
+    &lt;span class="n"&gt;def&lt;/span&gt; &lt;span class="n"&gt;__init__&lt;/span&gt;(&lt;span class="k"&gt;self&lt;/span&gt;, &lt;span class="n"&gt;l&lt;/span&gt;=&lt;span class="n"&gt;None&lt;/span&gt;):
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;None:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;l&lt;/span&gt; = []  &amp;lt;-- &lt;span class="n"&gt;這邊是正確&lt;/span&gt;
+        &lt;span class="n"&gt;else:&lt;/span&gt;
+            &lt;span class="k"&gt;self&lt;/span&gt;.&lt;span class="n"&gt;l&lt;/span&gt; = &lt;span class="n"&gt;l&lt;/span&gt;  &amp;lt;-- &lt;span class="n"&gt;這邊會有&lt;/span&gt; &lt;span class="n"&gt;mutable&lt;/span&gt; &lt;span class="n"&gt;的錯誤&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;剛開始為了解釋不同 class 之間繼承，如果可變參數沒有在初始化時 assign None 會造成錯誤，卻沒注意到如果有預設值時的問題。
+&lt;code&gt;self.l = l&lt;/code&gt; 的錯誤就在於，也指向了原本可變參數 l 的位置，因此我加了兩個 method &lt;code&gt;remove&lt;/code&gt;, &lt;code&gt;__repr__&lt;/code&gt; 作為示範，讓大家知道如果這樣做會造成錯誤：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; l = [1,2,3,4] # 建立一個 list = [1,2,3,4]
+&amp;gt;&amp;gt;&amp;gt; f = Foo(l=l) # 建立 Foo 的物件為 f 且預設參數是 l
+&amp;gt;&amp;gt;&amp;gt; f.remove(4) # 移除物件 f 內的 l 裡 4 這個值
+&amp;gt;&amp;gt;&amp;gt; print(l) # 印出類別外的 l
+&amp;gt;&amp;gt;&amp;gt; [1, 2, 3] # 錯誤了，原本了 l 不應該被移除
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;應該理解了吧，如果在一開始預設值沒有做可變參數複製，就會造成這樣錯誤。所以要改寫成 &lt;code&gt;self.l = list(l)&lt;/code&gt; 接著來測試&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&amp;gt;&amp;gt;&amp;gt; l = [1,2,3,4]
+&amp;gt;&amp;gt;&amp;gt; f = Foo(l=l)
+&amp;gt;&amp;gt;&amp;gt; f.remove(4)
+&amp;gt;&amp;gt;&amp;gt; l
+[1, 2, 3, 4]
+&amp;gt;&amp;gt;&amp;gt; f
+&amp;lt;foo [1, 2, 3]&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;bingo&amp;nbsp;解掉問題了。不過發現這個錯誤是在面試時板書解題發現的，我也忘記為什麼那時候沒有注意。這真的是一個很低級的錯誤。希望大家可以吸取這個經驗。&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>Pipenv 使用教學</title><link href="https://blog.chairco.me/posts/2017/02/Pipenv%20tutorial.html" rel="alternate"></link><published>2017-02-14T09:59:40+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-02-14:posts/2017/02/Pipenv tutorial.html</id><summary type="html">&lt;p&gt;Pipenv 是一個整合 Pipfile, pip, virtualenv&amp;nbsp;的套件管理工具。&lt;/p&gt;
 &lt;p&gt;根據開發者得說法：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。&lt;/p&gt;
