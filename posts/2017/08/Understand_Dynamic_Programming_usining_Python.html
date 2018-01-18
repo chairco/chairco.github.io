@@ -139,7 +139,7 @@
 <li><a href="#dp_2">爬樓梯</a></li>
 <li><a href="#dp_3">階乘</a></li>
 <li><a href="#dp_4">樓梯路線</a></li>
-<li><a href="#dp_5">背包問題</a></li>
+<li><a href="#dp_5">背包價值問題</a></li>
 <li><a href="#dp_6">找錢問題</a></li>
 </ul>
 <h3><a name="dp_1"></a>費式數列 <small><em><a href="#menu">回到最上層</a></em></small></h3>
@@ -290,7 +290,61 @@
 
 
 <hr />
-<h3><a name="dp_5"></a>背包問題 <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<h3><a name="dp_5"></a>背包價值問題 (Knapsack Problem) <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>演算法在動態規劃裡都會提到它，有一堆物品個標示其金錢價值與重量，有一個背包可以裝物品，如何讓背包裝的物品價值金錢總價值最高。這個問題有個前提包背只限制重量不限制形狀，所以不需要考慮東西裝不裝得進去，只考慮重量與最高價值。</p>
+<p>分割問題的方法是<strong>放</strong>與<strong>不放</strong>，接著放的重量與價值，不放後的重量與價值。</p>
+<p>用函式表達會像是這樣</p>
+<p><code>k(n, w) = max(k(n-1, w), k(n-1, w-weight[n]) + cost[n])</code></p>
+<p>n: 0 ~ n 個放進背包內物品
+W: 背包的負載重量
+knapSack(n, w): 0 ~ n 個物品耐重為 w 的答案
+wt[n]: n 物品的重量
+val[n]: n&nbsp;物品的價值</p>
+<p>需要考慮的條件</p>
+<ol>
+<li>
+<p>考慮邊界條件，耐重不足或是沒有物品。 
+    W &lt; 0 return 0
+    n &lt; 0 return 0
+    n = 0 and W &gt;= 0 return&nbsp;0</p>
+</li>
+<li>
+<p>避免存取負的物品與耐重。 
+    n = 0 return 0
+    n &gt; 0 and W-wt[n] &lt; 0 return knapSack(n-1,&nbsp;w)</p>
+</li>
+</ol>
+<p>採用 top-down&nbsp;方式解題：</p>
+<div class="codehilite"><pre><span></span><span class="c1"># Returns the maximum value that can be put in a knapsack of</span>
+<span class="c1"># capacity W</span>
+
+<span class="k">def</span> <span class="nf">knapSack</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="c1"># Base Case</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">W</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># If weight of the nth item is more than Knapsack of capacity</span>
+    <span class="c1"># W, then this item cannot be included in the optimal solution</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">wt</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">W</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># return the maximum of two cases:</span>
+    <span class="c1"># (1) nth item included</span>
+    <span class="c1"># (2) not included</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span><span class="o">-</span><span class="n">wt</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
+            <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+    <span class="n">wt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+</pre></div>
+
+
 <hr />
 <h3><a name="dp_6"></a>找錢問題 <small><em><a href="#menu">回到最上層</a></em></small></h3>
 <hr />

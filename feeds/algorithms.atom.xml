@@ -11,7 +11,7 @@
 &lt;li&gt;&lt;a href="#dp_2"&gt;爬樓梯&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="#dp_3"&gt;階乘&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="#dp_4"&gt;樓梯路線&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#dp_5"&gt;背包問題&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_5"&gt;背包價值問題&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="#dp_6"&gt;找錢問題&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;&lt;a name="dp_1"&gt;&lt;/a&gt;費式數列 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
@@ -162,7 +162,61 @@
 
 
 &lt;hr /&gt;
-&lt;h3&gt;&lt;a name="dp_5"&gt;&lt;/a&gt;背包問題 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_5"&gt;&lt;/a&gt;背包價值問題 (Knapsack Problem) &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
+&lt;p&gt;演算法在動態規劃裡都會提到它，有一堆物品個標示其金錢價值與重量，有一個背包可以裝物品，如何讓背包裝的物品價值金錢總價值最高。這個問題有個前提包背只限制重量不限制形狀，所以不需要考慮東西裝不裝得進去，只考慮重量與最高價值。&lt;/p&gt;
+&lt;p&gt;分割問題的方法是&lt;strong&gt;放&lt;/strong&gt;與&lt;strong&gt;不放&lt;/strong&gt;，接著放的重量與價值，不放後的重量與價值。&lt;/p&gt;
+&lt;p&gt;用函式表達會像是這樣&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;k(n, w) = max(k(n-1, w), k(n-1, w-weight[n]) + cost[n])&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;n: 0 ~ n 個放進背包內物品
+W: 背包的負載重量
+knapSack(n, w): 0 ~ n 個物品耐重為 w 的答案
+wt[n]: n 物品的重量
+val[n]: n&amp;nbsp;物品的價值&lt;/p&gt;
+&lt;p&gt;需要考慮的條件&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;考慮邊界條件，耐重不足或是沒有物品。 
+    W &amp;lt; 0 return 0
+    n &amp;lt; 0 return 0
+    n = 0 and W &amp;gt;= 0 return&amp;nbsp;0&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;避免存取負的物品與耐重。 
+    n = 0 return 0
+    n &amp;gt; 0 and W-wt[n] &amp;lt; 0 return knapSack(n-1,&amp;nbsp;w)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;採用 top-down&amp;nbsp;方式解題：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# Returns the maximum value that can be put in a knapsack of&lt;/span&gt;
+&lt;span class="c1"&gt;# capacity W&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;knapSack&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;W&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wt&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;val&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c1"&gt;# Base Case&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;W&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# If weight of the nth item is more than Knapsack of capacity&lt;/span&gt;
+    &lt;span class="c1"&gt;# W, then this item cannot be included in the optimal solution&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;wt&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;W&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;knapSack&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;W&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wt&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="c1"&gt;# return the maximum of two cases:&lt;/span&gt;
+    &lt;span class="c1"&gt;# (1) nth item included&lt;/span&gt;
+    &lt;span class="c1"&gt;# (2) not included&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;max&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;val&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;knapSack&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;W&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;wt&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wt&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; 
+            &lt;span class="n"&gt;knapSack&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;W&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wt&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;60&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;120&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;wt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;W&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;50&lt;/span&gt;
+    &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;val&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;knapSack&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;W&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wt&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;val&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;hr /&gt;
 &lt;h3&gt;&lt;a name="dp_6"&gt;&lt;/a&gt;找錢問題 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;hr /&gt;
