@@ -134,9 +134,33 @@
 </blockquote>
 <p>動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。</p>
 <h2>動態規劃簡單問題</h2>
-<p>這邊整理了一些比較常見簡單的 <span class="caps">DP</span>&nbsp;經典問題。</p>
+<p>整理了一些常見簡單的 <span class="caps">DP</span>&nbsp;經典問題:</p>
+<ul>
+<li>費式數列</li>
+<li>爬樓梯</li>
+<li>階乘</li>
+<li>樓梯路線</li>
+<li>背包問題</li>
+<li>找錢問題</li>
+</ul>
 <h3>費式數列</h3>
-<p><strong>先前文章有稍微介紹</strong>，可以<a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html">參考</a>。</p>
+<p>但想分享一個以遞迴做寫法但使用 Python 在 functools 裡有提供一個函式叫 <code>lru_cache</code> 解決堆疊函式被重複使用多次效能的問題。</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">377</span><span class="p">,</span> <span class="mi">610</span><span class="p">]</span>
+</pre></div>
+
+
+<p>如果對改寫成 <span class="caps">DP</span> 有興趣可以去看看<strong>先前文章有稍微介紹</strong>，<a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html">參考</a>。</p>
 <hr />
 <h3>爬樓梯</h3>
 <p>如果以一階或兩階方式爬樓梯，給定 n 階層樓梯，一共會有多少種走法？這問題就很適合來做分治法。首先走上第一階樓梯只有一種（一階一階爬），走上第二階層有兩種（兩階兩階爬或一階一階爬），但到了第三階他的走法就會是（一階一階爬）＋（兩階兩階爬）的總和，也就能歸納出 <code>f(n) = f(n-1) + f(n-1)</code></p>
@@ -212,8 +236,27 @@
 
 
 <hr />
-<h3>階乘</h3>
-<p>&lt;撰寫中&gt;</p>
+<h3>階乘（factorial）</h3>
+<p>撰寫階乘通常會立刻想到遞迴寫法。這想法太直覺了，範例如下：</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>不過這個會非常耗用記憶體資源，而且如果堆疊太深的話在 Python 會跑出 <code>RecursionError: maximum recursion depth exceeded in comparison</code> 這種超出堆疊限制的錯誤。這時候你還要設定 <code>sys.setrecursionlimit(5000)</code> 允許遞迴深度。因此 factorial&nbsp;使用遞迴寫法看起來真不是一個好主意。</p>
+<p>如果要改寫成動態規劃該怎麼做呢？做法很簡單，從階層的公式來看就是不斷的和前一個數字相乘得出的結果，因此我們做的迴圈將問題做分割，接著和前一個數字相乘把問題在組合起來。
+這樣時間複雜度只需要 O(N)，空間複雜度 O(N) 但如果只處理一個 n! 問題那麼空間複雜度就是 O(1)&nbsp;容易吧！</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fib_dp</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">*=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">f</span>
+</pre></div>
+
+
 <hr />
 <h3>樓梯路線（ Staircase Walk&nbsp;）</h3>
 <p>假設一個方格棋盤大小為<code>(x, y)</code>。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。</p>
@@ -249,10 +292,8 @@
 
 <hr />
 <h3>背包問題</h3>
-<p>&lt;撰寫中&gt;</p>
 <hr />
 <h3>找錢問題</h3>
-<p>&lt;撰寫中&gt;</p>
 <hr />
 <p>Reference:
 + <a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts">動態規劃題目</a></p>

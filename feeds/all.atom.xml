@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/all.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2018-01-06T15:11:00+08:00</updated><entry><title>Day2 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title><link href="https://blog.chairco.me/posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html" rel="alternate"></link><published>2017-12-19T09:25:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-19:posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html</id><summary type="html">&lt;p&gt;前一天我們提到二元分類器、並且透過交叉驗證 (cross-validation) 得到準確度並使用 precision/recall tradeoff 調整配適，最後透過 &lt;span class="caps"&gt;ROC&lt;/span&gt; curves, &lt;span class="caps"&gt;ROC&lt;/span&gt; &lt;span class="caps"&gt;AUC&lt;/span&gt;&amp;nbsp;分數來評估模型。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/all.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2018-01-11T18:31:05+08:00</updated><entry><title>Day3 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title><link href="https://blog.chairco.me/posts/2018/01/day3_machine_learning_in_python_using_scikit-learn_and_tensorflow.html" rel="alternate"></link><published>2018-01-11T18:31:05+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2018-01-11:posts/2018/01/day3_machine_learning_in_python_using_scikit-learn_and_tensorflow.html</id><summary type="html">&lt;p&gt;前兩天講的內容都專注在 classifier 分類上的演算法。但如果有接觸深度學習 (Deep-Learning) 演算法開始就會有些疑問了。到底這兩者有何差距？&amp;nbsp;這也是我的疑問，至少在沒有了解深度學習之前我根本的覺得他們兩個是一樣的東西。不過瞭解之後雖然概念上類似，卻擁有不同的方法。&lt;/p&gt;
+&lt;p&gt;如果用前面 &lt;span class="caps"&gt;MNIST&lt;/span&gt;&amp;nbsp;的例子來看使用機器學習與深度學習都可以達到辨識，但差異性在於&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;機器學習著重在根據&lt;code&gt;人所想出的特徵量&lt;/code&gt;接著透過機器學習方法如 &lt;span class="caps"&gt;SVM&lt;/span&gt;、&lt;span class="caps"&gt;KNN&lt;/span&gt;&amp;nbsp;這類監督或是非監督式方法來達成。&lt;/li&gt;
+&lt;li&gt;深度學習透過&lt;code&gt;神經網路&lt;/code&gt;則是由機器自己來學習這些特徵量。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;P.S 在這邊曾經有人問我我一個關於機器學習問題挺有趣： classifier 與 cluster&amp;nbsp;有怎樣差異。當時我瞬間有點詞窮，不過回頭來看就是機器學習裡監督或是非監督式學習方法&lt;/p&gt;
+&lt;p&gt;所以這邊我們稍微回頭過來以 &lt;span class="caps"&gt;MNIST&lt;/span&gt; 的例子用&lt;code&gt;深度學習&lt;/code&gt;方法來介紹處理方法。一開始先介紹感知器(perceptron)因為神經網路的概念就是從感知器得來。想像感知器就是傳遞訊號，接受多個訊號輸入，再把訊號輸出，結果會有兩種 0 代表不傳遞訊號，1&amp;nbsp;代表傳遞訊號。所以我們就可以透過邏輯閘方式用感知器表先一些數學函數&lt;/p&gt;</summary><category term="Python"></category><category term="Classification"></category><category term="Scikit-learn"></category><category term="Deep-Learning"></category></entry><entry><title>Day2 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列</title><link href="https://blog.chairco.me/posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html" rel="alternate"></link><published>2017-12-19T09:25:26+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-12-19:posts/2017/12/day2_machine_learning_in_python_using_scikit-learn_and_tensorflow.html</id><summary type="html">&lt;p&gt;前一天我們提到二元分類器、並且透過交叉驗證 (cross-validation) 得到準確度並使用 precision/recall tradeoff 調整配適，最後透過 &lt;span class="caps"&gt;ROC&lt;/span&gt; curves, &lt;span class="caps"&gt;ROC&lt;/span&gt; &lt;span class="caps"&gt;AUC&lt;/span&gt;&amp;nbsp;分數來評估模型。&lt;/p&gt;
 &lt;p&gt;但如果前面的例子，我們想拓展成能夠分類 0~9&amp;nbsp;的任一數字呢？接下來就來討論有哪些作法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Randon Forest classifier&lt;/code&gt;(隨機森林)或是 &lt;code&gt;navie Bayes&lt;/code&gt; classifiers&amp;nbsp;可以直接處理多元分類&lt;/li&gt;
@@ -877,9 +884,33 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 &lt;/blockquote&gt;
 &lt;p&gt;動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。&lt;/p&gt;
 &lt;h2&gt;動態規劃簡單問題&lt;/h2&gt;
-&lt;p&gt;這邊整理了一些比較常見簡單的 &lt;span class="caps"&gt;DP&lt;/span&gt;&amp;nbsp;經典問題。&lt;/p&gt;
+&lt;p&gt;整理了一些常見簡單的 &lt;span class="caps"&gt;DP&lt;/span&gt;&amp;nbsp;經典問題:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;費式數列&lt;/li&gt;
+&lt;li&gt;爬樓梯&lt;/li&gt;
+&lt;li&gt;階乘&lt;/li&gt;
+&lt;li&gt;樓梯路線&lt;/li&gt;
+&lt;li&gt;背包問題&lt;/li&gt;
+&lt;li&gt;找錢問題&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3&gt;費式數列&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;先前文章有稍微介紹&lt;/strong&gt;，可以&lt;a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html"&gt;參考&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;但想分享一個以遞迴做寫法但使用 Python 在 functools 裡有提供一個函式叫 &lt;code&gt;lru_cache&lt;/code&gt; 解決堆疊函式被重複使用多次效能的問題。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;lru_cache&lt;/span&gt;
+
+&lt;span class="nd"&gt;@lru_cache&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;maxsize&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;fib&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;21&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;34&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;55&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;89&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;144&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;233&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;377&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;610&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果對改寫成 &lt;span class="caps"&gt;DP&lt;/span&gt; 有興趣可以去看看&lt;strong&gt;先前文章有稍微介紹&lt;/strong&gt;，&lt;a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html"&gt;參考&lt;/a&gt;。&lt;/p&gt;
 &lt;hr /&gt;
 &lt;h3&gt;爬樓梯&lt;/h3&gt;
 &lt;p&gt;如果以一階或兩階方式爬樓梯，給定 n 階層樓梯，一共會有多少種走法？這問題就很適合來做分治法。首先走上第一階樓梯只有一種（一階一階爬），走上第二階層有兩種（兩階兩階爬或一階一階爬），但到了第三階他的走法就會是（一階一階爬）＋（兩階兩階爬）的總和，也就能歸納出 &lt;code&gt;f(n) = f(n-1) + f(n-1)&lt;/code&gt;&lt;/p&gt;
@@ -955,8 +986,27 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 
 &lt;hr /&gt;
-&lt;h3&gt;階乘&lt;/h3&gt;
-&lt;p&gt;&amp;lt;撰寫中&amp;gt;&lt;/p&gt;
+&lt;h3&gt;階乘（factorial）&lt;/h3&gt;
+&lt;p&gt;撰寫階乘通常會立刻想到遞迴寫法。這想法太直覺了，範例如下：&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;factorial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;factorial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;不過這個會非常耗用記憶體資源，而且如果堆疊太深的話在 Python 會跑出 &lt;code&gt;RecursionError: maximum recursion depth exceeded in comparison&lt;/code&gt; 這種超出堆疊限制的錯誤。這時候你還要設定 &lt;code&gt;sys.setrecursionlimit(5000)&lt;/code&gt; 允許遞迴深度。因此 factorial&amp;nbsp;使用遞迴寫法看起來真不是一個好主意。&lt;/p&gt;
+&lt;p&gt;如果要改寫成動態規劃該怎麼做呢？做法很簡單，從階層的公式來看就是不斷的和前一個數字相乘得出的結果，因此我們做的迴圈將問題做分割，接著和前一個數字相乘把問題在組合起來。
+這樣時間複雜度只需要 O(N)，空間複雜度 O(N) 但如果只處理一個 n! 問題那麼空間複雜度就是 O(1)&amp;nbsp;容易吧！&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;fib_dp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="o"&gt;*=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;hr /&gt;
 &lt;h3&gt;樓梯路線（ Staircase Walk&amp;nbsp;）&lt;/h3&gt;
 &lt;p&gt;假設一個方格棋盤大小為&lt;code&gt;(x, y)&lt;/code&gt;。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&amp;nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。&lt;/p&gt;
@@ -992,10 +1042,8 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 &lt;hr /&gt;
 &lt;h3&gt;背包問題&lt;/h3&gt;
-&lt;p&gt;&amp;lt;撰寫中&amp;gt;&lt;/p&gt;
 &lt;hr /&gt;
 &lt;h3&gt;找錢問題&lt;/h3&gt;
-&lt;p&gt;&amp;lt;撰寫中&amp;gt;&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;Reference:
 + &lt;a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts"&gt;動態規劃題目&lt;/a&gt;&lt;/p&gt;</summary><category term="Dynamic Programming"></category><category term="Python"></category></entry><entry><title>信任的演化</title><link href="https://blog.chairco.me/posts/2017/08/The%20Evolution%20of%20Trust%20--%20notes.html" rel="alternate"></link><published>2017-08-07T15:57:42+08:00</published><author><name>chairco(Jason)</name></author><id>tag:blog.chairco.me,2017-08-07:posts/2017/08/The Evolution of Trust -- notes.html</id><summary type="html">&lt;blockquote&gt;
