@@ -878,22 +878,21 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 &lt;p&gt;另外 &lt;code&gt;__annotation__&lt;/code&gt; 也以 dict 存放參數與回傳註釋。因此在檢查參數形態就可以與 bind 方法內的 &lt;code&gt;arguments.items()&lt;/code&gt;來做比較。當我們在撰寫函式時可以利用 inspect&amp;nbsp;這個模組協助參數檢查。&lt;/p&gt;
 &lt;hr /&gt;
 &lt;p&gt;其實 Python 內的一級函式真的是有很多東西可以來提。大概就簡單從 inspect&amp;nbsp;這個套件回顧，並且說明為什麼可以用這個套件來做參數檢查用。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">chairco(Jason)</dc:creator><pubDate>Tue, 26 Sep 2017 20:17:31 +0800</pubDate><guid isPermaLink="false">tag:blog.chairco.me,2017-09-26:posts/2017/09/Python useful module inspect and first class function.html</guid><category>Python</category><category>Inspect</category></item><item><title>用 Python 來理解動態規劃 (Dynamic Programming)</title><link>https://blog.chairco.me/posts/2017/08/Understand_Dynamic_Programming_usining_Python.html</link><description>&lt;p&gt;動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法)&amp;nbsp;把問題細分成子問題然後做記憶。&lt;/p&gt;
-&lt;p&gt;先回顧分治法個概念:&lt;/p&gt;
+&lt;h2&gt;回顧分治法的簡單概念&lt;/h2&gt;
 &lt;blockquote&gt;
-&lt;p&gt;把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為&amp;nbsp;遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。&lt;/p&gt;
+&lt;p&gt;把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為 遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。&amp;nbsp;動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。&lt;/p&gt;
-&lt;h2&gt;動態規劃簡單問題&lt;/h2&gt;
-&lt;p&gt;整理了一些常見簡單的 &lt;span class="caps"&gt;DP&lt;/span&gt;&amp;nbsp;經典問題:&lt;/p&gt;
+&lt;h2&gt;&lt;a name="menu"&gt;&lt;/a&gt;動態規劃問題&lt;/h2&gt;
+&lt;p&gt;整理了一些常見簡單的 &lt;span class="caps"&gt;DP&lt;/span&gt;&amp;nbsp;經典問題，點選可以快速跳到對應錨點(⚓️)&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;費式數列&lt;/li&gt;
-&lt;li&gt;爬樓梯&lt;/li&gt;
-&lt;li&gt;階乘&lt;/li&gt;
-&lt;li&gt;樓梯路線&lt;/li&gt;
-&lt;li&gt;背包問題&lt;/li&gt;
-&lt;li&gt;找錢問題&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_1"&gt;費式數列&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_2"&gt;爬樓梯&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_3"&gt;階乘&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_4"&gt;樓梯路線&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_5"&gt;背包問題&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#dp_6"&gt;找錢問題&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;費式數列&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_1"&gt;&lt;/a&gt;費式數列 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;p&gt;但想分享一個以遞迴做寫法但使用 Python 在 functools 裡有提供一個函式叫 &lt;code&gt;lru_cache&lt;/code&gt; 解決堆疊函式被重複使用多次效能的問題。&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;functools&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;lru_cache&lt;/span&gt;
 
@@ -912,7 +911,7 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 &lt;p&gt;如果對改寫成 &lt;span class="caps"&gt;DP&lt;/span&gt; 有興趣可以去看看&lt;strong&gt;先前文章有稍微介紹&lt;/strong&gt;，&lt;a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html"&gt;參考&lt;/a&gt;。&lt;/p&gt;
 &lt;hr /&gt;
-&lt;h3&gt;爬樓梯&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_2"&gt;&lt;/a&gt;爬樓梯 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;p&gt;如果以一階或兩階方式爬樓梯，給定 n 階層樓梯，一共會有多少種走法？這問題就很適合來做分治法。首先走上第一階樓梯只有一種（一階一階爬），走上第二階層有兩種（兩階兩階爬或一階一階爬），但到了第三階他的走法就會是（一階一階爬）＋（兩階兩階爬）的總和，也就能歸納出 &lt;code&gt;f(n) = f(n-1) + f(n-1)&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;這用遞迴很簡單，寫個函式不斷呼叫自己來加總。但可想而知樓梯的 n&amp;nbsp;越大堆疊越多，效能越不好。 &lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;recursive_climbStairs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
@@ -986,7 +985,7 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 
 &lt;hr /&gt;
-&lt;h3&gt;階乘（factorial）&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_3"&gt;&lt;/a&gt;階乘（factorial）&lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;p&gt;撰寫階乘通常會立刻想到遞迴寫法。這想法太直覺了，範例如下：&lt;/p&gt;
 &lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;factorial&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
@@ -1008,7 +1007,7 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 
 &lt;hr /&gt;
-&lt;h3&gt;樓梯路線（ Staircase Walk&amp;nbsp;）&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_4"&gt;&lt;/a&gt;樓梯路線（ Staircase Walk ）&lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;p&gt;假設一個方格棋盤大小為&lt;code&gt;(x, y)&lt;/code&gt;。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&amp;nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。&lt;/p&gt;
 &lt;p&gt;用圖來看會比較清楚(圖引用自&lt;a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html"&gt;演算法網站&lt;/a&gt;):&lt;/p&gt;
 &lt;p&gt;&lt;img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" /&gt;
@@ -1041,12 +1040,15 @@ TypeError: missing a required argument: &lt;span class="s1"&gt;&amp;#39;name&amp
 
 
 &lt;hr /&gt;
-&lt;h3&gt;背包問題&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_5"&gt;&lt;/a&gt;背包問題 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;hr /&gt;
-&lt;h3&gt;找錢問題&lt;/h3&gt;
+&lt;h3&gt;&lt;a name="dp_6"&gt;&lt;/a&gt;找錢問題 &lt;small&gt;&lt;em&gt;&lt;a href="#menu"&gt;回到最上層&lt;/a&gt;&lt;/em&gt;&lt;/small&gt;&lt;/h3&gt;
 &lt;hr /&gt;
-&lt;p&gt;Reference:
-+ &lt;a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts"&gt;動態規劃題目&lt;/a&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">chairco(Jason)</dc:creator><pubDate>Sun, 27 Aug 2017 12:53:00 +0800</pubDate><guid isPermaLink="false">tag:blog.chairco.me,2017-08-27:posts/2017/08/Understand_Dynamic_Programming_usining_Python.html</guid><category>Dynamic Programming</category><category>Python</category></item><item><title>信任的演化</title><link>https://blog.chairco.me/posts/2017/08/The%20Evolution%20of%20Trust%20--%20notes.html</link><description>&lt;blockquote&gt;
+&lt;p&gt;參考資源:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts"&gt;動態規劃題目&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">chairco(Jason)</dc:creator><pubDate>Sun, 27 Aug 2017 12:53:00 +0800</pubDate><guid isPermaLink="false">tag:blog.chairco.me,2017-08-27:posts/2017/08/Understand_Dynamic_Programming_usining_Python.html</guid><category>Dynamic Programming</category><category>Python</category></item><item><title>信任的演化</title><link>https://blog.chairco.me/posts/2017/08/The%20Evolution%20of%20Trust%20--%20notes.html</link><description>&lt;blockquote&gt;
 &lt;p&gt;這是&lt;strong&gt;信任的演化&lt;/strong&gt;這一遊戲的&lt;code&gt;備註頁面&lt;/code&gt;，參考&lt;a href="https://audreyt.github.io/trust-zh-TW/"&gt;中文繁體網站&lt;/a&gt;。很喜歡這個網站與遊戲，淺顯的說明賽局策略，並且用這個例子來告訴我們目前社會上人們因為賽局所改變成為的樣貌。&lt;/p&gt;
 &lt;p&gt;嘗試在 &lt;a href="https://github.com/chairco/trust-zh-TW/tree/gh-pages/notes"&gt;github&lt;/a&gt; 上進行翻譯，同時也把好久不見的&lt;strong&gt;思辨賽局&lt;/strong&gt;一書重新閱讀一遍。&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://ncase.me/trust/notes/"&gt;原文&lt;/a&gt;在此，最新中文版本請參考 Au&amp;#8217;s &lt;a href="https://audreyt.github.io/trust-zh-TW/notes/"&gt;網站&lt;/a&gt;&lt;/p&gt;

@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 先回顧分治法個概念: ...">
+        <meta name="description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2017/08/Understand_Dynamic_Programming_usining_Python.html">
 	<meta property="og:title" content="用 Python 來理解動態規劃 (Dynamic Programming)">
 	<meta property="article:published_time" content="2017-08-27 12:53:00+08:00">
-            <meta property="og:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 先回顧分治法個概念: ...">
+            <meta property="og:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 先回顧分治法個概念: ...">
+            <meta name="twitter:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -128,22 +128,21 @@
     <!-- Post Content -->
     <article>
         <p>動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法)&nbsp;把問題細分成子問題然後做記憶。</p>
-<p>先回顧分治法個概念:</p>
+<h2>回顧分治法的簡單概念</h2>
 <blockquote>
-<p>把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為&nbsp;遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。</p>
+<p>把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為 遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。&nbsp;動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。</p>
 </blockquote>
-<p>動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。</p>
-<h2>動態規劃簡單問題</h2>
-<p>整理了一些常見簡單的 <span class="caps">DP</span>&nbsp;經典問題:</p>
+<h2><a name="menu"></a>動態規劃問題</h2>
+<p>整理了一些常見簡單的 <span class="caps">DP</span>&nbsp;經典問題，點選可以快速跳到對應錨點(⚓️)</p>
 <ul>
-<li>費式數列</li>
-<li>爬樓梯</li>
-<li>階乘</li>
-<li>樓梯路線</li>
-<li>背包問題</li>
-<li>找錢問題</li>
+<li><a href="#dp_1">費式數列</a></li>
+<li><a href="#dp_2">爬樓梯</a></li>
+<li><a href="#dp_3">階乘</a></li>
+<li><a href="#dp_4">樓梯路線</a></li>
+<li><a href="#dp_5">背包問題</a></li>
+<li><a href="#dp_6">找錢問題</a></li>
 </ul>
-<h3>費式數列</h3>
+<h3><a name="dp_1"></a>費式數列 <small><em><a href="#menu">回到最上層</a></em></small></h3>
 <p>但想分享一個以遞迴做寫法但使用 Python 在 functools 裡有提供一個函式叫 <code>lru_cache</code> 解決堆疊函式被重複使用多次效能的問題。</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 
@@ -162,7 +161,7 @@
 
 <p>如果對改寫成 <span class="caps">DP</span> 有興趣可以去看看<strong>先前文章有稍微介紹</strong>，<a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html">參考</a>。</p>
 <hr />
-<h3>爬樓梯</h3>
+<h3><a name="dp_2"></a>爬樓梯 <small><em><a href="#menu">回到最上層</a></em></small></h3>
 <p>如果以一階或兩階方式爬樓梯，給定 n 階層樓梯，一共會有多少種走法？這問題就很適合來做分治法。首先走上第一階樓梯只有一種（一階一階爬），走上第二階層有兩種（兩階兩階爬或一階一階爬），但到了第三階他的走法就會是（一階一階爬）＋（兩階兩階爬）的總和，也就能歸納出 <code>f(n) = f(n-1) + f(n-1)</code></p>
 <p>這用遞迴很簡單，寫個函式不斷呼叫自己來加總。但可想而知樓梯的 n&nbsp;越大堆疊越多，效能越不好。 </p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">recursive_climbStairs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -236,7 +235,7 @@
 
 
 <hr />
-<h3>階乘（factorial）</h3>
+<h3><a name="dp_3"></a>階乘（factorial）<small><em><a href="#menu">回到最上層</a></em></small></h3>
 <p>撰寫階乘通常會立刻想到遞迴寫法。這想法太直覺了，範例如下：</p>
 <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -258,7 +257,7 @@
 
 
 <hr />
-<h3>樓梯路線（ Staircase Walk&nbsp;）</h3>
+<h3><a name="dp_4"></a>樓梯路線（ Staircase Walk ）<small><em><a href="#menu">回到最上層</a></em></small></h3>
 <p>假設一個方格棋盤大小為<code>(x, y)</code>。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。</p>
 <p>用圖來看會比較清楚(圖引用自<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html">演算法網站</a>):</p>
 <p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" />
@@ -291,12 +290,15 @@
 
 
 <hr />
-<h3>背包問題</h3>
+<h3><a name="dp_5"></a>背包問題 <small><em><a href="#menu">回到最上層</a></em></small></h3>
 <hr />
-<h3>找錢問題</h3>
+<h3><a name="dp_6"></a>找錢問題 <small><em><a href="#menu">回到最上層</a></em></small></h3>
 <hr />
-<p>Reference:
-+ <a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts">動態規劃題目</a></p>
+<p>參考資源:</p>
+<ul>
+<li><a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts">動態規劃題目</a></li>
+</ul>
+<hr />
         <div class="twitter">
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="ChaircoChen">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
