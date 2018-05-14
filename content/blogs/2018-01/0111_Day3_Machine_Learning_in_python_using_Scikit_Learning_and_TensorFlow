@@ -1,0 +1,23 @@
+---
+Title: Day3 一天一篇機器學習 in python using Scikit-Learn and TensorFlow 系列 
+Slug: day3_machine_learning_in_python_using_scikit-learn_and_tensorflow
+Date: 2018-01-11 18:31:05
+Modified: 2018-01-11 18:31:05
+Tags: Python, Classification, Scikit-learn, Deep-Learning
+Category: Machine Learning
+---
+
+前兩天講的內容都專注在 classifier 分類上的演算法。但如果有接觸深度學習 (Deep-Learning) 演算法開始就會有些疑問了。到底這兩者有何差距？
+這也是我的疑問，至少在沒有了解深度學習之前我根本的覺得他們兩個是一樣的東西。不過瞭解之後雖然概念上類似，卻擁有不同的方法。
+
+如果用前面 MNIST 的例子來看使用機器學習與深度學習都可以達到辨識，但差異性在於
+
+1. 機器學習著重在根據`人所想出的特徵量`接著透過機器學習方法如 SVM、KNN 這類監督或是非監督式方法來達成。
+2. 深度學習透過`神經網路`則是由機器自己來學習這些特徵量。
+
+P.S 在這邊曾經有人問我我一個關於機器學習問題挺有趣： classifier 與 cluster 有怎樣差異。當時我瞬間有點詞窮，不過回頭來看就是機器學習裡監督或是非監督式學習方法
+
+
+所以這邊我們稍微回頭過來以 MNIST 的例子用`深度學習`方法來介紹處理方法。一開始先介紹感知器(perceptron)因為神經網路的概念就是從感知器得來。想像感知器就是傳遞訊號，接受多個訊號輸入，再把訊號輸出，結果會有兩種 0 代表不傳遞訊號，1 代表傳遞訊號。所以我們就可以透過邏輯閘方式用感知器表先一些數學函數
+
+

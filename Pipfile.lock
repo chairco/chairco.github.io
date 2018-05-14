@@ -1,0 +1,59 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "e570d984a7cf94a2d34bd4a249a188d57cb0798766c63f95d2f9871f6a8b5410"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "blinker": {
+            "version": "==1.4"
+        },
+        "docutils": {
+            "version": "==0.12"
+        },
+        "feedgenerator": {
+            "version": "==1.8"
+        },
+        "jinja2": {
+            "version": "==2.9.6"
+        },
+        "markdown": {
+            "version": "==2.6.6"
+        },
+        "markupsafe": {
+            "version": "==1.0"
+        },
+        "pelican": {
+            "version": "==3.6.3"
+        },
+        "pygments": {
+            "version": "==2.2.0"
+        },
+        "python-dateutil": {
+            "version": "==2.5.3"
+        },
+        "pytz": {
+            "version": "==2016.4"
+        },
+        "six": {
+            "version": "==1.10.0"
+        },
+        "smartypants": {
+            "version": "==1.8.6"
+        },
+        "typogrify": {
+            "version": "==2.0.7"
+        },
+        "unidecode": {
+            "version": "==0.04.20"
+        }
+    },
+    "develop": {}
+}

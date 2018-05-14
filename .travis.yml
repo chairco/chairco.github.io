@@ -1,0 +1,13 @@
+language: python  
+python:  
+- '3.5'
+
+branches:  
+  only:  
+  - src
+
+install:  
+- pip install -r requirements.txt
+ 
+script:  
+- make travis 
