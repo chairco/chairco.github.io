@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
+        <meta name="description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2017/07/Let’s talk about testing Django apps.html">
 	<meta property="og:title" content="讓我們來談談 Django apps 上的測試吧">
 	<meta property="article:published_time" content="2017-07-20 15:39:46+08:00">
-            <meta property="og:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
+            <meta property="og:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。 ...">
+            <meta name="twitter:description" content="好的測試設定帶你上天堂，不好的測試設定讓你手動到離不開機房。 今天翻譯 Django 了一篇測試的文章，原文在此 文章大概在說明測試 Django apps 的一些設定概念、工具與經驗。希望想多瞭解一些 Django apps 的測試設定朋友會有興趣。...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -192,7 +192,7 @@
 </li>
 </ul>
 <p>這裡有一些目標要執行像是安裝測試相依的檔案，安裝需要的 Django 版本等。所以現在我可以在我的 <span class="caps">CI</span> 設定檔案內指定 <code>make test</code> 為指令，並且知道要安裝哪些相依檔案（之前我不得不手動安裝或是使用 <code>test_requires</code>），對於本地測試我可以指定任何我想要的 Django/Python 版本組合。舉個例，執行 Django 1.9 與 Python&nbsp;3.5.2:</p>
-<div class="codehilite"><pre><span></span>$ make venv <span class="nb">test</span> teardown <span class="nv">PYTHON_VERSION</span><span class="o">=</span>3.5.2 <span class="nv">DJANGO_VERSION</span><span class="o">=</span>1.9
+<div class="codehilite"><pre><span></span>$ make venv <span class="nb">test</span> teardown <span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="m">3</span>.5.2 <span class="nv">DJANGO_VERSION</span><span class="o">=</span><span class="m">1</span>.9
 </pre></div>
 
 

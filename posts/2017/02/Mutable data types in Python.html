@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class ...">
+        <meta name="description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -53,7 +53,7 @@
 	<meta property="og:url" content="../../../posts/2017/02/Mutable data types in Python.html">
 	<meta property="og:title" content="Python 物件為可變參數時的使用">
 	<meta property="article:published_time" content="2017-02-20 20:00:00+08:00">
-            <meta property="og:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class ...">
+            <meta property="og:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -63,7 +63,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class ...">
+            <meta name="twitter:description" content="你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 object，萬物都是一個 object 所以當你產生一個 function 這個預設的參數值就產生了。我們用底下一個範例來說明： class...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -131,14 +131,14 @@
 <p>你可能會遇到，當物件參數需要預設給一個值時到底要給可變參數還是給一個 None 值？這個問題牽涉到 Python 設計的觀念 <code>object</code>，萬物都是一個 <code>object</code> 
 所以當你產生一個 function&nbsp;這個預設的參數值就產生了。我們用底下一個範例來說明：</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="p">[]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span>
 
 <span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">Foo</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Foo</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">()</span>
     <span class="n">f</span><span class="o">.</span><span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">5566</span><span class="p">)</span>
@@ -150,7 +150,7 @@
 所以當你建立一個 f 的 <code>Foo()</code> 物件時他的預設參數也就產生了，因此當你建立 b 的 <code>Bar()</code> 物件時他其實是指向同一個記憶體位址。</p>
 <p>那正確做法應該怎麼做呢？應該將 l 的變數設定為一個不可變的變數 None.&nbsp;這樣才不會出現幽靈事件！</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">l</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -159,19 +159,19 @@
     <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;&lt;foo {self.l}&gt;&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="n">Foo</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">Foo</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Foo</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;&lt;Bar {self.l}&gt;&#39;</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c1"># test 1</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">Bar</span><span class="p">()</span>
@@ -197,12 +197,12 @@
 <p><strong>Cheers&nbsp;！！!</strong></p>
 <h4>Update&nbsp;2018/1/6</h4>
 <p>這邊在當初寫的時候有了一些錯誤，不過竟然隔了這麼久才發現 <span class="caps">QQ</span>，解釋一下 class Foo mutable 錯誤地方&nbsp;原本是這樣寫的：</p>
-<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="n">Foo:</span>
-    <span class="n">def</span> <span class="n">__init__</span>(<span class="k">self</span>, <span class="n">l</span>=<span class="n">None</span>):
-        <span class="k">if</span> <span class="n">l</span> <span class="k">is</span> <span class="n">None:</span>
-            <span class="k">self</span>.<span class="n">l</span> = []  &lt;-- <span class="n">這邊是正確</span>
-        <span class="n">else:</span>
-            <span class="k">self</span>.<span class="n">l</span> = <span class="n">l</span>  &lt;-- <span class="n">這邊會有</span> <span class="n">mutable</span> <span class="n">的錯誤</span>
+<div class="codehilite"><pre><span></span><span class="kr">class</span> <span class="nx">Foo</span>:
+    <span class="kt">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">None</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">l</span> <span class="nx">is</span> <span class="nx">None</span>:
+            <span class="kt">self.l</span> <span class="o">=</span> <span class="p">[]</span>  <span class="o">&lt;--</span> <span class="err">這邊是正確</span>
+        <span class="k">else</span><span class="o">:</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">l</span> <span class="o">=</span> <span class="nx">l</span>  <span class="o">&lt;--</span> <span class="err">這邊會有</span> <span class="nx">mutable</span> <span class="err">的錯誤</span>
 </pre></div>
 
 

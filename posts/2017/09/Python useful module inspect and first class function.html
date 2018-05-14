@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+        <meta name="description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>>...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2017/09/Python useful module inspect and first class function.html">
 	<meta property="og:title" content="Python inspect 實用功能與一級函式 First-class function">
 	<meta property="article:published_time" content="2017-09-26 20:17:31+08:00">
-            <meta property="og:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+            <meta property="og:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>>...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>> ...">
+            <meta name="twitter:description" content="起因 因為試著使用 Python 內的 inspect module， 發現可以透過 inspect.signature 來檢查 function 型態，下面是一個範例((引自 Louie blog))，用來檢查計算最大公因數時限制輸入的數字要為 int 形態。 >>>...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -151,13 +151,13 @@
 ...         a, <span class="nv">b</span> <span class="o">=</span> b, a % b
 ...     <span class="k">return</span> a
 ... 
-&gt;&gt;&gt; gcd<span class="o">(</span>2.7, 3.6<span class="o">)</span>
+&gt;&gt;&gt; gcd<span class="o">(</span><span class="m">2</span>.7, <span class="m">3</span>.6<span class="o">)</span>
 Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
-  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 1, in &lt;module&gt;
-  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 9, in wrapper
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in &lt;module&gt;
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">9</span>, in wrapper
 AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
-&gt;&gt;&gt; gcd<span class="o">(</span>27, 36<span class="o">)</span>
-9
+&gt;&gt;&gt; gcd<span class="o">(</span><span class="m">27</span>, <span class="m">36</span><span class="o">)</span>
+<span class="m">9</span>
 &gt;&gt;&gt;
 </pre></div>
 
@@ -169,8 +169,8 @@ AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
 ...     <span class="s1">&#39;&#39;&#39;return n!&#39;&#39;&#39;</span>
 ...     <span class="k">return</span> <span class="m">1</span> <span class="k">if</span> n &lt; <span class="m">2</span> <span class="k">else</span> n * factorial<span class="o">(</span>n-1<span class="o">)</span>
 ... 
-&gt;&gt;&gt; factorial<span class="o">(</span>10<span class="o">)</span>
-3628800
+&gt;&gt;&gt; factorial<span class="o">(</span><span class="m">10</span><span class="o">)</span>
+<span class="m">3628800</span>
 &gt;&gt;&gt; factorial.__doc__
 <span class="s1">&#39;return n!&#39;</span>
 &gt;&gt;&gt; type<span class="o">(</span>factorial<span class="o">)</span>
@@ -183,10 +183,10 @@ AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
 <div class="codehilite"><pre><span></span>&gt;&gt;&gt; <span class="nv">fact</span> <span class="o">=</span> factorial
 &gt;&gt;&gt; fact
 &lt;<span class="k">function</span> factorial at 0x10d96f9d8&gt;
-&gt;&gt;&gt; map<span class="o">(</span>fact, range<span class="o">(</span>10<span class="o">))</span>
+&gt;&gt;&gt; map<span class="o">(</span>fact, range<span class="o">(</span><span class="m">10</span><span class="o">))</span>
 &lt;map object at 0x10d9821d0&gt;
-&gt;&gt;&gt; list<span class="o">(</span>map<span class="o">(</span>fact, range<span class="o">(</span>10<span class="o">)))</span>
-<span class="o">[</span>1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880<span class="o">]</span>
+&gt;&gt;&gt; list<span class="o">(</span>map<span class="o">(</span>fact, range<span class="o">(</span><span class="m">10</span><span class="o">)))</span>
+<span class="o">[</span><span class="m">1</span>, <span class="m">1</span>, <span class="m">2</span>, <span class="m">6</span>, <span class="m">24</span>, <span class="m">120</span>, <span class="m">720</span>, <span class="m">5040</span>, <span class="m">40320</span>, <span class="m">362880</span><span class="o">]</span>
 </pre></div>
 
 
@@ -213,10 +213,10 @@ AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
 <h2>使用關鍵字參數</h2>
 <p>使用 <code>*args</code> 以及 <code>**kwargs</code> 是 Python&nbsp;內傳遞參數很方便的方法。</p>
 <p>註: cls 是 Python 3 用來傳遞 class&nbsp;屬性</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">content</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">content</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generte one or more html tags&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span>
+    <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
     <span class="k">if</span> <span class="n">attrs</span><span class="p">:</span>
         <span class="n">attr_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; </span><span class="si">%s</span><span class="s1">=&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                            <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span>
@@ -229,12 +229,12 @@ AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s%s</span><span class="s1"> /&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attr_str</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;br&#39;</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">33</span><span class="p">))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s1">&#39;sidebar&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="s1">&#39;sidebar&#39;</span><span class="p">))</span>
     <span class="k">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s1">&#39;testing&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;img&#39;</span><span class="p">))</span>
     <span class="n">my_tag</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Sunset Boulevard&#39;</span><span class="p">,</span>
               <span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="s1">&#39;sunset.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;cls&#39;</span><span class="p">:</span> <span class="s1">&#39;framed&#39;</span><span class="p">}</span>
@@ -262,20 +262,20 @@ AssertionError: Expected &lt;class <span class="s1">&#39;int&#39;</span>&gt;
 <p>但要如何讓函式知道需要有什麼參數與是否有預設值呢？在前面我們有提到函式物件內 <code>__default__</code> 它會保存一個 tuple，裡頭有定位與關鍵字引數的預設值。關鍵字引數預設值會被存在 <code>__kwdefaults__</code>，引數的名稱則放在 <code>__code__</code> 屬性。這些屬性內可以用來讓我們判斷參數的性質。</p>
 <p>但從這些屬性內來判定實在不方便，這時開始要用到前面提到一個很棒的 Python module: <code>inspect</code>。</p>
 <p><code>inspect.signature</code> 可以將函式回傳一個 <code>inspect.Signature</code> 的物件，裡頭有個 <code>parameters</code> 屬性讓你讀取 inspect.Parameter&nbsp;物件有序名稱映射:</p>
-<div class="codehilite"><pre><span></span>&gt;&gt;&gt; def bob<span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span>123<span class="o">)</span>:
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; def bob<span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span><span class="m">123</span><span class="o">)</span>:
 ...     <span class="k">if</span> <span class="nv">a</span> <span class="o">==</span> <span class="s1">&#39;Hello&#39;</span>:
 ...         <span class="k">return</span> b
 ...     <span class="k">else</span>:
-...         <span class="k">return</span> 321
+...         <span class="k">return</span> <span class="m">321</span>
 ... 
 &gt;&gt;&gt; from inspect import signature
 &gt;&gt;&gt; <span class="nv">sig</span> <span class="o">=</span> signature<span class="o">(</span>bob<span class="o">)</span>
 &gt;&gt;&gt; sig
-&lt;Signature <span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span>123<span class="o">)</span>&gt;
+&lt;Signature <span class="o">(</span>a, <span class="nv">b</span><span class="o">=</span><span class="m">123</span><span class="o">)</span>&gt;
 &gt;&gt;&gt; <span class="k">for</span> n, p in sig.parameters.items<span class="o">()</span>:
 ...     print<span class="o">(</span>p.kind, <span class="s1">&#39;:&#39;</span>, n, <span class="s1">&#39;=&#39;</span>, p.default<span class="o">)</span>
 POSITIONAL_OR_KEYWORD : <span class="nv">a</span> <span class="o">=</span> &lt;class <span class="s1">&#39;inspect._empty&#39;</span>&gt;
-POSITIONAL_OR_KEYWORD : <span class="nv">b</span> <span class="o">=</span> 123
+POSITIONAL_OR_KEYWORD : <span class="nv">b</span> <span class="o">=</span> <span class="m">123</span>
 </pre></div>
 
 
@@ -298,10 +298,10 @@ POSITIONAL_OR_KEYWORD : <span class="nv">b</span> <span class="o">=</span> 123
 &gt;&gt;&gt; del my_tag<span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span>
 &gt;&gt;&gt; <span class="nv">bound_args</span> <span class="o">=</span> sig.bind<span class="o">(</span>**my_tag<span class="o">)</span>
 Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
-  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line 1, in &lt;module&gt;
-  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line 2934, in <span class="nb">bind</span>
-    <span class="k">return</span> args<span class="o">[</span>0<span class="o">]</span>._bind<span class="o">(</span>args<span class="o">[</span>1:<span class="o">]</span>, kwargs<span class="o">)</span>
-  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line 2849, in _bind
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in &lt;module&gt;
+  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line <span class="m">2934</span>, in <span class="nb">bind</span>
+    <span class="k">return</span> args<span class="o">[</span><span class="m">0</span><span class="o">]</span>._bind<span class="o">(</span>args<span class="o">[</span><span class="m">1</span>:<span class="o">]</span>, kwargs<span class="o">)</span>
+  File <span class="s2">&quot;/Users/chairco/.pyenv/versions/3.6.0/lib/python3.6/inspect.py&quot;</span>, line <span class="m">2849</span>, in _bind
     raise TypeError<span class="o">(</span>msg<span class="o">)</span> from None
 TypeError: missing a required argument: <span class="s1">&#39;name&#39;</span>
 </pre></div>

@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins ...">
+        <meta name="description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -55,7 +55,7 @@
 	<meta property="og:url" content="../../../posts/2017/07/3 mistakes to avoid when learning to code in Python.html">
 	<meta property="og:title" content="學習編寫 Python 時應該避免的三種錯誤">
 	<meta property="article:published_time" content="2017-07-12 13:13:29+08:00">
-            <meta property="og:description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins ...">
+            <meta property="og:description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -65,7 +65,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins ...">
+            <meta name="twitter:description" content="關於可變變數在 Python 作為參數使用一直是初入朋友的痛。尤其看起來執行起來一切正常的 Python Code，卻跑出不可預期的結果著實讓人心煩。 本篇 TL;DR，文字太多有害身體健康。所以想 3 mins...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -231,7 +231,7 @@
 <p>等等，到底發生什麼事!？ 沒有預期這樣的結果啊。 我們實例化兩個單獨的物件，a 和 b。 a 給了一個 <span class="caps">URL</span> 然後 b 給另一個。怎麼兩個物件都變成擁有兩個&nbsp;URLs？</p>
 <p>這樣的結果和前面我們舉的第一個例子是一樣的問題。 當定義的類別被建立時 URLs 的 list 就已經被<code>實例化</code>。所有類別內的的實例都會使用同樣一個&nbsp;list。現在這裡有些優秀的例子，但多數時候你不會想這樣做。你會希望不同的物件各自單獨的儲存。要做到這樣，我們必須針對程式碼做一些變動：</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">URLCatcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urls</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">add_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>

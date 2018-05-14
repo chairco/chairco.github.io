@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
+        <meta name="description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2017/08/Understand_Dynamic_Programming_usining_Python.html">
 	<meta property="og:title" content="用 Python 來理解動態規劃 (Dynamic Programming)">
 	<meta property="article:published_time" content="2017-08-27 12:53:00+08:00">
-            <meta property="og:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
+            <meta property="og:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 ...">
+            <meta name="twitter:description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -284,7 +284,7 @@
     <span class="k">return</span> <span class="s2">&quot;由(0,0)到({},{})共有{}種走法&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">table</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
 </pre></div>
 
@@ -336,7 +336,7 @@ val[n]: n&nbsp;物品的價值</p>
             <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
     <span class="n">wt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
     <span class="n">W</span> <span class="o">=</span> <span class="mi">50</span>
@@ -361,7 +361,7 @@ val[n]: n&nbsp;物品的價值</p>
     <span class="k">return</span> <span class="n">K</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">W</span><span class="p">]</span>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
     <span class="n">wt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
     <span class="n">W</span> <span class="o">=</span> <span class="mi">50</span>

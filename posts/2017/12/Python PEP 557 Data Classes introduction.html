@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP ...">
+        <meta name="description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2017/12/Python PEP 557 Data Classes introduction.html">
 	<meta property="og:title" content="PEP 557 — Data Classes 擁抱更友善的資料模型">
 	<meta property="article:published_time" content="2017-12-05 23:49:05+08:00">
-            <meta property="og:description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP ...">
+            <meta property="og:description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP ...">
+            <meta name="twitter:description" content="Python 的 Class 裡我們透過 __init__ 來做初始化一個類別與所需變數，然後透過兩個底線的方法例如 __repr__, __eq__ 來定義資料模型。有沒有更好的方法呢？PEP 557 引入了一個嶄新的定義資料模型方式。結合對變數型態的宣告(PEP...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -132,12 +132,12 @@
 <p>首先我們採用文件範例先用過去我們認知的寫法重新表示一次，再來比較新的方式：</p>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">InventoryItem</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit_price</span><span class="p">,</span> <span class="n">quantity_on_hand</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit_price</span><span class="p">,</span> <span class="n">quantity_on_hand</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span> <span class="o">=</span> <span class="n">unit_price</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span> <span class="o">=</span> <span class="n">quantity_on_hand</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;InventoryItem(name={self.name!r} unit_price={self.unit_price!r} quantity_on_hand={self.quantity_on_hand!r})&#39;</span>
 
     <span class="k">def</span> <span class="nf">total_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -167,41 +167,41 @@
 
 
 <p><code>@dataclass</code> 裝飾器會協助增加等價方法的自訂型態到類別內，就不需要在維護這些自訂型態。</p>
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unit_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">quantity_on_hand</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unit_price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">quantity_on_hand</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span> <span class="o">=</span> <span class="n">unit_price</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span> <span class="o">=</span> <span class="n">quantity_on_hand</span>
 
-<span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">f</span><span class="s1">&#39;InventoryItem(name={self.name!r}, unit_price={self.unit_price!r}, quantity_on_hand={self.quantity_on_hand!r})&#39;</span>
 
-<span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-<span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-<span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-<span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-<span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-<span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+<span class="k">def</span> <span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">quantity_on_hand</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">NotImplemented</span>
 </pre></div>

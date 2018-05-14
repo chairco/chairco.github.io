@@ -39,7 +39,7 @@
 
 
 
-        <meta name="description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 ...">
+        <meta name="description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下...">
 
         <meta name="author" content="chairco(Jason)">
 
@@ -54,7 +54,7 @@
 	<meta property="og:url" content="../../../posts/2016/07/Django-Tutorial-02-2.html">
 	<meta property="og:title" content="Django教學第二篇-建立第一個APP(下)">
 	<meta property="article:published_time" content="2016-07-04 10:46:15+08:00">
-            <meta property="og:description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 ...">
+            <meta property="og:description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下...">
 
             <meta property="og:image" content="../../../theme/images/post-bg.jpg">
     
@@ -64,7 +64,7 @@
 
             <meta name="twitter:image" content="../../../theme/images/post-bg.jpg">
         
-            <meta name="twitter:description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下 ...">
+            <meta name="twitter:description" content="兩篇內容好像太長了，看了會有點辛苦。所以我把第二篇分成 2 篇。上篇建立了 model，也用了 Django 的 Admin module 讓我們可以手動建立資料，接著可以開始寫 views 讓使用者可以透過瀏覽器來操作這個 APP。 在開始動手寫程式之前要先瞭解一下...">
     
     <link rel="icon" href="../../../theme/images/myfavicon.ico">
     <link rel="shortcut icon" href="../../../theme/images/myfavicon.ico" type="image/x-icon" />
@@ -184,8 +184,8 @@
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">loans.views</span> <span class="kn">import</span> <span class="n">home</span>
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -364,9 +364,9 @@
 
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^loan/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;loans.urls&#39;</span><span class="p">)),</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;home&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^admin/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^loan/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;loans.urls&#39;</span><span class="p">)),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^$&#39;</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;home&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -377,7 +377,7 @@
 
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s1">r&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">LoanList</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;loan_list&#39;</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^$&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">LoanList</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;loan_list&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 
