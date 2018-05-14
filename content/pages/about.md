@@ -7,9 +7,10 @@ Yi-Chieh(Jason)目前擔任資料工程師一職，對機器學習與深度學�
 
 喜愛使用 `Python` 開發軟體，最常使用 `Django` 進行網頁後端程式的開發。工作上主要專注於`程式`與`資料庫`效能提升(例如使用協程、並行開發等或是將 SQL 語言優化)。閒暇的時間喜歡解 **[LeetCode](https://leetcode.com/problemset/all/)** 上的題目與研究資料結構與演算法的書籍
 
->**如果您正在尋找夥伴一起工作，或是願意分享內薦機會。如對我的經歷表示肯定，不管是國內外工作機會，請來信 [chairco@gmail.com](mailto:hairco@gmail.com) 給予我機會。**
+>**如果此時您正在尋找夥伴一起工作，或是願意分享內薦機會，也對我的經歷表示肯定，不管是國內外工作機會，誠摯希望透過 [chairco@gmail.com](mailto:hairco@gmail.com) 來信給我 ;)**
 
 ***
+
 
 ## 工作經驗與經歷
 
