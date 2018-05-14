@@ -25,7 +25,7 @@ CLOUDFILES_CONTAINER=my_cloudfiles_container
 
 DROPBOX_DIR=~/Dropbox/Public/
 
-GITHUB_REPO_SLUG=chairco/blogs
+GITHUB_REPO_SLUG=chairco/chairco.github.io
 GITHUB_PAGES_BRANCH=master
 GITHUB_REMOTE_NAME=origin
 GITHUB_COMMIT_MSG=$(shell git --no-pager log --format=%s -n 1)
