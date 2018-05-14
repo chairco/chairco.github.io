@@ -127,7 +127,8 @@ github: publish
 
 travis: publish
 	git config --global user.name "chairco - Travis"  
-	git config --global user.email chairco@gmail.com  
+	git config --global user.email chairco@gmail.com
+	echo "blog.chairco.me" > '$(OUTPUTDIR)/CNAME'  
 	ghp-import -n -r $(GITHUB_REMOTE_NAME) -b $(GITHUB_PAGES_BRANCH) -m "$(GITHUB_COMMIT_MSG)" $(OUTPUTDIR)  
 	@git push -fq https://${GH_TOKEN}@github.com/$(GITHUB_REPO_SLUG).git $(GITHUB_PAGES_BRANCH):$(GITHUB_PAGES_BRANCH) > /dev/null   
 
