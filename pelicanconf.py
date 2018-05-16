@@ -81,13 +81,13 @@ AUTHOR_FEED_RSS = None
 
 # Social widget
 SOCIAL = (
-    ('Google', '#'),
+    #('Google', '#'),
     ('Twitter', 'https://twitter.com/ChaircoChen'),
     ('Facebook', 'https://www.facebook.com/chairco'),
     ('Github', 'https://github.com/chairco'),
     ('RSS', 'http://chairco.me/feeds/all.atom.xml'),
     ('Email', 'mailto:chairco@gmail.com'),
-    ('Linkedin', '#'),
+    #('Linkedin', '#'),
 )
 
 
@@ -107,10 +107,10 @@ NEST_CSS_MINIFY = True
 MENUITEMS = [
     ('About', '/pages/about-me/'),
     ('Resume', '/cv'),
-    ('Archives', '/archives.html'),
+    #('Archives', '/archives.html'),
     ('Categories', '/categories.html'),
-    ('Tags', '/tags.html'),
-    ('RSS', '/feeds/all.atom.xml')
+    #('Tags', '/tags.html'),
+    #('RSS', '/feeds/all.atom.xml')
 ]
 # Add header background image from content/images : 'background.jpg'
 NEST_HEADER_IMAGES = 'home-bg.jpg'
@@ -146,10 +146,10 @@ NEST_AUTHOR_HEAD_DESCRIPTION = u'Posts by'
 NEST_AUTHOR_HEADER_SUBTITLE = u'Posts archives'
 NEST_AUTHOR_CONTENT_TITLE = u'Posts'
 # authors.html
-NEST_AUTHORS_HEAD_TITLE = u'Author list'
-NEST_AUTHORS_HEAD_DESCRIPTION = u'Author list'
-NEST_AUTHORS_HEADER_TITLE = u'Author list'
-NEST_AUTHORS_HEADER_SUBTITLE = u'Archives listed by author'
+#NEST_AUTHORS_HEAD_TITLE = u'Author list'
+#NEST_AUTHORS_HEAD_DESCRIPTION = u'Author list'
+#NEST_AUTHORS_HEADER_TITLE = u'Author list'
+#NEST_AUTHORS_HEADER_SUBTITLE = u'Archives listed by author'
 # categories.html
 NEST_CATEGORIES_HEAD_TITLE = u'Categories'
 NEST_CATEGORIES_HEAD_DESCRIPTION = u'Archives listed by category'

@@ -21,7 +21,9 @@ Yi-Chieh(Jason)目前擔任`資料工程師`一職，對機器學習與深度學
 + 2016 - 2017  **PyCon Taiwan 2017** 議程組組長
 
 
-個人[簡歷](/files/CV.pdf)
+## 個人簡歷
+
++ [CV](/files/CV.pdf)
 
 
 <div class="fllow-twitter">
