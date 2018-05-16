@@ -1,6 +1,6 @@
 ---
-Title: 用 Python 來理解動態規劃 (Dynamic Programming)
-Slug: Understand_Dynamic_Programming_usining_Python
+Title: 用 Python 來理解動態規劃（Dynamic Programming）演算法
+Slug: Understand_Dynamic_Programming_Algorithm_usining_Python
 Date: 2017-08-27 12:53:00
 Tags: Dynamic Programming, Python
 Category: Algorithms
