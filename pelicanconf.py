@@ -43,8 +43,8 @@ THEME = "./nest/"
 
 
 # Theme setting
-SITETITLE = "廢廢的阿宅，來看一下嘛，反正不用錢 >///<"
-SITESUBTITLE = "廢廢的阿宅，來看一下嘛，反正不用錢 >///<" #"Code / Travel / Other"
+SITETITLE = u"廢廢的宅生物，歡迎餵食，但禁止拍打"
+SITESUBTITLE = SITETITLE #"Code / Travel / Other"
 SITEDESCRIPTION = SITETITLE
 SITELOGO = "/pics/20161206.png"
 MAIN_MENU = True
@@ -131,9 +131,9 @@ NEST_COPYRIGHT = u"&copy; Jason's blog 2018"
 NEST_FOOTER_HTML = ''
 # index.html
 NEST_INDEX_HEAD_TITLE = u'noname'
-NEST_INDEX_HEADER_TITLE = u'廢廢的阿宅，來看一下嘛，反正不用錢 >///<'
+NEST_INDEX_HEADER_TITLE = SITETITLE
 NEST_INDEX_HEADER_SUBTITLE = u'Taiwan No.1'
-NEST_INDEX_CONTENT_TITLE = u'Last Posts'
+NEST_INDEX_CONTENT_TITLE = u'Latest Posts'
 # archives.html
 NEST_ARCHIVES_HEAD_TITLE = u'Archives'
 NEST_ARCHIVES_HEAD_DESCRIPTION = u'Posts Archives'
