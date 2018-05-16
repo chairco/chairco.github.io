@@ -1,6 +1,6 @@
 ---
 Title: Python 實作斐波那契（Fibonacci）兩三事
-Slug: Let's talk about the fibonacci with python
+Slug: Lets talk about the fibonacci with python
 Date: 2017-07-24 18:31:26
 Tags: python, fibonacci
 Category: Algorithms

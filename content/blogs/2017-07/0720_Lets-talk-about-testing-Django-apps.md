@@ -1,6 +1,6 @@
 ---
 Title: 讓我們來談談 Django apps 上的測試吧
-Slug: Let’s talk about testing Django apps
+Slug: Lets talk about testing Django apps
 Date: 2017-07-20 15:39:46
 Tags: Django, testing
 Category: Django 
