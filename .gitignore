@@ -4,3 +4,4 @@ theme-flex/
 medius/
 *.pyc
 .DS_Store
+pelicanconf_*
