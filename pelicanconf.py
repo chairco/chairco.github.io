@@ -35,13 +35,9 @@ MD_EXTENSIONS = [
     'extra',
     'codehilite(linenums=False)'
 ]
-
-
 # Theme Path
 #THEME = "./pelican-clean-blog/"
 THEME = "./nest/"
-
-
 # Theme setting
 SITETITLE = u"廢廢的宅生物，歡迎餵食，但禁止拍打"
 SITESUBTITLE = SITETITLE #"Code / Travel / Other"
@@ -61,15 +57,12 @@ DISPLAY_CATEGORIES_ON_MENU = False
 COLOR_SCHEME_CSS = 'tomorrow.css'
 FAVICON = 'myfavicon.ico'
 COPYRIGHT_YEAR = 2018
-
 CC_LICENSE = {
     'name': 'Creative Commons Attribution',
     'version': '4.0',
     'slug': 'by'
 }
 #OG_LOCALE = 'zh_TW'
-
-
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = 'feeds/all.atom.xml'
 FEED_ALL_RSS = 'feeds/all.rss.xml'
@@ -77,23 +70,18 @@ CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
-
-
 # Social widget
 SOCIAL = (
-    #('Google', '#'),
-    ('Twitter', 'https://twitter.com/ChaircoChen'),
-    ('Facebook', 'https://www.facebook.com/chairco'),
     ('Github', 'https://github.com/chairco'),
-    ('RSS', 'http://chairco.me/feeds/all.atom.xml'),
+    ('Twitter', 'https://twitter.com/ChaircoChen'),
     ('Email', 'mailto:chairco@gmail.com'),
+    #('Google', '#'),
+    #('Facebook', 'https://www.facebook.com/chairco'),
+    #('RSS', 'http://chairco.me/feeds/all.atom.xml'),
     #('Linkedin', '#'),
 )
-
-
 SUMMARY_MAX_LENGTH = 24
 DEFAULT_PAGINATION = 12
-
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
 
@@ -107,8 +95,8 @@ NEST_CSS_MINIFY = True
 MENUITEMS = [
     ('About', '/pages/about-me/'),
     ('Resume', '/cv'),
-    #('Archives', '/archives.html'),
     ('Categories', '/categories.html'),
+    #('Archives', '/archives.html'),
     #('Tags', '/tags.html'),
     #('RSS', '/feeds/all.atom.xml')
 ]
@@ -126,13 +114,13 @@ NEST_SITEMAP_ATOM_LINK = u'Atom Feed'
 NEST_SITEMAP_RSS_LINK = u'RSS Feed'
 NEST_SOCIAL_COLUMN_TITLE = u'Social'
 NEST_LINKS_COLUMN_TITLE = u'Links'
-NEST_COPYRIGHT = u"&copy; Jason's blog 2018"
+NEST_COPYRIGHT = u"&copy; Jason's Blog 2018"
 # Footer optional
 NEST_FOOTER_HTML = ''
 # index.html
 NEST_INDEX_HEAD_TITLE = u'noname'
 NEST_INDEX_HEADER_TITLE = SITETITLE
-NEST_INDEX_HEADER_SUBTITLE = u'Taiwan No.1'
+NEST_INDEX_HEADER_SUBTITLE = u'TAIWAN No.1'
 NEST_INDEX_CONTENT_TITLE = u'Latest Posts'
 # archives.html
 NEST_ARCHIVES_HEAD_TITLE = u'Archives'
@@ -192,14 +180,10 @@ EXTRA_PATH_METADATA = {
     'extra/favicon.ico': {'path': 'favicon.ico'},
     'extra/logo.svg': {'path': 'logo.svg'}
 }
-
-
 # Disqus
 DISQUS_SITENAME = "chairco"
-
 # Google analytics
 GOOGLE_ANALYTICS = "UA-79798833-1"
-
 # Analytics
 GAUGES = False
 PIWIK_URL = False
