@@ -107,7 +107,7 @@ NEST_HEADER_LOGO = '/images/logo.png'
 NEST_SITEMAP_COLUMN_TITLE = u'Sitemap'
 NEST_SITEMAP_MENU = [
     ('Archives', '/archives.html'),
-    ('Tags','/tags.html'), 
+    ('Tags','/tags.html'),
     #('Authors','/authors.html')
 ]
 NEST_SITEMAP_ATOM_LINK = u'Atom Feed'
@@ -118,7 +118,7 @@ NEST_COPYRIGHT = u"&copy; Jason's Blog 2018"
 # Footer optional
 NEST_FOOTER_HTML = ''
 # index.html
-NEST_INDEX_HEAD_TITLE = u'noname'
+NEST_INDEX_HEAD_TITLE = u'真是迷人的 Asyncio'
 NEST_INDEX_HEADER_TITLE = SITETITLE
 NEST_INDEX_HEADER_SUBTITLE = u'TAIWAN No.1'
 NEST_INDEX_CONTENT_TITLE = u'Latest Posts'
