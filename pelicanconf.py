@@ -55,7 +55,7 @@ MENUITEMS = [
 DISPLAY_PAGES_ON_MENU = False
 DISPLAY_CATEGORIES_ON_MENU = False
 COLOR_SCHEME_CSS = 'tomorrow.css'
-FAVICON = 'myfavicon.ico'
+FAVICON = 'favicon.ico'
 COPYRIGHT_YEAR = 2018
 CC_LICENSE = {
     'name': 'Creative Commons Attribution',
@@ -177,7 +177,7 @@ NEST_TAGS_CONTENT_LIST = u'tagged'
 STATIC_PATHS = ['images', 'extra/robots.txt', 'extra/favicon.ico', 'extra/logo.svg']
 EXTRA_PATH_METADATA = {
     'extra/robots.txt': {'path': 'robots.txt'},
-    'extra/favicon.ico': {'path': 'favicon.ico'},
+    'extra/favicon.ico': {'path': 'myfavicon.ico'},
     'extra/logo.svg': {'path': 'logo.svg'}
 }
 # Disqus
