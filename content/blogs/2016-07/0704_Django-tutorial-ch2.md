@@ -80,7 +80,7 @@ urlpatterns = [
 ]
 ```
 
-Django 是用正規表達式( Regular Expression )來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home 的位置就可以了囉。
+Django 是用正規表達式 (Regular Expression) 來處理所有 urls pattern 的 routing, ，因此只要告訴 urls pattern function home 的位置就可以了囉。
 
 但突然想起一件事，還沒有建立 template 呀！對，這才要回應前面第一段目的，在這邊我們的繼承關係會是這樣:
 
@@ -167,7 +167,7 @@ Django 是用正規表達式( Regular Expression )來處理所有 urls pattern �
 
 ### 進入開發第一步
 
-打鐵要趁熱，接下來我們要建立一個借用系統表單流程，這個流程的使用者情境 (user story) 應該會是這樣:
+接下來我們要建立一個借用系統表單流程，這個流程的使用者情境 (user story) 應該會是這樣:
 
 ```
 新增表單 -> 填寫表單 -> 送出表單
