@@ -325,7 +325,7 @@ return('event_loop took %.1f sec' % (time.time() - self.start))
 ```
 
 
-## coroutine（協同程序）
+## Coroutine（協同程序）
 
 這個情境裡頭最大的問題在於 callback(回呼)，對於大多數人來說很難一時之間理解某一段 callback 程式在做什麼，而過多的 callback 可能也讓程式碼看起來比較不那樣美觀，而以上的這些問題也就被某些人稱作 callback hell(回呼地獄)，下圖就用 js 極端的圖片例子:
 
@@ -338,7 +338,7 @@ return('event_loop took %.1f sec' % (time.time() - self.start))
 如果今天要讓程式間`資料的傳遞`更直覺，就必須將原本的函式溝通改善成為一個流程，於是 Python 的 generator（產生器）就發生作用，接著我們需要一個東西當事件被暫停時他要能把控制權拋出，於是需要時做一個 Future，有了上述兩點還需要去執行這些流程間工作，於是 Task（任務） 也是重點。
 
 
-因此協同程序又被稱作 micro-trhead(微執行緒)，他在 Single-thread 由程式決定執行的順序。
+因此協同程序又被稱作 micro-thread(微執行緒)，在 Single-thread 由程式決定執行的順序。
 
 
 所以要發展一個 Coroutine 需要幾樣東西:
