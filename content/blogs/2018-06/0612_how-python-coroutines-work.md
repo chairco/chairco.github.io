@@ -8,21 +8,20 @@ Category: Python
 ---
 
 
-要達成非同步(Asynchronous) I/O 有很多種策略，常聽到的是使用多執行緒(multithreading)達到非同步。雖然 GIL(Global Interpreter Lock) 讓 Python multithreading 更適合 I/O 頻繁的應用(concurrency)，實際上過多的的上下文切換(context-switch)反而消耗了更多時間。[^1]
+>要達成非同步(Asynchronous) I/O 有很多種策略，常聽到的是使用多執行緒(multithreading)達到非同步。雖然 GIL(Global Interpreter Lock) 讓 Python multithreading 更適合 I/O 頻繁的應用(concurrency)，實際上過多的的上下文切換(context-switch)反而消耗了更多時間。[^1]
+
+>最近因為需要使用到 Python Asyncio library 更深入接觸到協同程序(coroutine)的概念。簡單說協同程序是在 single thread 下允許程式來決定程式執行的順序，而有效達成非同步 I/O 的一種方法
+
+>要理解協同程序的運作，我覺得最棒的一篇是 Jesse Jiryu Davis 的教學 ["How Python Coroutines Work"](https://emptysqua.re/blog/links-for-how-python-coroutines-work/)，這篇教學先從如何達成 Asynchronous I/O，最後說明如何用協同程序(coroutine)來達成。
 
 
-最近因為需要使用到 Python Asyncio library 更深入接觸到協同程序(coroutine)的概念。簡單說協同程序是在 single thread 下允許程式來決定程式執行的順序，而有效達成非同步 I/O 的一種方法，
-
-
-不過要理解協同程序的運作，我覺得最棒的一篇是 Jesse Jiryu Davis 的教學 ["How Python Coroutines Work"](https://emptysqua.re/blog/links-for-how-python-coroutines-work/)，這篇教學先從如何達成 Asynchronous I/O，最後說明如何用協同程序(coroutine)來達成。
-
-
-達成 Asynchronous I/O 有如下幾個條件，接下來先讓我舉例說明吧。
+達成 Asynchronous I/O 有如下幾個條件:
 
 + non-blocking
 + callback
 + event loop
 
+接下來先讓我舉例說明吧
 
 ---
 
