@@ -117,8 +117,9 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             print('%r generated an exception: %s' % (url, exc))
     
     print('multithreading took %.1f sec' % (time.time() - start))
+```
 
-
+```shell
 HTTP/1.0 200 OK
 HTTP/1.0 200 OK
 multithreading took 1.0 sec
@@ -443,7 +444,7 @@ return('coroutines took %.1f sec' % (time.time() - self.start))
 
 接著試試看效果，ya 達成！
 
-```
+```shell
 HTTP/1.0 200 OK
 HTTP/1.0 200 OK
 coroutines took 1.0 sec
