@@ -13,15 +13,6 @@ Yi-Chieh(Jason)目前擔任`資料工程師`一職，對機器學習與深度學
 >**如果此時您正在尋找夥伴一起工作，或是願意分享內薦機會，也對我的經歷表示肯定，不管是國內外工作機會，誠摯希望透過 [chairco@gmail.com](mailto:hairco@gmail.com) 來信給我 ;)**
 
 
----
-
-
-## 簡歷
-
-+ [Resume](https://registry.jsonresume.org/chairco)
-
-
----
 
 
 ## 工作經驗與經歷
