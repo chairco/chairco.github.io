@@ -55,8 +55,8 @@ MENUITEMS = [
 DISPLAY_PAGES_ON_MENU = False
 DISPLAY_CATEGORIES_ON_MENU = False
 COLOR_SCHEME_CSS = 'tomorrow.css'
-FAVICON = 'favicon.ico'
-COPYRIGHT_YEAR = 2018
+FAVICON = 'myfavicon.ico'
+COPYRIGHT_YEAR = 2019
 CC_LICENSE = {
     'name': 'Creative Commons Attribution',
     'version': '4.0',
@@ -174,7 +174,7 @@ NEST_TAGS_HEADER_SUBTITLE = u'Tags List'
 NEST_TAGS_CONTENT_TITLE = u'Tags List'
 NEST_TAGS_CONTENT_LIST = u'tagged'
 # Static files
-STATIC_PATHS = ['images', 'extra/robots.txt', 'extra/favicon.ico', 'extra/logo.svg']
+STATIC_PATHS = ['images', 'pics', 'extra/robots.txt', 'extra/favicon.ico', 'extra/logo.svg']
 EXTRA_PATH_METADATA = {
     'extra/robots.txt': {'path': 'robots.txt'},
     'extra/favicon.ico': {'path': 'myfavicon.ico'},
