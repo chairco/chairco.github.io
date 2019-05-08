@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e570d984a7cf94a2d34bd4a249a188d57cb0798766c63f95d2f9871f6a8b5410"
+            "sha256": "d28f02125fbee0df1b24925a20edb5a55241c61ef8d27c825db5f584b319f9af"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -31,6 +31,12 @@
                 "sha256:c00a60ee5179c99330078f4016c39924154a34677f0b84c62556b5ebc2ad7156"
             ],
             "version": "==1.8"
+        },
+        "ghp-import": {
+            "hashes": [
+                "sha256:6058810e1c46dd3b5b1eee87e203bdfbd566e10cfc77566edda7aa4dbf6a3053"
+            ],
+            "version": "==0.4.1"
         },
         "jinja2": {
             "hashes": [
