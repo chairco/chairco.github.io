@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 
 # Base setting
-AUTHOR = 'chairco(Jason)'
+AUTHOR = 'Jason'
 SITENAME = "Jason's Blog"
 SITEURL = 'https://blog.chairco.me'
 
@@ -39,7 +39,7 @@ MD_EXTENSIONS = [
 #THEME = "./pelican-clean-blog/"
 THEME = "./nest/"
 # Theme setting
-SITETITLE = u"廢廢的宅生物，歡迎餵食，但禁止拍打"
+SITETITLE = u"廢廢的宅生物，歡迎餵食，禁止拍打"
 SITESUBTITLE = SITETITLE #"Code / Travel / Other"
 SITEDESCRIPTION = SITETITLE
 SITELOGO = "/pics/20161206.png"
