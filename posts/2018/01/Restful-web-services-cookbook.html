@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="這份文件主要是整理過去在開發 RESTful web services 的一些觀念，在 Django 裡有套很棒的第三方套件叫 Django REST framework 可以讓使用者很輕鬆的打造 Web APIs 但我覺得還是有必要確認自己過程中是否真正了解 REST 的觀念以及再使用其他 framework 時也能正確的操作，因此有了這份紀錄的產生。 但首先也是先提一下有人問我 ...">
+        <meta name="keywords" content="API, Python, RESTful">
+        
+        <link rel="icon" href="https://blog.chairco.me/myfavicon.ico">
+        <link rel="shortcut icon" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+        <link rel="Bookmark" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+
+        <title>RESTful web services&nbsp;cookbook - Jason's Blog</title>
+
+        <!-- Stylesheets -->
+        <link href="https://blog.chairco.me/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
+        <link href="https://blog.chairco.me/feeds/restful.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-79798833-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+        <!-- /Google Analytics -->
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('https://blog.chairco.me/images/home-bg.jpg'); background-position: center; background-size: cover;">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <div class="header-logo">
+                        <a class="pull-left" href="https://blog.chairco.me/"><img class="mr20" src="https://blog.chairco.me/images/logo.png" alt="logo">Jason's Blog</a>
+                    </div>
+                    <div class="nav pull-right">
+                                <a href="https://blog.chairco.me/pages/about-me/">About</a>
+                                <a href="https://blog.chairco.me/cv">Resume</a>
+                                <a href="https://blog.chairco.me/categories.html">Categories</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">RESTful web services&nbsp;cookbook</h1>
+                      <p class="header-date">By <a href="https://blog.chairco.me/author/jason.html">Jason</a>, Jan 18, 2018, modified Jan 18, 2018, in category <a href="https://blog.chairco.me/category/restful.html">Restful</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://blog.chairco.me/tag/api.html">API</a>, <a href="https://blog.chairco.me/tag/python.html">Python</a>, <a href="https://blog.chairco.me/tag/restful.html">RESTful</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <p>這份文件主要是整理過去在開發 RESTful web services 的一些觀念，在 Django 裡有套很棒的第三方套件叫 <a href="http://www.django-rest-framework.org/">Django <span class="caps">REST</span> framework</a> 可以讓使用者很輕鬆的打造 Web APIs 但我覺得還是有必要確認自己過程中是否真正了解 <span class="caps">REST</span> 的觀念以及再使用其他 framework&nbsp;時也能正確的操作，因此有了這份紀錄的產生。</p>
+<p>但首先也是先提一下有人問我 <span class="caps">REST</span> 是什麼？我覺得我的回答會是 <span class="caps">REST</span> 是一種風格，目的是透過簡潔方法達到類似 <span class="caps">SOAP</span>, <span class="caps">XML</span>-<span class="caps">RPC</span> 等方法。這個風格是基於 <span class="caps">HTTP</span>、<span class="caps">URL</span>、<span class="caps">XML</span>、<span class="caps">HTML</span> 這些標準與協定。然後具備 <span class="caps">REST</span> 風格的 Web <span class="caps">API</span> 被稱為 RESTful <span class="caps">API</span>。如果有人覺得可以更詳細的補充請告訴我。</p>
+<p>接著就從動詞，使用情境等紀錄，希望也在做這些開發的朋友如有發現錯誤能給予指教。</p>
+<h2>動詞</h2>
+<ul>
+<li><span class="caps">GET</span> - 得到<strong>一個</strong>資源描述(情境為安全下使用)</li>
+<li><span class="caps">PUT</span> - 建立與更新<strong>一個</strong>資源</li>
+<li><span class="caps">DELETE</span> -&nbsp;用於刪除資源</li>
+<li><span class="caps">POST</span> - 建立<strong>多個</strong>新資源，或對多個新資源進行他種變更</li>
+</ul>
+<h3><span class="caps">GET</span></h3>
+<p>不要將 <span class="caps">GET</span> 用於不安全的操作上，例如購物車上的<code>添加商品</code>、<code>發送訊息</code>、<code>刪除訊息</code>等等操作。但如果一定要使用 <span class="caps">GET</span>&nbsp;來做務必確認以下幾點：</p>
+<ol>
+<li>確保這個操作沒有做暫存：&nbsp;Catch-control:no-catch</li>
+<li>確保副作用(side&nbsp;effect)都是良性的，不會影響重要的資料</li>
+<li>在 server&nbsp;上最好是將這些操作做成可以重複執行</li>
+</ol>
+<h3><span class="caps">POST</span></h3>
+<p><span class="caps">POST</span> 的重點覺得應該是在多個資源的操控，而且他能將很多資料包成一個資料結構傳輸。例如在做查詢時候，要丟很長串資料 <span class="caps">GET</span> 可能會受限於 <span class="caps">URL</span> 在瀏覽器上的長度。 <span class="caps">POST</span>&nbsp;就能解決這類問題。不過還是有些情境如下整理：</p>
+<ol>
+<li>將資源視為一個工廠(factory)</li>
+<li>透過一個控制器來修改一或多個資源</li>
+<li>執行大數據的傳輸查詢</li>
+<li>執行不安全或非冪等(no&nbsp;Idempotent)操作</li>
+</ol>
+<p>整理了適用的情境：</p>
+<ol>
+<li>對已經存在的資源註解</li>
+<li>對信箱列表、新聞群組或是類似群組發送訊息</li>
+<li>資料模組，例如表單送到資料處理後的結果</li>
+<li>額外操作擴充資料庫</li>
+</ol>
+<p>也因此暫存不會儲存這些方法造成影響，爬蟲工具不會發出 <span class="caps">POST</span> 請求，大部分通用的 <span class="caps">HTTP</span> 工具不會重複的傳送 <span class="caps">POST</span>&nbsp;請求。</p>
+<p>雖然適合用 <span class="caps">GET</span> 但用 <span class="caps">POST</span>&nbsp;更為適合情境:</p>
+<ol>
+<li>瀏覽器發出的請求，如果將相關內容用 <span class="caps">URL</span> 做傳遞可能會洩漏敏感訊息例如：信用卡資料等等，如果無法使用 <span class="caps">TLS</span> 時候就可以考慮用 <span class="caps">POST</span>。</li>
+<li>客戶送出的資料有太多的參數時。</li>
+</ol>
+<p><span class="caps">POST</span> 創建資源方法是採用 factory&nbsp;模式。</p>
+<h3><span class="caps">PUT</span></h3>
+<p>用來創建與更新單一資源。與 <span class="caps">POST</span> 差異在於當用戶端知道創建資源的 <span class="caps">URL</span> 時才能使用 <span class="caps">PUT</span> 不然就使用 <span class="caps">POST</span>，因此在這樣方法下伺服器需要和用戶端解釋 <span class="caps">URL</span> 如何組成，什麼樣的 <span class="caps">URL</span> 是合法或是非法的。同時還要顧慮到伺服器端是否有設定 <span class="caps">URL</span> 的模式或是過濾規則。通常會使用範圍較小的 <span class="caps">URL</span>&nbsp;來創建資源。</p>
+<h2>設計</h2>
+<p>RESTful <span class="caps">API</span> 透過 <span class="caps">URL</span> 來標示<code>資源(resource)</code>的實體。因此會使用 <span class="caps">HTTP</span>&nbsp;描述與格式來包裝這些實體與實際的標頭。接著稍微介紹一下我知道的部分：</p>
+<h3>Header&nbsp;的描述包含以下幾項</h3>
+<ul>
+<li>Content-Type: 描述 Header&nbsp;類型與包含的參數</li>
+<li>Content-Length:&nbsp;正文字串長度</li>
+<li>Content-Language:&nbsp;指定得語言</li>
+<li>Content-<span class="caps">MD5</span>: 採 <span class="caps">MD5</span>&nbsp;驗證的摘要</li>
+<li>Content-Enconding: gzip, compress or deflate&nbsp;編碼時使用</li>
+<li>Last Modified:&nbsp;資源被修改的時間</li>
+</ul>
+<div class="codehilite"><pre><span></span># 範例
+Content-Type: application/xml;charset=UTF-8 
+Content-Language: en-US
+Content-MD5: bbdc7bbb8ea5a689666e33ac922c0f83
+Last-Modified: Sun, 29 Mar 2009 04:51:38 GMT
+
+<span class="p">&lt;</span><span class="nt">user</span> <span class="na">xmlns:atom</span><span class="o">=</span><span class="s">&quot;http://www.w3.org/2005/Atom&quot;</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">id</span><span class="p">&gt;</span>user001<span class="p">&lt;/</span><span class="nt">id</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">atom:link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;self&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://example.org/user/user001&quot;</span><span class="p">/&gt;</span> <span class="p">&lt;</span><span class="nt">name</span><span class="p">&gt;</span>John Doe<span class="p">&lt;/</span><span class="nt">name</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">email</span><span class="p">&gt;</span>john@example.org<span class="p">&lt;/</span><span class="nt">email</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">user</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<h4>Content-Type</h4>
+<p>描述 header 的類型，通常會說 media-type or <span class="caps">MIME</span>。例如：text/html、image/png 這些都是一種 header，目的是告訴你要將這種訊息要編譯成哪一種格式的方法。<span class="caps">XML</span>、<span class="caps">JSON</span>&nbsp;這些都是。所以如果沒有標頭就只能猜測。</p>
+<h4>Content-Length</h4>
+<p>讓接收方來判斷是否接收正確的數據長度。但 <span class="caps">HTTP</span> 1.1 有了<code>分塊傳輸編碼 (chuncked transfer encoding)</code> 讓接收方不需要預先知道數據長度，因為最終會有一個 0 的塊結束。但如果是 <span class="caps">HTTP</span> 1.0 並未包含分塊傳輸編碼所以還是需要&nbsp;Content-Length。</p>
+<h4>Content-Language</h4>
+<p>本地化的語言需求。</p>
+<h4>Content-<span class="caps">MD5</span></h4>
+<p>用來驗證數據文本的完整性。但不能保證是否數據被竄改。</p>
+<h4>Content-Enconding</h4>
+<p>表示數據壓縮的方式，但是因為沒有方法知道 server&nbsp;使用的壓縮法，所以儘量避免使用除非很清楚知道。</p>
+<h4>Last&nbsp;Modified</h4>
+<p>用來表示資源最後被修改時間。</p>
+<hr />
+
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                var disqus_identifier = 'posts/2018/01/Restful-web-services-cookbook.html';
+                var disqus_url = 'https://blog.chairco.me/posts/2018/01/Restful-web-services-cookbook.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Sitemap</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://blog.chairco.me/archives.html">Archives</a></li>
+                            <li><a href="https://blog.chairco.me/tags.html">Tags</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">Atom Feed</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Social</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/chairco" target="_blank">Github</a></li>
+                            <li><a href="https://twitter.com/ChaircoChen" target="_blank">Twitter</a></li>
+                            <li><a href="mailto:chairco@gmail.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div> 
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <small><em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank">pelican</a></em></small><br/>
+                            <small><em>Theme and code by <a href="https://github.com/molivier" target="_blank">molivier</a></em></small><br/>
+                            <small>&copy; Jason's Blog 2018</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

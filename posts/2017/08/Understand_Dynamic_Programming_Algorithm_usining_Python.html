@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法) 把問題細分成子問題然後做記憶。 回顧分治法的簡單概念 把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, ...">
+        <meta name="keywords" content="Dynamic Programming, Python">
+        
+        <link rel="icon" href="https://blog.chairco.me/myfavicon.ico">
+        <link rel="shortcut icon" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+        <link rel="Bookmark" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+
+        <title>用 Python 來理解動態規劃（Dynamic&nbsp;Programming）演算法 - Jason's Blog</title>
+
+        <!-- Stylesheets -->
+        <link href="https://blog.chairco.me/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
+        <link href="https://blog.chairco.me/feeds/algorithms.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-79798833-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+        <!-- /Google Analytics -->
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('https://blog.chairco.me/images/home-bg.jpg'); background-position: center; background-size: cover;">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <div class="header-logo">
+                        <a class="pull-left" href="https://blog.chairco.me/"><img class="mr20" src="https://blog.chairco.me/images/logo.png" alt="logo">Jason's Blog</a>
+                    </div>
+                    <div class="nav pull-right">
+                                <a href="https://blog.chairco.me/pages/about-me/">About</a>
+                                <a href="https://blog.chairco.me/cv">Resume</a>
+                                <a href="https://blog.chairco.me/categories.html">Categories</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">用 Python 來理解動態規劃（Dynamic&nbsp;Programming）演算法</h1>
+                      <p class="header-date">By <a href="https://blog.chairco.me/author/jason.html">Jason</a>, Aug 27, 2017, in category <a href="https://blog.chairco.me/category/algorithms.html">Algorithms</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://blog.chairco.me/tag/dynamic-programming.html">Dynamic Programming</a>, <a href="https://blog.chairco.me/tag/python.html">Python</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <p>動態規劃的想法就是 divide and conquer (分治法) + memoization (記憶法)&nbsp;把問題細分成子問題然後做記憶。</p>
+<h2>回顧分治法的簡單概念</h2>
+<blockquote>
+<p>把大問題分成小問題在各個擊破。白話講就是分解動作。和遞歸(Recursive)概念相同，取其遞迴精神。在進行這件事會有三個流程：Divide, Conquer, Combine。流程是切割問題、解決問題、合併解答。但在分治法比較特別是有時子問題不需要全部解決，例如二分搜尋法。在找尋問題時子問題與原問題相同但範圍不同被稱為 遞迴(recurrence)，通常我們會把其寫成遞迴公式，例如爬樓梯的問題。&nbsp;動態規劃雖然和分治法很相似，但選擇動態規劃一很重要原因是：如果採取分治法其中的遞歸實作會不斷用相同函式求解造成效率不佳，而動態規劃則是在求解過程把子問題答案先儲存在記憶體內，之後再去查表取出，這樣就能避免不斷堆疊的函式求解。</p>
+</blockquote>
+<h2><a name="menu"></a>動態規劃問題</h2>
+<p>整理了一些常見簡單的 <span class="caps">DP</span>&nbsp;經典問題，點選可以快速跳到對應錨點(⚓️)</p>
+<ul>
+<li><a href="#dp_1">費式數列</a></li>
+<li><a href="#dp_2">爬樓梯</a></li>
+<li><a href="#dp_3">階乘</a></li>
+<li><a href="#dp_4">樓梯路線</a></li>
+<li><a href="#dp_5">背包價值問題</a></li>
+<li><a href="#dp_6">找錢問題</a></li>
+</ul>
+<h3><a name="dp_1"></a>費式數列 <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>但想分享一個以遞迴做寫法但使用 Python 在 functools 裡有提供一個函式叫 <code>lru_cache</code> 解決堆疊函式被重複使用多次效能的問題。</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">233</span><span class="p">,</span> <span class="mi">377</span><span class="p">,</span> <span class="mi">610</span><span class="p">]</span>
+</pre></div>
+
+
+<p>如果對改寫成 <span class="caps">DP</span> 有興趣可以去看看<strong>先前文章有稍微介紹</strong>，<a href="/posts/2017/07/Let's%20talk%20about%20fibonacci%20with%20python.html">參考</a>。</p>
+<hr />
+<h3><a name="dp_2"></a>爬樓梯 <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>如果以一階或兩階方式爬樓梯，給定 n 階層樓梯，一共會有多少種走法？這問題就很適合來做分治法。首先走上第一階樓梯只有一種（一階一階爬），走上第二階層有兩種（兩階兩階爬或一階一階爬），但到了第三階他的走法就會是（一階一階爬）＋（兩階兩階爬）的總和，也就能歸納出 <code>f(n) = f(n-1) + f(n-1)</code></p>
+<p>這用遞迴很簡單，寫個函式不斷呼叫自己來加總。但可想而知樓梯的 n&nbsp;越大堆疊越多，效能越不好。 </p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">recursive_climbStairs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :type n: int</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">recursive_climbStairs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">recursive_climbStairs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>改成用分治法加上記憶法的動態規劃來處理。首先 <code>dynamic_programming(n)</code> 在迴圈過程會不斷向前去找已經計算過的答案。</p>
+<p>先補充在做 <span class="caps">DP</span>&nbsp;時的兩種實作方式:</p>
+<ol>
+<li>Bottom-up</li>
+<li>Top-down</li>
+</ol>
+<p><code>Bottom-up</code> 就是建立一個順序，往前去查詢已經計算好的結果來完成當前的計算。優點效率佳，但會把所有的問題都解出來，而不是只解出我們要的答案。所以 <code>dynamic_programming(n)</code> 會先順序地把所有結果都計算並且儲存起來。但因為我們只要最終結果，<code>climbStairs(n)</code> 回傳最終的結果。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">climbStairs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :type n: int</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">dynamic_programming</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">dynamic_programming</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+
+
+<p>看懂上面程式碼，發現可以將函式精簡。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">climbStairs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+</pre></div>
+
+
+<p><code>Top-down</code> 就是可不按照順序，遞迴的由小到大處理各個子問題。這樣方法無法控制記憶體順序和效能較上面方法差？這是一個有趣問題，意思是說在處理過程才會逐步把子問題補滿。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">topdown_climbStairs</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">table</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+</pre></div>
+
+
+<hr />
+<h3><a name="dp_3"></a>階乘（factorial）<small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>撰寫階乘通常會立刻想到遞迴寫法。這想法太直覺了，範例如下：</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>不過這個會非常耗用記憶體資源，而且如果堆疊太深的話在 Python 會跑出 <code>RecursionError: maximum recursion depth exceeded in comparison</code> 這種超出堆疊限制的錯誤。這時候你還要設定 <code>sys.setrecursionlimit(5000)</code> 允許遞迴深度。因此 factorial&nbsp;使用遞迴寫法看起來真不是一個好主意。</p>
+<p>如果要改寫成動態規劃該怎麼做呢？做法很簡單，從階層的公式來看就是不斷的和前一個數字相乘得出的結果，因此我們做的迴圈將問題做分割，接著和前一個數字相乘把問題在組合起來。
+這樣時間複雜度只需要 O(N)，空間複雜度 O(N) 但如果只處理一個 n! 問題那麼空間複雜度就是 O(1)&nbsp;容易吧！</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fib_dp</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">*=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">f</span>
+</pre></div>
+
+
+<hr />
+<h3><a name="dp_4"></a>樓梯路線（ Staircase Walk ）<small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>假設一個方格棋盤大小為<code>(x, y)</code>。要從左上角(0,0)走到右下角(x,y)只能往右或是往下走，一共會有幾種走法？&nbsp;反過來想從抵達位置來看，就是從上面來的或是從左邊來的。</p>
+<p>用圖來看會比較清楚(圖引用自<a href="http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html">演算法網站</a>):</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting1.png" />
+<img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting2.png" /></p>
+<p>所以就是從上面走來和從左邊走來相加就是走法。
+數學上來表達加總走法： c(i, j) = c(i-1, j) + c(i,&nbsp;j-1)。這樣就可以做遞迴了。</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting3.png" /></p>
+<p>所以概念就是建立一個二維陣列一個個 cell&nbsp;把它加起來。</p>
+<p><img alt="#" src="http://www.csie.ntnu.edu.tw/~u91029/DPCounting4.png" /></p>
+<p>首先程式碼先建立一個 <code>x*y</code> 的二維陣列，接著把 <code>x = 0</code>, <code>y = 0</code> 的位置都設為 1（因為從這個位置出發）
+接著每往左往下到達下一個 cell 就是將上和左的 cell&nbsp;相加。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="s2">&quot;由(0,0)到({},{})共有{}種走法&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">table</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">stairswalk</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+
+
+<hr />
+<h3><a name="dp_5"></a>背包價值問題 (Knapsack Problem) <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<p>演算法在動態規劃裡都會提到它，有一堆物品個標示其金錢價值與重量，有一個背包可以裝物品，如何讓背包裝的物品價值金錢總價值最高。這個問題有個前提包背只限制重量不限制形狀，所以不需要考慮東西裝不裝得進去，只考慮重量與最高價值。</p>
+<p>分割問題的方法是<strong>放</strong>與<strong>不放</strong>，接著放的重量與價值，不放後的重量與價值。</p>
+<p>用函式表達會像是這樣</p>
+<p><code>k(n, w) = max(k(n-1, w), k(n-1, w-weight[n]) + cost[n])</code></p>
+<p>n: 0 ~ n 個放進背包內物品
+W: 背包的負載重量
+knapSack(n, w): 0 ~ n 個物品耐重為 w 的答案
+wt[n]: n 物品的重量
+val[n]: n&nbsp;物品的價值</p>
+<p>需要考慮的條件</p>
+<ol>
+<li>
+<p>考慮邊界條件，耐重不足或是沒有物品。 
+    W &lt; 0 return 0
+    n &lt; 0 return 0
+    n = 0 and W &gt;= 0 return&nbsp;0</p>
+</li>
+<li>
+<p>避免存取負的物品與耐重。 
+    n = 0 return 0
+    n &gt; 0 and W-wt[n] &lt; 0 return knapSack(n-1,&nbsp;w)</p>
+</li>
+</ol>
+<p>採用 top-down&nbsp;方式解題</p>
+<div class="codehilite"><pre><span></span><span class="c1"># Returns the maximum value that can be put in a knapsack of</span>
+<span class="c1"># capacity W</span>
+
+<span class="k">def</span> <span class="nf">knapSack_topdown</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="c1"># Base Case</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">W</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># If weight of the nth item is more than Knapsack of capacity</span>
+    <span class="c1"># W, then this item cannot be included in the optimal solution</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">wt</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">W</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># return the maximum of two cases:</span>
+    <span class="c1"># (1) nth item included</span>
+    <span class="c1"># (2) not included</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span><span class="o">-</span><span class="n">wt</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
+            <span class="n">knapSack</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+    <span class="n">wt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">knapSack_topdown</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+</pre></div>
+
+
+<p>採用 bottom-up&nbsp;方式解題</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">knapSack_bottomup</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">W</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+    <span class="c1"># Build table K[][] in bottom up manner</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">W</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">w</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">w</span><span class="p">:</span>
+                <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">w</span><span class="o">-</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>  <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">w</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">w</span><span class="p">]</span> 
+    <span class="k">return</span> <span class="n">K</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">W</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+    <span class="n">wt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">knapSack_bottomup</span><span class="p">(</span><span class="n">W</span> <span class="p">,</span> <span class="n">wt</span> <span class="p">,</span> <span class="n">val</span> <span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+</pre></div>
+
+
+<hr />
+<h3><a name="dp_6"></a>找錢問題 <small><em><a href="#menu">回到最上層</a></em></small></h3>
+<hr />
+<p>參考資源:</p>
+<ul>
+<li><a href="http://www.geeksforgeeks.org/dynamic-programming/#concepts">動態規劃題目</a></li>
+</ul>
+<hr />
+
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                var disqus_identifier = 'posts/2017/08/Understand_Dynamic_Programming_Algorithm_usining_Python.html';
+                var disqus_url = 'https://blog.chairco.me/posts/2017/08/Understand_Dynamic_Programming_Algorithm_usining_Python.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Sitemap</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://blog.chairco.me/archives.html">Archives</a></li>
+                            <li><a href="https://blog.chairco.me/tags.html">Tags</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">Atom Feed</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Social</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/chairco" target="_blank">Github</a></li>
+                            <li><a href="https://twitter.com/ChaircoChen" target="_blank">Twitter</a></li>
+                            <li><a href="mailto:chairco@gmail.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div> 
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <small><em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank">pelican</a></em></small><br/>
+                            <small><em>Theme and code by <a href="https://github.com/molivier" target="_blank">molivier</a></em></small><br/>
+                            <small>&copy; Jason's Blog 2018</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

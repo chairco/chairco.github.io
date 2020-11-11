@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Jason's Blog</title><link href="https://blog.chairco.me/" rel="alternate"></link><link href="https://blog.chairco.me/feeds/jupyter.atom.xml" rel="self"></link><id>https://blog.chairco.me/</id><updated>2018-06-20T10:08:07+08:00</updated><entry><title>如何建立一個團隊用的 Jupyter-Hub</title><link href="https://blog.chairco.me/posts/2018/06/how%20to%20build%20a%20jupytre-hub%20for%20team.html" rel="alternate"></link><published>2018-06-20T10:08:07+08:00</published><author><name>Jason</name></author><id>tag:blog.chairco.me,2018-06-19:posts/2018/06/how to build a jupytre-hub for team.html</id><summary type="html">&lt;h2&gt;Target&lt;/h2&gt;
+&lt;p&gt;目前有組一台主機來做科學計算，因此打算建構一個 remote 環境運行 Jupyterhub 跑科學計算。
+原則上使用 jupyterhub&amp;nbsp;只是假設未來有多人使用需求可以區隔環境。&lt;/p&gt;
+&lt;p&gt;架構大概是這樣：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="#" src="http://jupyterhub.readthedocs.io/en/latest/_images/jhub-parts.png" /&gt;&lt;/p&gt;
+&lt;h2&gt;設定&lt;/h2&gt;
+&lt;p&gt;透過 jupyterhub 來設定多人可登入主機。&lt;a href="https://github.com/jupyterhub/jupyterhub/wiki/Installation-of-Jupyterhub-on-remote-server"&gt;官方教學&lt;/a&gt;會有幾個重點：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;下載與安裝&amp;nbsp;anaconda3&lt;/li&gt;
+&lt;li&gt;安裝工具&lt;/li&gt;
+&lt;li&gt;建立 Jupyterhub server&amp;nbsp;資料夾&lt;/li&gt;
+&lt;li&gt;設定 https 建立一組認證&amp;nbsp;key&lt;/li&gt;
+&lt;li&gt;認證方式（&lt;span class="caps"&gt;PAM&lt;/span&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;下載與安裝&amp;nbsp;anaconda3&lt;/h3&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# wget anaconda and install&lt;/span&gt;
+$ wget https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
+$ bash Anaconda2-4.0.0-Linux-x86_64.sh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;安裝工具&lt;/h3&gt;
+&lt;p&gt;安裝 node.js 與套件管理工具&amp;nbsp;npm&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo apt-get install npm nodejs-legacy
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著安裝&amp;nbsp;proxy &lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ npm install -g configurable-http-proxy
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;因為一開始就用 anaconda 安裝 Python，anaconda 管理套件方式是採用 &lt;code&gt;conda&lt;/code&gt; 因此直接用 &lt;code&gt;conda&lt;/code&gt; 安裝 jupyterhub 和 notebook (&lt;a href="https://jupyterhub.readthedocs.io/en/latest/quickstart.html"&gt;參考&lt;/a&gt;)&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ conda install -c conda-forge jupyterhub
+$ conda install notebook
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;安裝完成之後測試看看是否 hub 和 proxy 都有安裝成功，執行下面兩個指令如果有跑處 help&amp;nbsp;畫面就算是成功&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ jupyterhub -h
+$ configurable-http-proxy -h
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;建立 Jupyterhub server&amp;nbsp;資料夾&lt;/h3&gt;
+&lt;p&gt;建議在 &lt;code&gt;/etc/&lt;/code&gt; 底下，建立一個 jupyterhub&amp;nbsp;資料夾&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo mkdir -p /etc/jupyterhub
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;測試在這個資料夾底下執行 jupyterhub，但因為這是沒有 ssl 所以是採&amp;nbsp;http，http://your_ip_address:8000&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ jupyterhub --no-ssl
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;設定 https 建立認證&amp;nbsp;key&lt;/h3&gt;
+&lt;p&gt;在路徑 &lt;code&gt;/etc/jupyterhub&lt;/code&gt; 底下產生&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;openssl req -x509 -nodes -days &lt;span class="m"&gt;365&lt;/span&gt; -newkey rsa:1024 -keyout mykey.key -out mycert.pem
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;產生 ssl 認證 key 之後接著就可以用 https 登入&amp;nbsp;hub&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ jupyterhub
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著可以建立 hub 的 config&amp;nbsp;file&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#Create Jupyterhub configuration file&lt;/span&gt;
+$ jupyterhub --generate-config
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著下面會說明認證方式，接著再回來說明 config file: jupyterhub_config.py&amp;nbsp;如何設定&lt;/p&gt;
+&lt;h3&gt;認證方式（&lt;span class="caps"&gt;PAM&lt;/span&gt;）&lt;/h3&gt;
+&lt;p&gt;比較複雜，使用 &lt;span class="caps"&gt;PAM&lt;/span&gt; 所以會綁定系統的帳戶。&lt;a href="https://github.com/jupyterhub/jupyterhub/wiki/Using-sudo-to-run-JupyterHub-without-root-privileges"&gt;參考&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;流程大略是安裝一個 &lt;code&gt;sudospwawner&lt;/code&gt; 接著建立一個帳號來做啟動 jupyterhub 這樣就可以不需要 root&amp;nbsp;權限並做認證。&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# create user run hub&lt;/span&gt;
+$ sudo useradd rhea
+
+&lt;span class="c1"&gt;# Spawner to enable monitoring the single-user servers with sudo:&lt;/span&gt;
+$ sudo pip install sudospawner
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;編輯  &lt;code&gt;/etc/sudoers&lt;/code&gt; 或是 (use &lt;code&gt;visudo&lt;/code&gt; for safe editing of&amp;nbsp;sudoers):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;specify the list of users for whom rhea can spawn servers&amp;nbsp;(JUPYTER_USERS)&lt;/li&gt;
+&lt;li&gt;specify the command that rhea can execute on behalf of users&amp;nbsp;(JUPYTER_CMD)&lt;/li&gt;
+&lt;li&gt;give rhea permission to run JUPYTER_CMD on behalf of JUPYTER_USERS without entering a&amp;nbsp;password&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# comma-separated whitelist of users that can spawn single-user servers
+# this should include all of your Hub users
+Runas_Alias JUPYTER_USERS = rhea, zoe, wash
+
+# the command(s) the Hub can run on behalf of the above users without needing a password
+# the exact path may differ, depending on how sudospawner was installed
+Cmnd_Alias JUPYTER_CMD = /usr/local/bin/sudospawner
+
+# actually give the Hub user permission to run the above command on behalf
+# of the above users without prompting for a password
+rhea ALL=(JUPYTER_USERS) NOPASSWD:JUPYTER_CMD
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著啟用 &lt;span class="caps"&gt;PAW&lt;/span&gt; 不須要 root&amp;nbsp;權限，首先先確認權限狀態&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ ls -l /etc/shadow
+-rw-r-----  &lt;span class="m"&gt;1&lt;/span&gt; root shadow   &lt;span class="m"&gt;2197&lt;/span&gt; Jul &lt;span class="m"&gt;21&lt;/span&gt; 13:41 shadow
+$ ls -l /etc/shadow
+-rw-------  &lt;span class="m"&gt;1&lt;/span&gt; root wheel   &lt;span class="m"&gt;2197&lt;/span&gt; Jul &lt;span class="m"&gt;21&lt;/span&gt; 13:41 shadow
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接著建立 &lt;code&gt;shadow&lt;/code&gt; 群組並且修改檔案權限&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo groupadd shadow
+$ sudo chgrp shadow /etc/shadow
+$ sudo chmod g+r /etc/shadow
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;將 &lt;code&gt;rhea&lt;/code&gt; 增加為 &lt;code&gt;shadow&lt;/code&gt; 群組&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo usermod -a -G shadow rhea
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;設定 port 80 可以運行 jupyterhub，如果有錯誤可以查看這篇&lt;a href="https://gist.github.com/chairco/99342c9e5d7fba51e1b8f69a7b5ccf11"&gt;參考&lt;/a&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ sudo setcap &lt;span class="s1"&gt;&amp;#39;cap_net_bind_service=+ep&amp;#39;&lt;/span&gt; /usr/bin/node
+or 
+$ sudo setcap &lt;span class="s1"&gt;&amp;#39;cap_net_bind_service=+ep&amp;#39;&lt;/span&gt; &lt;span class="sb"&gt;`&lt;/span&gt;which node&lt;span class="sb"&gt;`&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最後要設定 jupyterhub_config.py。也可以參考&lt;a href="https://jupyterhub.readthedocs.io/en/0.7.0/config-examples.html"&gt;官網&lt;/a&gt;&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;os&lt;/span&gt;
+&lt;span class="n"&gt;file_path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dirname&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;abspath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__file__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="c1"&gt;# db&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;db_url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;file_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;jupyterhub.sqlite&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+
+&lt;span class="c1"&gt;# Jupyterhub setting&lt;/span&gt;
+
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Spawner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;default_url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/lab&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# should be install jupyter labextension&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Spawner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;jupyter-labhub&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Spawner&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;notebook_dir&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;~/notebooks&amp;#39;&lt;/span&gt;
+
+
+&lt;span class="c1"&gt;## Jupyterhub service setting by Jason&lt;/span&gt;
+
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;spawner_class&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;sudospawner.SudoSpawner&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssl_cert&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;file_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;mycert.pem&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ssl_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;file_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;mykey.key&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cookie_secret_file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;file_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;jupyterhub_cookie_secret&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;JupyterHub&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;proxy_cmd&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;/usr/local/bin/configurable-http-proxy&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+
+&lt;span class="c1"&gt;# This is an application.&lt;/span&gt;
+&lt;span class="c1"&gt;# create system users that don&amp;#39;t exist yet&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LocalAuthenticator&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;create_system_users&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Authenticator&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;whitelist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{username}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Authenticator&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;admin_users&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;{username}&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;安裝必要套件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/jupyterhub/jupyterlab-hub"&gt;jupyterlab&lt;/a&gt; &lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/bokeh/jupyterlab_bokeh"&gt;jupyter bokeh&lt;/a&gt;, &lt;a href="https://github.com/bokeh/bokeh/issues/6700"&gt;issue&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;R&amp;nbsp;kernal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Jupyterlab&lt;/h3&gt;
+&lt;p&gt;用來讓畫面比較好看&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ jupyter labextension install @jupyterlab/hub-extension
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Jupyter&amp;nbsp;bokeh&lt;/h3&gt;
+&lt;p&gt;畫圖用，裝了 jupyterlab&amp;nbsp;一定要裝這個套件才能正常運作&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ jupyter labextension install jupyterlab_bokeh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;R&amp;nbsp;kernal&lt;/h3&gt;
+&lt;p&gt;可以選擇 R&amp;nbsp;來運作&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ conda update anaconda
+$ conda install -c r r-essentials
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;帳號設定&lt;/h2&gt;
+&lt;p&gt;如果要使用 jupyterhub 來進行帳號認證流程如下：
++ 透過 sudo 建立一個帳號
++ 帳號設定為 jupyterhub 群組
++ 新增的帳號家目錄底下新建一個 /notebooks 的資聊夾用來存放分析程式
++ 編輯 /etc/sudoer&amp;nbsp;將使用者加入 &lt;/p&gt;
+&lt;p&gt;操作流程&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# 新增帳號, useradd (不會建立家目錄) adduser (會建立家目錄)&lt;/span&gt;
+$ sudo adduser jupyter
+
+&lt;span class="c1"&gt;# 將帳號設定為 jupyterhub 群組&lt;/span&gt;
+$ sudo usermod -a -G jupyterhub jupyter
+
+&lt;span class="c1"&gt;# 新帳號底下建立 notebooks 資料夾&lt;/span&gt;
+$ sudo su jupyter
+$ mkdir -p ~/.notebooks
+
+&lt;span class="c1"&gt;# 編輯 /etc/sudoer 將使用sudo vim /etc/sudoers者加入可以登入權限&lt;/span&gt;
+$ sudo vim /etc/sudoers
+Runas_Alias &lt;span class="nv"&gt;JUPYTER_USERS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; jupyter
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;啟動&amp;nbsp;server&lt;/h2&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo -u rhea jupyterhub -f /etc/jupyterhub/jupyterhub_config.py  
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;使用帳號登入 localhost:8000 並且啟動&amp;nbsp;server&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;參考文獻&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://medium.com/@ybarraud/setting-up-jupyterhub-with-sudospawner-and-anaconda-844628c0dbee"&gt;jupyterhub root&amp;nbsp;設定&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://hsusir.org/jupyter-r-python/"&gt;安裝 jupyter&amp;nbsp;R&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jupyterhub/jupyterhub/wiki/Installation-of-Jupyterhub-on-remote-server"&gt;Jupyter remote&amp;nbsp;server&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="Python"></category></entry></feed>

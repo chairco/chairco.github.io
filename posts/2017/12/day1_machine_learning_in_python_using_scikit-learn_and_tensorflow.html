@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="今天介紹的是 Machine Learning 一個很基礎的方法：分類(Classification)，然後採用 MNIST 的 dataset 來做。MNIST 是一個擁有 70,000 個小圖片的資料，每張圖都會有標記它代表的數字。MNIST 很像初學程式語言時的 HELLO WORLD 所以就拿它來做學習。 scikit-learn 提供一個函式可以輕鬆取得這個資料集，同時可以注意到 ...">
+        <meta name="keywords" content="Classification, Python, Scikit-learn">
+        
+        <link rel="icon" href="https://blog.chairco.me/myfavicon.ico">
+        <link rel="shortcut icon" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+        <link rel="Bookmark" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+
+        <title>Day1 一天一篇機器學習 in python using Scikit-Learn and TensorFlow&nbsp;系列 - Jason's Blog</title>
+
+        <!-- Stylesheets -->
+        <link href="https://blog.chairco.me/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
+        <link href="https://blog.chairco.me/feeds/machine-learning.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-79798833-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+        <!-- /Google Analytics -->
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('https://blog.chairco.me/images/home-bg.jpg'); background-position: center; background-size: cover;">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <div class="header-logo">
+                        <a class="pull-left" href="https://blog.chairco.me/"><img class="mr20" src="https://blog.chairco.me/images/logo.png" alt="logo">Jason's Blog</a>
+                    </div>
+                    <div class="nav pull-right">
+                                <a href="https://blog.chairco.me/pages/about-me/">About</a>
+                                <a href="https://blog.chairco.me/cv">Resume</a>
+                                <a href="https://blog.chairco.me/categories.html">Categories</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Day1 一天一篇機器學習 in python using Scikit-Learn and TensorFlow&nbsp;系列</h1>
+                      <p class="header-date">By <a href="https://blog.chairco.me/author/jason.html">Jason</a>, Dec 17, 2017, modified Dec 17, 2017, in category <a href="https://blog.chairco.me/category/machine-learning.html">Machine learning</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://blog.chairco.me/tag/classification.html">Classification</a>, <a href="https://blog.chairco.me/tag/python.html">Python</a>, <a href="https://blog.chairco.me/tag/scikit-learn.html">Scikit-learn</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <p>今天介紹的是 Machine Learning 一個很基礎的方法：分類(Classification)，然後採用 <span class="caps">MNIST</span> 的 dataset 來做。<span class="caps">MNIST</span> 是一個擁有 70,000 個小圖片的資料，每張圖都會有標記它代表的數字。<span class="caps">MNIST</span> 很像初學程式語言時的 <code>HELLO WORLD</code> 所以就拿它來做學習。</p>
+<p>scikit-learn 提供一個函式可以輕鬆取得這個資料集，同時可以注意到 scikit-learn 回傳是一個 dictionary 的資料結構，<code>DESCR</code> 是這個資料集說明，<code>data</code> 是資料集資料，array 結構，一個 row 包含實例，一個 row 包含特徵, <code>target</code> 是標籤(label)</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_mldata</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mnist</span> <span class="o">=</span> <span class="n">fetch_mldata</span><span class="p">(</span><span class="s1">&#39;MNIST original&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">mnist</span>
+<span class="p">{</span><span class="s1">&#39;COL_NAMES&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;DESCR&#39;</span><span class="p">:</span> <span class="s1">&#39;mldata.org dataset: mnist-original&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="o">...</span><span class="p">,</span> 
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">uint8</span><span class="p">),</span>
+ <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">,</span>  <span class="mf">9.</span><span class="p">])}</span>
+</pre></div>
+
+
+<p>接著可以看看資料內容</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mnist</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">mnist</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="mi">70000</span><span class="p">,</span> <span class="mi">784</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+<span class="p">(</span><span class="mi">70000</span><span class="p">,)</span>
+</pre></div>
+
+
+<p>一共有 70,000 個 images 和 784 個特徵，784 是因為每個 images 的 pixels 為 28x28，然後每個特徵值代表是像素的強度：從 0(white)~255(block)&nbsp;我們可以將其顯示出來：</p>
+<div class="codehilite"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">some_digit</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">36000</span><span class="p">]</span>
+<span class="n">some_digit_image</span> <span class="o">=</span> <span class="n">some_digit</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">some_digit_image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">binary</span><span class="p">,</span>
+           <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="#" src="https://i.imgur.com/lf0kZGV.png" /></p>
+<p>接著印出 label&nbsp;上的值</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">y</span><span class="p">[</span><span class="mi">36000</span><span class="p">]</span>
+<span class="mf">5.0</span>
+</pre></div>
+
+
+<p>然後 <span class="caps">MNIST</span> 的資料集也協助我們將資料切割成兩部分分別為前 60,000 筆資料讓我們可以方便地去做訓練，後面 10,000 資料做測試。
+同時對於訓練資料我們也需要做 shuffle&nbsp;訓練資料，這樣可以讓我們在做交叉驗證時(cross-validation)會有一致性。ps.提示一點，很多演算法對於訓練資料的順序很敏感，像是得到一連串相同的資料。</p>
+<p>所以用 numpy&nbsp;來打亂資料</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="o">&gt;&gt;</span> <span class="n">shuffle_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="mi">60000</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">shuffle_index</span><span class="p">],</span> <span class="n">y_train</span><span class="p">[</span><span class="n">shuffle_index</span><span class="p">]</span>
+</pre></div>
+
+
+<p>接著我們來訓練一個二元分類(Binary Classifier)，例如選定一個數字 5，二元分類就會只有 5 或是 非 5&nbsp;兩種，接著我們來建立一個目標向量的分類任務:</p>
+<div class="codehilite"><pre><span></span><span class="n">y_train_5</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">y_test_5</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+
+<p>接著我們就可以開始選擇一個分類器並且訓練他。這邊選用是一個統計學的演算法叫 Stochastic gradient descent (梯度下降法)，會用到 Scikit-learn 的 SGDClassifier 類別。我們會設置一個 random_state&nbsp;參數，因為這個方法重視資料的隨機性。</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">SGDClassifier</span>
+<span class="n">sgd_clf</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">sgd_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_5</span><span class="p">)</span>
+</pre></div>
+
+
+<p>然後注意一點，因為 0.19 版本的類別增加了一個參數叫 <code>max_iter</code> 如果沒有設置會出現警告，可以不需要理會，但不想出現警告可以隨意設置一個值例如 1000。<a href="https://github.com/ageron/handson-ml/issues/90">參考</a></p>
+<p>可以用下面函式來偵測數字&nbsp;5</p>
+<div class="codehilite"><pre><span></span>&gt;&gt;&gt; sgd_clf.predict([some_digit])
+array([ True], dtype=bool)
+</pre></div>
+
+
+<p>接著我們要開始驗證，要驗爭資料準確性 (accuracy) 通常會採用交叉驗證 (Cross-Validation)，這邊我們會使用 cross_val_score()，使用的方法是 K-fold, 意思就是拆解成 k&nbsp;個子樣本來做交叉測試：</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+<span class="n">cross_val_score</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_5</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">0.96905</span><span class="p">,</span>  <span class="mf">0.9682</span> <span class="p">,</span>  <span class="mf">0.9707</span> <span class="p">])</span>
+</pre></div>
+
+
+<p>顯示高達 96% 的準確度 (accuracy)。
+接著可以來試試 非 5 的分類，首先撰寫一個&nbsp;class：</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
+
+<span class="k">class</span> <span class="nc">Never5Classifier</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span> 
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+
+<span class="o">&gt;&gt;</span> <span class="n">never_5_clf</span> <span class="o">=</span> <span class="n">Never5Classifier</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">never_5_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_5</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;accuracy&quot;</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">0.91345</span><span class="p">,</span>  <span class="mf">0.9095</span> <span class="p">,</span>  <span class="mf">0.906</span>  <span class="p">])</span>
+</pre></div>
+
+
+<p>準確度到 90% 左右了，但這是合理的，因為大約只有 10% 數字是 5，因此在猜測中大概有 90% 機會是正確的。這也告訴我們一件事，準確性通常不會是分類器重視的指標，尤其對於傾斜資料 (skewed&nbsp;dataset)。</p>
+<p>另外一個測試分類氣的方式是混淆矩陣 (Confuion Matrix) ，概念有點像是統計裡的 type I, type <span class="caps">II</span>&nbsp;錯誤。</p>
+<ul>
+<li><span class="caps">TT</span>: 預測是,&nbsp;實際是</li>
+<li><span class="caps">TF</span>: 預測是,&nbsp;實際不是</li>
+<li><span class="caps">FT</span>: 預測不是,&nbsp;實際是</li>
+<li><span class="caps">FF</span>: 預測不是,&nbsp;實際也不是</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>預測沒下</th>
+<th>預測下</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>實際下</td>
+<td><span class="caps">TF</span>(type I)</td>
+<td><span class="caps">TT</span></td>
+</tr>
+<tr>
+<td>實際沒下</td>
+<td><span class="caps">FF</span></td>
+<td><span class="caps">FT</span>(type <span class="caps">II</span>)</td>
+</tr>
+</tbody>
+</table>
+<p>因此在開始之前你需要建構一個預測集，用來進行比較。在 scikit-learn 可以使用 <code>cross_val_predict()</code> 這個函式。和前面我們使用 <code>cross_val_score()</code> 一樣也會使用交叉驗證，但不同是他不會返回一個分數，而是返回 k-fold 的一組實例。意思是他會返回 [true, false, false&#8230;] 這樣的結果。接著就能開是做 Confusion&nbsp;Matrix。</p>
+<p>在 scikit-learn 提供 <code>confusion_matrix</code> 函式，接著參數指定一組<code>訓練資料</code>與<code>預測資料</code>。</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="mi">53954</span><span class="p">,</span>   <span class="mi">625</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mi">1216</span><span class="p">,</span>  <span class="mi">4205</span><span class="p">]])</span>
+</pre></div>
+
+
+<p>這個二維陣列表示<code>實際</code>與<code>預測</code>我們簡單用表格表示。</p>
+<ul>
+<li>第一行表示實際非 5, 53,954 代表正確預測也非 5 (true negatives)，625 則表示分類錯誤, 錯誤預測 (false&nbsp;positive) </li>
+<li>第二行表示實際是 5, 1,216 分類錯誤，預測錯誤(false negative)，4,205 預測和實際 5 正確(true&nbsp;positive)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>預測非5</th>
+<th>預測是5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>實際非5</td>
+<td><em>53,954</em>(<span class="caps">TN</span>)</td>
+<td>625(<span class="caps">FP</span>)</td>
+</tr>
+<tr>
+<td>實際是5</td>
+<td>1,216(<span class="caps">FN</span>)</td>
+<td><em>4,205</em>(<span class="caps">TP</span>)</td>
+</tr>
+</tbody>
+</table>
+<p>當然我們也可以做個簡單驗證，假設我們有個完美預測(perfect train data)，那照理說就不會有預測錯誤的問題。簡單方法就是把訓練資料當成預測資料。這時你會發現預測錯誤的部分都是&nbsp;0，賓果！</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">y_train_perfect_predictions</span> <span class="o">=</span> <span class="n">y_train_5</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_perfect_predictions</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="mi">54579</span><span class="p">,</span>     <span class="mi">0</span><span class="p">],</span>
+       <span class="p">[</span>    <span class="mi">0</span><span class="p">,</span>  <span class="mi">5421</span><span class="p">]])</span>
+</pre></div>
+
+
+<p>混淆矩陣提供我們一個判斷，透過矩陣讓我們可以計算出所謂精確度(precision):
+<code>true positive(tp)/true positive(TP) + false positive(FP)</code></p>
+<p>但是精確度可能會零一種狀況是萬一發生 1/1 = 100% 會無法有效地去避免只有一個正確的數字情況，因此通常會和 recall 來做使用，稱為 sensitivity or true positive rate(<span class="caps">TPR</span>) 稱為靈敏度或是真正率:
+<code>recall = true positive(tp)/true positive(tp)+false negative(fn)</code></p>
+<p>在 sickit-learning 有兩個函式可以協助 precision_score,&nbsp;recall_score</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+<span class="mf">0.87060041407867494</span> <span class="c1"># 4205/4205+625</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+<span class="mf">0.77568714259361737</span> <span class="c1"># 4205/4205+1216</span>
+</pre></div>
+
+
+<p>這代表意思是你有 87% 可以準確的判斷出預測為 5 實際也是 5，只能檢測到實際是 5 的機率&nbsp;77%。看起來和之前使用交叉驗證得到的分數有些差距。</p>
+<p>從 precsion 和 recall 我們還可以推導出一個 <a href="https://baike.baidu.com/item/f-measure">Piotroski F-Score</a>，他是 precsion 和 recall&nbsp;的加權調和平均數。可以用來判斷模型好壞，所以我們用它來判斷分類器。</p>
+<p>f1&nbsp;公式與推導:</p>
+<div class="codehilite"><pre><span></span>2 * PR / P + R = TP / TP + (FN + FP / 2)
+
+P = TP/TP+FP
+R = TP/TP+FP
+</pre></div>
+
+
+<p>一樣在 sickit-learning 用 f1_score&nbsp;這個函式來計算：</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+<span class="mf">0.82040776509608826</span>
+</pre></div>
+
+
+<p>雖然 F1-score 給了我們一個方法判斷分類器，但有時候這個並不是我們需要的。因為不同時候你關切的可能是 prescision 或是 recall&nbsp;其中一個。</p>
+<p>舉個例如果你關希望分類器幫你辨別好的影片(這邊假設是適合兒童看，沒有任何暴力或是性的影像)，那你可以能會比較關切精確度 (prescision)，因為你在乎的是排除不好的影片，而不會關切是否有好的影片被排除。(寧可放過不可錯殺)
+另一個例子是如果你希望寧可錯殺也不願放過，像是偵測扒手資料，那可能 recall&nbsp;會讓你比較關切。因為不是扒手被抓到的機率對你而言不重要，你並不想放過任何一人。(寧可錯殺不可放過)</p>
+<p>這裡從統計觀點來看 prescision 就是所謂 type I error, recall 就是 type <span class="caps">II</span> error。如果站在法律觀點，通常我們可以忍受 type I&nbsp;error。</p>
+<p>SGDClassifier 的分類方式是建立一個 threshold 的 <code>decision function</code> 藉此分出 positive class 或是 negative&nbsp;class。</p>
+<p>圖示：
+|   8, 7, 3, 9 | 5, 2,    |        5 | 5           |      6 | 5, 5, 5     -|     
+| - negative prediction - | - decision threshold - | - positive prediction&nbsp;-|  </p>
+<ul>
+<li>
+<p>Decision threshold 中間那條線來區分看右邊 (right side of threadhold) 5 所佔的比例
+  + precision = 4/5(80%)
+  + recall =&nbsp;4/6(67%)</p>
+</li>
+<li>
+<p>如果移動 threshold 到右邊第 6 與 5 那條線，那 5 所佔的比例就會變成
+  + precision =&nbsp;3/3(100%)</p>
+</li>
+<li>recall = 3/6(50%)
+  
+從這邊可以看到 threshold 的提高與降低會讓 precision 與 recall 彼此間消長。
+  
+在 sickit-learning 無法直接設定 threshold，但可以透過取得 decision score 的 threshold 來進行預測，要取得 score 是呼叫 decision_function()&nbsp;這個函式：</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">y_scores</span> <span class="o">=</span> <span class="n">sgd_clf</span><span class="o">.</span><span class="n">decision_function</span><span class="p">([</span><span class="n">some_digit</span><span class="p">])</span>
+<span class="n">y_scores</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">416.56310942</span><span class="p">])</span>
+</pre></div>
+
+
+<p>接著就可以設定想要的 threshold&nbsp;來做判定</p>
+<div class="codehilite"><pre><span></span><span class="n">threshold</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y_some_digit_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_scores</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span>
+<span class="n">y_some_digit_pred</span>
+<span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="mi">200000</span>
+<span class="n">y_some_digit_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_scores</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span>
+<span class="n">y_some_digit_pred</span>
+<span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+
+
+<p>但衍伸出問題是多少的 threshold 設定值才是正確，可以使用 precision_recall_curve() 這個函式畫出 precision 和 recall tradeoff&nbsp;交互曲線來參考：</p>
+<div class="codehilite"><pre><span></span><span class="n">y_scores</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_5</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                 <span class="n">method</span><span class="o">=</span><span class="s2">&quot;decision_function&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_recall_curve</span>
+<span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+</pre></div>
+
+
+<p>秀出圖片，並且存到 <code>/images/classification/</code> 下。這樣你就可以根據圖顯示的狀況，來選擇 precision/recall&nbsp;tradeoff。</p>
+<div class="codehilite"><pre><span></span><span class="c1"># To plot pretty figures</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c1"># Where to save the figures</span>
+<span class="n">PROJECT_ROOT_DIR</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+<span class="n">CHAPTER_ID</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">save_fig</span><span class="p">(</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">tight_layout</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PROJECT_ROOT_DIR</span><span class="p">,</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="n">CHAPTER_ID</span><span class="p">,</span> <span class="n">fig_id</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Saving figure&quot;</span><span class="p">,</span> <span class="n">fig_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tight_layout</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_precision_recall_vs_threshold</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">thresholds</span><span class="p">,</span> <span class="n">precisions</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;b--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Precision&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">thresholds</span><span class="p">,</span> <span class="n">recalls</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;g-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Recall&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Threshold&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plot_precision_recall_vs_threshold</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">700000</span><span class="p">,</span> <span class="mi">700000</span><span class="p">])</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s2">&quot;precision_recall_vs_threshold_plot&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="#" src="https://i.imgur.com/sxo08aS.png" /></p>
+<p>另外一種方式，是將 precisions 和 recall 繪製成 x,y&nbsp;座標圖關係。</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">plot_precision_vs_recall</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recalls</span><span class="p">,</span> <span class="n">precisions</span><span class="p">,</span> <span class="s2">&quot;b-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Recall&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Precision&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plot_precision_vs_recall</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">)</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s2">&quot;precision_vs_recall_plot&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="#" src="https://i.imgur.com/xneUv8L.png" /></p>
+<p>關於 precision 與 recall 關係可以舉個例子，如果我們要 90% precision 先比照前前張交互圖，大概需要 70,000 筆資料，接著我們就可以計算出 recall 分數。所以可以很容易的設定出我們想要的精準度(precision)，但這樣其實未必有用，因為伴隨著越高 precision，也帶來 recall&nbsp;值下降。</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">y_train_pred_90</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_scores</span> <span class="o">&gt;</span> <span class="mi">70000</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred_90</span><span class="p">)</span>
+<span class="mf">0.8842242503259452</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_train_pred_90</span><span class="p">)</span>
+<span class="mf">0.62553034495480542</span>
+</pre></div>
+
+
+<p>關於二元分類還有一個不錯的工具：<span class="caps">ROC</span> Curve (receiver operating characteristic)，和 precision/recall curve 很類似。繪製出 true positive rate(又稱為 recall) 與 false positive rate 之間的關係。<span class="caps">FPR</span> 為不正確分類的比率（預測是但實際不是）。scikit-learn 提供 roc_curve()&nbsp;函式來實作並且繪圖：</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_roc_curve</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
+
+<span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s2">&quot;roc_curve_plot&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="#" src="https://i.imgur.com/953KgNg.png" /></p>
+<p>同樣可以看到 <span class="caps">TPR</span>(recall) 越高，<span class="caps">FPR</span> 的分類錯誤也就越多。如果我們想比較分類模型可以比較曲線下面幾 (<span class="caps">AUC</span>) 來做模型優劣化指標，越接近 1 越是完美分類。但如果 = 0.5 那模型幾乎沒有價值，&lt; 0.5 比隨機預測還差。同樣 scikit-learn&nbsp;提供的函式:</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+<span class="mf">0.9611350465691233</span>
+</pre></div>
+
+
+<p>看起來 0.96&nbsp;很不錯！</p>
+<p>然後我們也試著用隨機森林的分類演算法來訓練並且比較，比較特別是隨機森林分類沒有 decision_function() 而有 predict_proba()&nbsp;回傳一個類別的概率。</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">forest_clf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">y_probas_forest</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">forest_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_5</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="n">method</span><span class="o">=</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">y_scores_forest</span> <span class="o">=</span> <span class="n">y_probas_forest</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="c1"># score = proba of positive class </span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fpr_forest</span><span class="p">,</span> <span class="n">tpr_forest</span><span class="p">,</span> <span class="n">thresholds_forest</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span><span class="n">y_scores_forest</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="s2">&quot;b:&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;SGD&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">fpr_forest</span><span class="p">,</span> <span class="n">tpr_forest</span><span class="p">,</span> <span class="s2">&quot;Random Forest&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">save_fig</span><span class="p">(</span><span class="s2">&quot;roc_curve_comparison_plot&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="#" src="https://i.imgur.com/JJMIxCz.png" /></p>
+<p>從圖上可以比較用隨機森林繪製出的圖和 <span class="caps">ROC</span> curves 很像，接著我們來算算隨機森林的 <span class="caps">AUC</span>：</p>
+<div class="codehilite"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_train_5</span><span class="p">,</span> <span class="n">y_scores_forest</span><span class="p">)</span>
+<span class="mf">0.99224143341969517</span>
+</pre></div>
+
+
+<p>現在我們知道在挑選二元分類器時，如何使用交差驗證(cross-validation) 評估, 並用 precision/recall tradeoff 來調整你想要的合適度。接者使用 <span class="caps">ROC</span> curves, <span class="caps">ROC</span> <span class="caps">AUC</span>&nbsp;分數來決定模型是否合適。</p>
+
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                var disqus_identifier = 'posts/2017/12/day1_machine_learning_in_python_using_scikit-learn_and_tensorflow.html';
+                var disqus_url = 'https://blog.chairco.me/posts/2017/12/day1_machine_learning_in_python_using_scikit-learn_and_tensorflow.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Sitemap</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://blog.chairco.me/archives.html">Archives</a></li>
+                            <li><a href="https://blog.chairco.me/tags.html">Tags</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">Atom Feed</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Social</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/chairco" target="_blank">Github</a></li>
+                            <li><a href="https://twitter.com/ChaircoChen" target="_blank">Twitter</a></li>
+                            <li><a href="mailto:chairco@gmail.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div> 
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <small><em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank">pelican</a></em></small><br/>
+                            <small><em>Theme and code by <a href="https://github.com/molivier" target="_blank">molivier</a></em></small><br/>
+                            <small>&copy; Jason's Blog 2018</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>

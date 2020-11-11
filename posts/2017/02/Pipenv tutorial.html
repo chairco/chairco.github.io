@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-hant">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Pipenv 是一個整合 Pipfile, pip, virtualenv 的套件管理工具。 根據開發者得說法： Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。 Python 目前開發環境已經非常成熟，各種類型的套件只要隨手一個 pip install 就信手拈來讓開發者省去很多力氣。再來 ...">
+        <meta name="keywords" content="Pipenv, Python">
+        
+        <link rel="icon" href="https://blog.chairco.me/myfavicon.ico">
+        <link rel="shortcut icon" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+        <link rel="Bookmark" href="https://blog.chairco.me/myfavicon.ico" type="image/x-icon" />
+
+        <title>Pipenv&nbsp;使用教學 - Jason's Blog</title>
+
+        <!-- Stylesheets -->
+        <link href="https://blog.chairco.me/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+        <link href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Full Atom Feed" />
+        <link href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Jason's Blog Full RSS Feed" />
+        <link href="https://blog.chairco.me/feeds/python.atom.xml" type="application/atom+xml" rel="alternate" title="Jason's Blog Categories Atom Feed" />
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Analytics -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-79798833-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+        <!-- /Google Analytics -->
+
+
+    </head>
+
+    <body>
+
+        <!-- Header -->
+    <div class="header-container" style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('https://blog.chairco.me/images/home-bg.jpg'); background-position: center; background-size: cover;">
+
+            <!-- Static navbar -->
+            <div class="container">
+                <div class="header-nav">
+                    <div class="header-logo">
+                        <a class="pull-left" href="https://blog.chairco.me/"><img class="mr20" src="https://blog.chairco.me/images/logo.png" alt="logo">Jason's Blog</a>
+                    </div>
+                    <div class="nav pull-right">
+                                <a href="https://blog.chairco.me/pages/about-me/">About</a>
+                                <a href="https://blog.chairco.me/cv">Resume</a>
+                                <a href="https://blog.chairco.me/categories.html">Categories</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Static navbar -->
+
+            <!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Pipenv&nbsp;使用教學</h1>
+                      <p class="header-date">By <a href="https://blog.chairco.me/author/jason.html">Jason</a>, Feb 14, 2017, in category <a href="https://blog.chairco.me/category/python.html">Python</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://blog.chairco.me/tag/pipenv.html">Pipenv</a>, <a href="https://blog.chairco.me/tag/python.html">Python</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+            <!-- /Header -->
+
+        </div>
+        <!-- /Header -->
+
+
+        <!-- Content -->
+    <div class="container content">
+        <p>Pipenv 是一個整合 Pipfile, pip, virtualenv&nbsp;的套件管理工具。</p>
+<p>根據開發者得說法：</p>
+<blockquote>
+<p>Pipenv是一個實驗性項目，旨在將所有最好的包裝世界帶到Python世界。它將Pipfile，pip和virtualenv整合到一個單一的工具。</p>
+</blockquote>
+<p>Python 目前開發環境已經非常成熟，各種類型的套件只要隨手一個 pip install 就信手拈來讓開發者省去很多力氣。再來 Python 的生態系裡不像 node js 有非常多的版本，目前 Pytchon 的生態系主要就分成兩個分支 Python 2.x 與 Python 3.x，簡單來講 Python&nbsp;就是一個簡單易懂又容易的語言。</p>
+<p>不過這不代表 Python 就不需要一個好的套件管理。至少 Python 在不同的 2.x 與 3.x 透過 six 這些套件完美的橋接不同的套件，但事實上在開發過程中我們有更多使用 Python 所開發的 framework，這些 framework 相依著很多不同的套件，例如 Django 有一個很棒的套件叫 <code>Django-Debug-Toolbar</code> 這個套件在 1.5 可以支援 Django 1.9.x 的版本，但當 Django 1.10.x 後一些 api 作了改變就壞掉惹！這時就必須要升到 <code>Django-Debug-Toolbar</code> 1.6&nbsp;的版本。所以其實還是需要一個好的套件管理協助我們避免這種事情發生。</p>
+<p>要怎麼安裝這個套件呢？首先還是先用 <code>pip</code> 來安裝 <code>pipenv</code> 這個套件。（如果有 py2.x, py3.x&nbsp;只要在其中一個環境安裝就可以了）</p>
+<p>Python 2.x:
+<code>pip install pipenv</code></p>
+<p>Python 3.x:
+<code>pip3 install pipenv</code></p>
+<p>安裝完成之後可以試試看在 commandline 下輸入 <code>pipenv</code> 就會輸出相關使用方法：</p>
+<div class="codehilite"><pre><span></span><span class="n">Usage</span><span class="o">:</span> <span class="n">pipenv</span> <span class="o">[</span><span class="n">OPTIONS</span><span class="o">]</span> <span class="n">COMMAND</span> <span class="o">[</span><span class="n">ARGS</span><span class="o">]...</span>
+
+<span class="n">Options</span><span class="o">:</span>
+  <span class="o">--</span><span class="n">where</span>          <span class="n">Output</span> <span class="n">project</span> <span class="n">home</span> <span class="n">information</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">venv</span>           <span class="n">Output</span> <span class="n">virtualenv</span> <span class="n">information</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">rm</span>             <span class="n">Remove</span> <span class="n">the</span> <span class="n">virtualenv</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">bare</span>           <span class="n">Minimal</span> <span class="n">output</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">three</span> <span class="sr">/ --two  Use Python 3/</span><span class="mi">2</span> <span class="n">when</span> <span class="n">creating</span> <span class="n">virtualenv</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">python</span> <span class="n">TEXT</span>    <span class="n">Specify</span> <span class="n">which</span> <span class="n">version</span> <span class="n">of</span> <span class="n">Python</span> <span class="n">virtualenv</span> <span class="n">should</span> <span class="n">use</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">h</span><span class="o">,</span> <span class="o">--</span><span class="n">help</span>       <span class="n">Show</span> <span class="k">this</span> <span class="n">message</span> <span class="n">then</span> <span class="n">exit</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">version</span>        <span class="n">Show</span> <span class="n">the</span> <span class="n">version</span> <span class="n">and</span> <span class="n">exit</span><span class="o">.</span>
+
+
+<span class="n">Usage</span> <span class="n">Examples</span><span class="o">:</span>
+   <span class="n">Create</span> <span class="n">a</span> <span class="k">new</span> <span class="n">project</span> <span class="n">using</span> <span class="n">Python</span> <span class="mi">3</span><span class="o">:</span>
+   <span class="n">$</span> <span class="n">pipenv</span> <span class="o">--</span><span class="n">three</span>
+
+   <span class="n">Install</span> <span class="n">all</span> <span class="n">dependencies</span> <span class="k">for</span> <span class="n">a</span> <span class="n">project</span> <span class="o">(</span><span class="n">including</span> <span class="n">dev</span><span class="o">):</span>
+   <span class="n">$</span> <span class="n">pipenv</span> <span class="n">install</span> <span class="o">--</span><span class="n">dev</span>
+
+   <span class="n">Create</span> <span class="n">a</span> <span class="n">lockfile</span><span class="o">:</span>
+   <span class="n">$</span> <span class="n">pipenv</span> <span class="n">lock</span>
+
+<span class="n">Commands</span><span class="o">:</span>
+  <span class="n">check</span>      <span class="n">Checks</span> <span class="n">PEP</span> <span class="mi">508</span> <span class="n">markers</span> <span class="n">provided</span> <span class="k">in</span> <span class="n">Pipfile</span><span class="o">.</span>
+  <span class="n">install</span>    <span class="n">Installs</span> <span class="n">provided</span> <span class="n">packages</span> <span class="n">and</span> <span class="n">adds</span> <span class="n">them</span> <span class="n">to</span><span class="o">...</span>
+  <span class="n">lock</span>       <span class="n">Generates</span> <span class="n">Pipfile</span><span class="o">.</span><span class="na">lock</span><span class="o">.</span>
+  <span class="n">run</span>        <span class="n">Spawns</span> <span class="n">a</span> <span class="n">command</span> <span class="n">installed</span> <span class="n">into</span> <span class="n">the</span><span class="o">...</span>
+  <span class="n">shell</span>      <span class="n">Spawns</span> <span class="n">a</span> <span class="n">shell</span> <span class="n">within</span> <span class="n">the</span> <span class="n">virtualenv</span><span class="o">.</span>
+  <span class="n">uninstall</span>  <span class="n">Un</span><span class="o">-</span><span class="n">installs</span> <span class="n">a</span> <span class="n">provided</span> <span class="k">package</span> <span class="nn">and</span> <span class="n">removes</span> <span class="n">it</span><span class="o">...</span>
+  <span class="n">update</span>     <span class="n">Updates</span> <span class="n">pip</span> <span class="n">to</span> <span class="n">latest</span> <span class="n">version</span><span class="o">,</span> <span class="n">uninstalls</span> <span class="n">all</span><span class="o">...</span>
+</pre></div>
+
+
+<p>然後管理的方法很簡單，只要執行 <code>pipenv --three</code> 就會在預設資料夾底下(mac: /Users/{username}/.virtualenvs) 建立一個和這個資料夾同名稱的虛擬環境。
+接著你就可以試試透過 <code>pipenv install requests</code> 安裝 requests 這個套件。安裝完後你可以執行<code>cat Pipfile</code> 看內容如下，這時 <code>requests</code> 已經被記錄在 Pipfile&nbsp;了。</p>
+<div class="codehilite"><pre><span></span><span class="k">[[source]]</span>
+<span class="na">url</span> <span class="o">=</span> <span class="s">&quot;https://pypi.python.org/simple&quot;</span>
+<span class="na">verify_ssl</span> <span class="o">=</span> <span class="s">true</span>
+
+<span class="k">[packages]</span>
+<span class="na">requests</span> <span class="o">=</span> <span class="s">&quot;*&quot;</span>
+</pre></div>
+
+
+<p>你可以看到安裝完成了，接著用 <code>pipenv lock</code> 鎖定 dependence，<code>cat Pipfile.lock</code> 看到內容會如下，你會看見他會產生一個 hash 值，這個值其實就是讓你這個虛擬環境下能保持 requests == 2.13&nbsp;相依性。</p>
+<div class="codehilite"><pre><span></span>{
+    &quot;default&quot;: {
+        &quot;requests&quot;: {
+            &quot;version&quot;: &quot;==2.13.0&quot;,
+            &quot;hash&quot;: &quot;sha256:1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb&quot;
+        }
+    },
+    &quot;develop&quot;: {},
+    &quot;_meta&quot;: {
+        &quot;sources&quot;: [
+            {
+                &quot;url&quot;: &quot;https://pypi.python.org/simple&quot;,
+                &quot;verify_ssl&quot;: true
+            }
+        ],
+        &quot;requires&quot;: {},
+        &quot;hash&quot;: {
+            &quot;sha256&quot;: &quot;da2810af0c3b5333e0de2fce9bea2a228812e2014e5f5fe3b1c533badc6c24e4&quot;
+        }
+    }
+}%
+</pre></div>
+
+
+<p>最後如果要執行 Python shell 一樣透過 pipenv 輸入 <code>pipenv shell</code> 就能進去。（不過筆者不知道為什麼不行&nbsp;＠＠，至少上稿前還找不到原因。）</p>
+<p>用很簡單篇幅介紹這個新的工具，如果有更多想參考可以到 <a href="http://docs.pipenv.org/en/latest/">Pipenv 教學</a>。</p>
+<hr />
+<p>更新在 6/19，用了一陣子 Pipenv 覺得實在太好用了。不過有一些 Pip&nbsp;使用習慣轉換過來做些紀錄。</p>
+<ul>
+<li>
+<p>要如何在 Pipfile 內新增從 github 下載安裝的套件？
+執行：<code>pipenv install git+https://github.com/django/dango.git#egg=Django</code> 這邊和 pip 不同是網址後一定要加上 <strong>.git#egg={套件名稱}</strong></p>
+</li>
+<li>
+<p>如果有 requirements.txt 時要怎麼自動轉換過去 Pipfile?
+很簡單，只要在同一目錄底下執行: <code>pipenv install</code> 接著會顯示：<code>Requirements file found, instead of Pipfile! Converting...</code> 套件會花點時間將 requirements.txt 轉換成 Pipfile 格式（大約要三分鐘以上 <span class="caps">QQ</span>&nbsp;沒有研究為什麼要這麼久）</p>
+</li>
+<li>
+<p>要怎麼在我的環境安裝 Pipfile 的套件呢？
+執行: <code>pipenv install --dev</code> 接著輸入 <code>pipenv shell</code> 就完成囉。記得要退出時要執行 <code>exit</code></p>
+</li>
+<li>
+<p><code>pipenv shell</code> 沒有反應
+感覺像是環境變數問題，<a href="https://github.com/kennethreitz/pipenv/issues/415">issue#415</a> 有人在聊但沒仔細看。現在是安裝完成後可以 <code>pipenv --venv</code> 然後直接手動去吃環境變數。有點蠢。</p>
+</li>
+</ul>
+<p><strong>2017-09-26 更新</strong>: 後來找到原因，因為安裝 pyenv 導致，原因在 <a href="https://github.com/kennethreitz/pipenv/issues/184">issue#184</a>。解決<a href="https://github.com/kennethreitz/pipenv/issues/237">方法</a>):</p>
+<ul>
+<li>
+<p><code>pipenv shell --compat</code>  或是</p>
+</li>
+<li>
+<p>在環境變數設定 <code>export PIPENV_SHELL_COMPAT=true</code>。</p>
+</li>
+</ul>
+
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'chairco';
+                var disqus_identifier = 'posts/2017/02/Pipenv tutorial.html';
+                var disqus_url = 'https://blog.chairco.me/posts/2017/02/Pipenv tutorial.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+        <!-- /Content --> 
+
+        <!-- Footer -->
+        <div class="footer gradient-2">
+            <div class="container footer-container ">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Sitemap</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://blog.chairco.me/archives.html">Archives</a></li>
+                            <li><a href="https://blog.chairco.me/tags.html">Tags</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">Atom Feed</a></li>
+                            <li><a href="https://blog.chairco.me/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">RSS Feed</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                        <div class="footer-title">Social</div>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/chairco" target="_blank">Github</a></li>
+                            <li><a href="https://twitter.com/ChaircoChen" target="_blank">Twitter</a></li>
+                            <li><a href="mailto:chairco@gmail.com" target="_blank">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    </div> 
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <p class="pull-right text-right">
+                            <small><em>Proudly powered by <a href="http://docs.getpelican.com/" target="_blank">pelican</a></em></small><br/>
+                            <small><em>Theme and code by <a href="https://github.com/molivier" target="_blank">molivier</a></em></small><br/>
+                            <small>&copy; Jason's Blog 2018</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Footer -->
+    </body>
+</html>
