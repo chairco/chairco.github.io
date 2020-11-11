@@ -11,3 +11,12 @@ install:
  
 script:  
 - make travis 
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: public
+  keep-history: false
+  on:
+    branch: master
