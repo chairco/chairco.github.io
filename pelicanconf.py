@@ -41,7 +41,7 @@ MD_EXTENSIONS = [
 THEME = "./nest/"
 # Theme setting
 SITETITLE = u"廢廢的宅生物，歡迎餵食，禁止拍打"
-SITESUBTITLE = SITETITLE #"Code / Travel / Other"
+SITESUBTITLE = SITETITLE
 SITEDESCRIPTION = SITETITLE
 SITELOGO = "/pics/20161206.png"
 MAIN_MENU = True
