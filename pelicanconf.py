@@ -7,7 +7,8 @@ import re
 # Base setting
 AUTHOR = 'Jason'
 SITENAME = "Jason's Blog"
-SITEURL = 'https://blog.chairco.me'
+SITEURL = 'https://chairco.github.io'
+# SITEURL = 'https://blog.chairco.me'
 
 PATH = 'content'
 STATIC_PATHS = ['blogs', 'pages', 'pics', 'files']
