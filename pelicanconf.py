@@ -57,7 +57,7 @@ DISPLAY_PAGES_ON_MENU = False
 DISPLAY_CATEGORIES_ON_MENU = False
 COLOR_SCHEME_CSS = 'tomorrow.css'
 FAVICON = 'myfavicon.ico'
-COPYRIGHT_YEAR = 2019
+COPYRIGHT_YEAR = 2022
 CC_LICENSE = {
     'name': 'Creative Commons Attribution',
     'version': '4.0',
